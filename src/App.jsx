@@ -9,13 +9,14 @@ import ServicesPage from "./pages/ServicesPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
 import JobPage from "./pages/JobPage";
+import JobCreationForm from './pages/JobCreationForm'
 import JobDetailsPage from "./pages/JobDetailPage";
 import DashboardPage from "./pages/DeptStaffpages/DashboardPage";
 import UsersPage from "./pages/UsersPage";
 import { IoMdAdd } from "react-icons/io";
 import RequireAuth from './components/Auth/RequireAuth'
 import NotRequireAuth from './components/Auth/NotRequireAuth'
-
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <Router>
