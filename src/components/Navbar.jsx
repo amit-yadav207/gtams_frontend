@@ -5,6 +5,7 @@ import { HiUser, HiCog, HiBell, HiOutlineBell, HiLogout } from "react-icons/hi";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import './Navbar.css'
 import GTAMS from '../assets/images/logo3.png'
+
 // function Navbar() {
 //   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 //   const hasNotifications = true; // Example: Set to true if there are notifications
@@ -179,13 +180,16 @@ import { useState } from "react"; // Importing useState hook from React
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false); // State for toggling navbar
 
+
+
+   
   return (
-    <nav className="flex items-center justify-between flex-wrap p-6 bg-gray-800 text-white">
+    <nav className="flex items-center justify-between flex-wrap p-4 bg-gray-800 text-white">
       {/* logo */}
-      <div className="flex items-center flex-shrink-0 text-white mr-6 lg:mr-72">
-        <button>
+      <div className="flex items-center flex-shrink-0 text-white mr-3 lg:mr-10">
+        <NavLink to="/">
           <img src={GTAMS} className="h-11" alt="Logo" />
-        </button>
+        </NavLink>
       </div>
       <span>
         <div className="lg:hidden inline-block ">
@@ -207,14 +211,14 @@ function Navbar() {
             className="flex items-center px-3 py-3 rounded text-white-500 hover:text-white-900 "
           >
             <svg
-              className={`fill-current h-7 w-6  ${isOpen ? "hidden" : "inline-block"}`}
+              className={`fill-current h-7 w-6  ${isOpen ? "hidden" : "block"}`}
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
             </svg>
             <svg
-              className={`fill-current h-7 w-6 ${isOpen ? "inline-block" : "hidden"}`}
+              className={`fill-current h-7 w-6 ${isOpen ? "block" : "hidden"}`}
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
             >

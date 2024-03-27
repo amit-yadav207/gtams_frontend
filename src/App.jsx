@@ -16,10 +16,13 @@ import JobsPage from "./pages/JobsPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import DepartmentsPage from "./pages/DepartmentsPage";
 import StaffPage from "./pages/StaffPage";
+import JobCreationForm from "./pages/JobCreationForm";
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <Router>
       <Navbar />
+      <div><Toaster position="top-right" reverseOrder={false} /></div>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -36,7 +39,9 @@ function App() {
         <Route path="/departments" element={<DepartmentsPage />} />
         <Route path="/staff" element={<StaffPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
+        <Route path="/dashboard/create-job" element={<JobCreationForm />} /> //Define route for job creation form
       </Routes>
+      
       <Footer />
     </Router>
   );

@@ -1,74 +1,25 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
+import { FaSearch } from 'react-icons/fa'; // Import the search icon from FontAwesome
+
+import jobs from "../jobsData";
 
 const DashboardPage = () => {
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      title: "Teaching Assistant",
-      courseID: "CS101",
-      instructor: "Dr. John Smith",
-      requirements: "Bachelor's degree in Computer Science or related field, strong communication skills.",
-      departments: ["Computer Science", "Information Technology"],
-    },
-    {
-      id: 2,
-      title: "Lab Assistant",
-      courseID: "BIO303",
-      instructor: "Dr. Sarah Brown",
-      requirements: "Bachelor's degree in Biology or related field, laboratory experience required.",
-      departments: ["Biology", "Chemistry"],
-    },
-    {
-      id: 3,
-      title: "Research Assistant",
-      courseID: "PHYS404",
-      instructor: "Prof. Michael Davis",
-      requirements: "Master's degree in Physics or related field, research experience preferred.",
-      departments: ["Physics", "Engineering"],
-    },
-    {
-      id: 4,
-      title: "Grading Assistant",
-      courseID: "MATH606",
-      instructor: "Prof. David Wilson",
-      requirements: "Bachelor's degree in Mathematics or related field, attention to detail required.",
-      departments: ["Mathematics", "Statistics"],
-    },
-    {
-      id: 5,
-      title: "Tutor",
-      courseID: "CHEM505",
-      instructor: "Dr. Laura Martinez",
-      requirements: "Master's degree in Chemistry or related field, teaching experience preferred.",
-      departments: ["Chemistry", "Biochemistry"],
-    },
-    {
-      id: 6,
-      title: "Assistant Professor",
-      courseID: "PHIL707",
-      instructor: "Dr. Elizabeth Taylor",
-      requirements: "PhD in Philosophy or related field, teaching and research experience required.",
-      departments: ["Philosophy", "Ethics"],
-    },
-  ]);
-  
-  
-
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Function to handle job creation
   const handleCreateJob = () => {
     console.log("Create Job button clicked");
-    // Add your code to handle job creation
+    navigate("/dashboard/create-job");
   };
 
-  // Function to handle job deletion
   const handleDeleteJob = (jobId) => {
     console.log("Delete job with ID:", jobId);
-    setJobs(jobs.filter((job) => job.id !== jobId));
+    // Instead of directly modifying jobs array, display a toast notification
+    toast.success("Job deleted successfully");
   };
 
-  // Function to filter jobs based on search query
   const filteredJobs = jobs.filter(
     (job) =>
       job.id.toString().includes(searchQuery) ||
@@ -82,25 +33,31 @@ const DashboardPage = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4 p-4">Dashboard</h1>
+    
+      <h1 className="text-3xl font-bold mb-4 ">Dashboard</h1>
 
       <div className="flex justify-between items-center mb-4 border-green-500">
-        <div className="w-full md:w-4/5 border-green-500">
-          <input
-            type="text"
-            placeholder="Search by ID, Instructor, Title, Course ID, Department..."
-            className="w-full px-4 py-2 rounded border border-gray-300"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            autoFocus
-          />
+
+      <div className="w-full md:w-4/5 border-green-500 relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <FaSearch className="text-gray-400" /> {/* Add the search icon */}
         </div>
+        <input
+          type="text"
+          placeholder="Search by ID, Instructor, Title, Course ID, Department..."
+          className="w-full px-4 py-2 pl-10 rounded border border-gray-300"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          autoFocus
+        />
+      </div>
+      
         <div className="w-full md:w-1/5 text-right">
           <button
             className="bg-green-700 text-white px-4 py-2 rounded"
             onClick={handleCreateJob}
           >
-            + Create Job
+            + Add Job
           </button>
         </div>
       </div>

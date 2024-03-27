@@ -1,130 +1,9 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import jobs from "./jobsData";
 const JobPage = () => {
-  // Sample job data
-  const [jobs] = useState([
-    {
-      id: 1,
-      title: "Teaching Assistant",
-      courseID: "CS101",
-      instructor: "Dr. John Smith",
-      requirements:
-        "Bachelor's degree in Computer Science or related field, strong communication skills.",
-      departments: ["Computer Science", "Information Technology"],
-      location: "New York, NY",
-    },
-    {
-      id: 2,
-      title: "Teaching Assistant",
-      courseID: "ENG202",
-      instructor: "Prof. Emily Johnson",
-      requirements:
-        "Master's degree in English Literature or related field, previous teaching experience.",
-      departments: ["English", "Literature"],
-      location: "Los Angeles, CA",
-    },
-    {
-      id: 3,
-      title: "Research Assistant",
-      courseID: "MATH301",
-      instructor: "Dr. Sarah Brown",
-      requirements:
-        "Ph.D. in Mathematics or related field, research experience in algebraic geometry.",
-      departments: ["Mathematics", "Statistics"],
-      location: "Chicago, IL",
-    },
-    {
-      id: 4,
-      title: "Lab Assistant",
-      courseID: "CHEM201",
-      instructor: "Prof. Michael Davis",
-      requirements:
-        "Bachelor's degree in Chemistry or related field, lab experience preferred.",
-      departments: ["Chemistry", "Biochemistry"],
-      location: "Houston, TX",
-    },
-    {
-      id: 5,
-      title: "Teaching Assistant",
-      courseID: "PHY101",
-      instructor: "Dr. Rachel White",
-      requirements:
-        "Master's degree in Physics or related field, experience in teaching preferred.",
-      departments: ["Physics", "Astrophysics"],
-      location: "San Francisco, CA",
-    },
-    {
-      id: 6,
-      title: "Teaching Assistant",
-      courseID: "PSYCH101",
-      instructor: "Prof. David Miller",
-      requirements:
-        "Bachelor's degree in Psychology or related field, good interpersonal skills.",
-      departments: ["Psychology", "Counseling"],
-      location: "Miami, FL",
-    },
-    {
-      id: 7,
-      title: "Research Assistant",
-      courseID: "BIO101",
-      instructor: "Dr. Lisa Johnson",
-      requirements:
-        "Bachelor's degree in Biology or related field, research experience in molecular biology.",
-      departments: ["Biology", "Biotechnology"],
-      location: "Seattle, WA",
-    },
-    {
-      id: 8,
-      title: "Lab Assistant",
-      courseID: "ENGR201",
-      instructor: "Prof. Adam Wilson",
-      requirements:
-        "Bachelor's degree in Engineering or related field, lab experience preferred.",
-      departments: ["Engineering", "Mechanical Engineering"],
-      location: "Boston, MA",
-    },
-    {
-      id: 9,
-      title: "Teaching Assistant",
-      courseID: "HIST101",
-      instructor: "Prof. Sarah Brown",
-      requirements:
-        "Master's degree in History or related field, previous teaching experience.",
-      departments: ["History", "Archeology"],
-      location: "Denver, CO",
-    },
-    {
-      id: 10,
-      title: "Teaching Assistant",
-      courseID: "ART101",
-      instructor: "Dr. Robert Jackson",
-      requirements:
-        "Bachelor's degree in Fine Arts or related field, teaching experience in art preferred.",
-      departments: ["Fine Arts", "Visual Arts"],
-      location: "Portland, OR",
-    },
-    {
-      id: 11,
-      title: "Research Assistant",
-      courseID: "ECON201",
-      instructor: "Prof. Jennifer Lee",
-      requirements:
-        "Master's degree in Economics or related field, research experience in econometrics.",
-      departments: ["Economics", "Finance"],
-      location: "Austin, TX",
-    },
-    {
-      id: 12,
-      title: "Lab Assistant",
-      courseID: "PHIL201",
-      instructor: "Dr. Mark Roberts",
-      requirements:
-        "Bachelor's degree in Philosophy or related field, critical thinking skills.",
-      departments: ["Philosophy", "Ethics"],
-      location: "Washington, D.C.",
-    },
-  ]);
+  // Sample job data imported jobsDataimport jobsData from "./jobsData";
 
   // State for search query
   const [searchQuery, setSearchQuery] = useState("");
@@ -155,19 +34,19 @@ const JobPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-3xl font-bold mb-4 text-center">Job Listings</h1>
+    <div className="container mx-auto px-4 p-4">
+      <h1 className="text-3xl font-bold mb-4">Job Listings</h1>
       {/* Search bar with icon */}
       <div className="relative mb-4">
+        <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
         <input
           type="text"
           placeholder="Search by title, course, instructor, or department"
           value={searchQuery}
           onChange={handleSearchInputChange}
-          className="border border-gray-300 rounded px-4 py-2 pr-10 w-full"
+          className="border border-gray-300 rounded px-4 py-2 pl-10 w-full" // Adjusted padding for the input
           autoFocus
         />
-        <FaSearch className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400" />
       </div>
       {/* Grid layout for job cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -193,10 +72,7 @@ const JobPage = () => {
             <p className="mb-2">
               <strong>Departments:</strong> {job.departments.join(", ")}
             </p>
-            <p className="text-sm text-gray-500 mb-2">
-              <strong>Location:</strong> {job.location}
-            </p>
-        
+
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
               onClick={() => handleSeeDetails(job.id)}
@@ -205,7 +81,6 @@ const JobPage = () => {
             </button>
           </div>
         ))}
-        
       </div>
     </div>
   );
