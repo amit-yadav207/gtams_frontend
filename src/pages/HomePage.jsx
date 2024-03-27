@@ -1,28 +1,34 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <header className="bg-white shadow-sm py-4">
-        <div className="container mx-auto flex justify-between items-center px-4">
-          <h1 className="text-xl font-bold">Graduate Teaching Assistant Management System</h1>
-          <nav>
-            <ul className="flex space-x-4">
-              <li><Link to="/login" className="text-blue-600 hover:underline">Login</Link></li>
-              <li><Link to="/signup" className="text-blue-600 hover:underline">Sign Up</Link></li>
-              {/* Add more navigation links as needed */}
-            </ul>
-          </nav>
+        <div className="container mx-auto flex justify-center items-center px-4">
+          <h1 className="text-xl font-bold">
+            Graduate Teaching Assistant Management System
+          </h1>
         </div>
       </header>
 
       <main className="container mx-auto py-8">
         <section className="text-center">
           <div className="max-w-lg mx-auto">
-            <h2 className="text-3xl font-bold mb-4">Streamline TA Application and Assignment Processes</h2>
-            <p className="text-gray-700">Welcome to the Graduate Teaching Assistant Management System. Our platform simplifies the process of managing TA applications, course assignments, and performance evaluations.</p>
-            <Link to="/signup" className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300">Get Started</Link>
+            <h2 className="text-3xl font-bold mb-4">
+              Streamline TA Application and Assignment Processes
+            </h2>
+            <p className="text-gray-700">
+              Welcome to the Graduate Teaching Assistant Management System. Our
+              platform simplifies the process of managing TA applications,
+              course assignments, and performance evaluations.
+            </p>
+            <Link
+              to="/signup"
+              className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+            >
+              Get Started
+            </Link>
           </div>
         </section>
 
@@ -37,13 +43,6 @@ const HomePage = () => {
           </div>
         </section>
       </main>
-
-      <footer className="bg-white py-4 mt-8">
-        <div className="container mx-auto text-center">
-          <p>&copy; 2024 Graduate Teaching Assistant Management System. All rights reserved.</p>
-          {/* Add additional footer content here */}
-        </div>
-      </footer>
     </div>
   );
 };
