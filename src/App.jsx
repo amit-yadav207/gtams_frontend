@@ -17,6 +17,7 @@ import { IoMdAdd } from "react-icons/io";
 import RequireAuth from './components/Auth/RequireAuth'
 import NotRequireAuth from './components/Auth/NotRequireAuth'
 import { Toaster } from "react-hot-toast";
+import VerifyAccount from "./pages/User/Verification";
 function App() {
   return (
     <Router>
@@ -24,6 +25,7 @@ function App() {
       <div><Toaster position="top-right" reverseOrder={false} /></div>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/verify/:verificationToken" element={<VerifyAccount />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/about" element={<AboutPage />} />

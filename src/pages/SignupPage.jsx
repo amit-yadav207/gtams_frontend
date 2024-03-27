@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { createAccount } from "../Redux/authSlice";
+import toast from "react-hot-toast";
 
 const SignupPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -16,17 +23,66 @@ const SignupPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add signup logic here (e.g., send signup request to backend)
-    console.log(formData);
+  const createNewAccount = async (event) => {
+    event.preventDefault();
+
+    // checking the empty fields
+    if (
+      !formData.phone ||
+      !formData.email ||
+      !formData.fullName ||
+      !formData.password
+    ) {
+      toast.error("Please fill all the fields");
+      return;
+    }
+
+    // checking the name field length
+    if (formData.fullName.length < 3) {
+      toast.error("Name should be at least of 3 characters");
+      return;
+    }
+
+    // email validation using regex
+    if (
+      !formData.email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+    ) {
+      toast.error("Invalid email id");
+      return;
+    }
+
+    // password validation using regex
+    if (!formData.password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/)) {
+      toast.error(
+        "Minimum password length should be 8 with Uppercase, Lowercase, Number and Symbol"
+      );
+      return;
+    }
+    if (formData.phone.length !== 10) {
+      toast.error('Invalid mobile number');
+      return;
+    }
+
+    const res = await dispatch(createAccount(formData));
+
+    // redirect to login page if true
+    if (res.payload.success) navigate("/login");
+
+    // clearing the sign-up inputs
+    setFormData({
+      fullName: "",
+      email: "",
+      password: "",
+      phone: "",
+    });
   };
+
 
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center items-center">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={createNewAccount}>
           <div className="mb-4">
             <label
               htmlFor="name"
