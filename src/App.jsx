@@ -12,10 +12,10 @@ import JobPage from "./pages/JobPage";
 import JobDetailsPage from "./pages/JobDetailPage";
 import DashboardPage from "./pages/DeptStaffpages/DashboardPage";
 import UsersPage from "./pages/UsersPage";
-import JobsPage from "./pages/JobsPage";
-import CategoriesPage from "./pages/CategoriesPage";
-import DepartmentsPage from "./pages/DepartmentsPage";
-import StaffPage from "./pages/StaffPage";
+import { IoMdAdd } from "react-icons/io";
+import RequireAuth from './components/Auth/RequireAuth'
+import NotRequireAuth from './components/Auth/NotRequireAuth'
+
 function App() {
   return (
     <Router>
@@ -31,14 +31,21 @@ function App() {
         <Route path="/job/:jobId" element={<JobDetailsPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/users" element={<UsersPage />} />
-        <Route path="/jobs" element={<JobsPage />} />
-        <Route path="/categories" element={<CategoriesPage />} />
-        <Route path="/departments" element={<DepartmentsPage />} />
-        <Route path="/staff" element={<StaffPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
       </Routes>
+
+      <Routes element={<RequireAuth allowedRoles={['USER', 'DS', 'TACM', 'INS', , 'ADMIN']} />}>
+
+      </Routes>
+
+
+      <Routes element={<NotRequireAuth />}>
+
+      </Routes>
+
+
       <Footer />
-    </Router>
+    </Router >
   );
 }
 

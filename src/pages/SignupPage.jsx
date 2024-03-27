@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     email: "",
     password: "",
-    userType: "", // Add userType field
+    phone: "",
   });
 
   const handleChange = (e) => {
@@ -37,8 +37,8 @@ const SignupPage = () => {
             <input
               type="text"
               id="name"
-              name="name"
-              value={formData.name}
+              name="fullName"
+              value={formData.fullName}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
               required
@@ -61,6 +61,25 @@ const SignupPage = () => {
               required
             />
           </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="phone"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Phone
+            </label>
+            <input
+              type="tle"
+              id="tle"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              required
+            />
+          </div>
+
           <div className="mb-4">
             <label
               htmlFor="password"
@@ -77,29 +96,6 @@ const SignupPage = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
               required
             />
-          </div>
-          {/* User type selection */}
-          <div className="mb-4">
-            <label
-              htmlFor="userType"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              User Type
-            </label>
-            <select
-              id="userType"
-              name="userType"
-              value={formData.userType}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-              required
-            >
-              <option value="">Select User Type</option>
-              <option value="TA Applicants">TA Applicants</option>
-              <option value="Department Staff">Department Staff</option>
-              <option value="TA Committee Members">TA Committee Members</option>
-              <option value="Instructors">Instructors</option>
-            </select>
           </div>
           <button
             type="submit"
