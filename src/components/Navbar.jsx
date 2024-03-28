@@ -278,7 +278,6 @@ function Navbar() {
           </NavLink>
 
 
-
           <NavLink
             to="/dashboard"
             className="block mt-3 lg:inline-block lg:mt-0 text-gray-300 mr-4 hover:bg-gray-700 hover:text-white p-2 rounded-md text-sm font-medium"

@@ -18,6 +18,7 @@ import RequireAuth from './components/Auth/RequireAuth'
 import NotRequireAuth from './components/Auth/NotRequireAuth'
 import { Toaster } from "react-hot-toast";
 import VerifyAccount from "./pages/User/Verification";
+import EmailNotificationPage from "./pages/EmailNotificationPage";
 function App() {
   return (
     <Router>
@@ -26,6 +27,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/verify/:verificationToken" element={<VerifyAccount />} />
+        <Route path="/email-notification/:emailPrefix" element={<EmailNotificationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/about" element={<AboutPage />} />
@@ -39,7 +41,7 @@ function App() {
         <Route path="/dashboard/create-job" element={<JobCreationForm />} /> //Define route for job creation form
       </Routes>
 
-      <Routes element={<RequireAuth allowedRoles={['USER', 'DS', 'TACM', 'INS', , 'ADMIN']} />}>
+      <Routes element={<RequireAuth allowedRoles={['USER', 'DS', 'TACM', 'INS',  'ADMIN']} />}>
 
       </Routes>
 
