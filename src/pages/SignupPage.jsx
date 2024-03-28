@@ -8,7 +8,6 @@ const SignupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -59,16 +58,26 @@ const SignupPage = () => {
       return;
     }
     if (formData.phone.length !== 10) {
-      toast.error('Invalid mobile number');
+      toast.error("Invalid mobile number");
       return;
     }
 
     const res = await dispatch(createAccount(formData));
 
-    // redirect to login page if true
-    if (res.payload.success) navigate("/login");
+    if (res.payload.success) {
+      const emailParts = formData.email.split("@");
+      const username = emailParts[0];
+      const domain = emailParts[1];
+      const prefixLength = Math.min(username.length, 3);
+      const hiddenPart = "*".repeat(username.length - prefixLength);
+      const emailPrefix =
+        username.substring(0, prefixLength) + hiddenPart + domain;
 
-    // clearing the sign-up inputs
+      // Redirect to email verification page
+      navigate(`/email-notification/${encodeURIComponent(emailPrefix)}`);
+    }
+
+    // Clearing the sign-up inputs
     setFormData({
       fullName: "",
       email: "",
@@ -76,7 +85,6 @@ const SignupPage = () => {
       phone: "",
     });
   };
-
 
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center items-center">
@@ -126,8 +134,8 @@ const SignupPage = () => {
               Phone
             </label>
             <input
-              type="tle"
-              id="tle"
+              type="tel"
+              id="phone"
               name="phone"
               value={formData.phone}
               onChange={handleChange}

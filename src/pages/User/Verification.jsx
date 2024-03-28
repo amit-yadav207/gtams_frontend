@@ -27,19 +27,21 @@ const VerifyAccount = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center h-[120vh]"      >
-        <form className="flex flex-col justify-center gap-6 rounded-lg p-4 text-white w-80 h-[26rem] shadow-[0_0_10px_black]">
-          <h3 className="text-center text-2xl font-bold">Verify Account</h3>
+    <div className="flex items-center justify-center h-screen bg-white">
+      <form className="flex flex-col justify-center gap-6 rounded-lg p-6 bg-gray-800 text-white w-80 h-96 shadow-md">
+        <h3 className="text-center text-2xl font-bold">Verify Account</h3>
+  
+        <button
+          className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-3 font-semibold text-lg cursor-pointer"
+          onClick={handleFormSubmit}
+        >
+          Verify
+        </button>
+      </form>
+    </div>
+  </>
+  
 
-          <button
-            className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer"
-            onClick={handleFormSubmit}
-          >
-            Verify
-          </button>
-        </form>
-      </div>
-    </>
   );
 };
 
