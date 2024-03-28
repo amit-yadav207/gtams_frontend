@@ -20,13 +20,14 @@ import VerifyAccount from "./pages/User/Verification";
 import EmailNotificationPage from "./pages/EmailNotificationPage";
 import { useSelector } from "react-redux";
 import Denied from "./pages/Denied";
+import ApplicationsPage from "./pages/ApplicationsPage";
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
   return (
     <Router>
       <Navbar />
       <div>
-        <Toaster position="top-right" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
       </div>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -55,6 +56,8 @@ function App() {
             path="/profile"
             element={<ProfilePage user={loggedInUser} />}
           />
+
+          <Route path="/applications" element={<ApplicationsPage />} />
         </Route>
         <Route element={<RequireAuth allowedRoles={["DS"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["TACM"]} />}></Route>

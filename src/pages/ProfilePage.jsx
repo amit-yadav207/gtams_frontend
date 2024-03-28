@@ -38,6 +38,7 @@ function ProfilePage({ user }) {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4 text-center">Your Profile</h1>
       <hr className="my-4" />
+      <div>second</div>
       <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg overflow-hidden">
         <div className="flex justify-center">
           <img
