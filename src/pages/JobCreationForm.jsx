@@ -1,50 +1,69 @@
-import React, { useState, useNavig } from "react";
+import React, { useState } from "react";
 import jobs from "./jobsData";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 import toast from "react-hot-toast";
+import axiosInstance from "../Helper/axiosInstance";
+
 const JobCreationForm = () => {
   const navigate = useNavigate(); // Initialize navigate function
   const [formData, setFormData] = useState({
     title: "",
-    courseID: "",
+    courseId: "",
     instructor: "",
-    requirements: "",
-    departments: [], // Change departments to an array
+    requiredSkills: "",
+    department: "",
+    jobId: "",
   });
 
   // Function to handle form field changes
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]:
-        name === "departments"
-          ? value.split(",").map((dept) => dept.trim())
-          : value, // Split the input value into an array of departments
-    }));
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
+
+
+  const createJob = async () => {
+    const res = await axiosInstance.post('/application/create', formData);
+    if (res.data?.success) {
+      toast.success('Application created.')
+    } else {
+      toast.success('Error in fetch.')
+    }
+    console.log(res.data.data);
+  }
+
+
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add the form data to the existing jobs array
-    const newJob = {
-      id: jobs.length + 1, // Generate a new ID (assuming IDs are consecutive)
-      ...formData,
-    };
-    jobs.push(newJob);
-    // Log the updated jobs array
-    toast.success("Job added!")
-    console.log("Updated jobs array:", jobs);
-    // Reset form data after submission
+
+    try {
+      await createJob();
+    } catch (err) {
+      console.error(err);
+    }
+
+    // const newJob = {
+    //   id: jobs.length + 1, // Generate a new ID (assuming IDs are consecutive)
+    //   ...formData,
+    // };
+    // jobs.push(newJob);
+    // // Log the updated jobs array
+    // toast.success("Job added!")
+    // console.log("Updated jobs array:", jobs);
+    // // Reset form data after submission
     setFormData({
       title: "",
-      courseID: "",
+      courseId: "",
       instructor: "",
-      requirements: "",
-      departments: [],
+      requiredSkills: "",
+      department: "",
+      jobId: "",
     });
-    navigate('/dashboard')
+    navigate('/dashboardDS')
   };
 
   return (
@@ -74,16 +93,16 @@ const JobCreationForm = () => {
           {/* Course ID */}
           <div className="mb-4">
             <label
-              htmlFor="courseID"
+              htmlFor="courseId"
               className="block text-gray-700 font-semibold mb-2"
             >
               Course ID:
             </label>
             <input
               type="text"
-              id="courseID"
-              name="courseID"
-              value={formData.courseID}
+              id="courseId"
+              name="courseId"
+              value={formData.courseId}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
@@ -107,37 +126,55 @@ const JobCreationForm = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
-          {/* Requirements */}
+          {/* requiredSkills */}
           <div className="mb-4">
             <label
-              htmlFor="requirements"
+              htmlFor="requiredSkills"
               className="block text-gray-700 font-semibold mb-2"
             >
-              Requirements:
+              requiredSkills:
             </label>
             <textarea
-              id="requirements"
-              name="requirements"
-              value={formData.requirements}
+              id="requiredSkills"
+              name="requiredSkills"
+              value={formData.requiredSkills}
               onChange={handleChange}
               required
               rows="3"
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
-          {/* Departments */}
+          {/* Department */}
           <div className="mb-4">
             <label
-              htmlFor="departments"
+              htmlFor="department"
               className="block text-gray-700 font-semibold mb-2"
             >
               Department:
             </label>
             <input
               type="text"
-              id="departments"
-              name="departments"
-              value={formData.departments.join(", ")} // Convert array to comma-separated string
+              id="department"
+              name="department"
+              value={formData.department} // Convert array to comma-separated string
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="jobId"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              jobId:
+            </label>
+            <input
+              type="text"
+              id="jobId"
+              name="jobId"
+              value={formData.jobId} // Convert array to comma-separated string
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
