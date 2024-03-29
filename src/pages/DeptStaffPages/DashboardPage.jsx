@@ -80,9 +80,9 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto mb-4">
-        <table className="w-full table-fixed">
-          <thead>
+      <div className="overflow-x-auto mb-4 text-sm ">
+        <table className="w-full table-auto">
+          <thead className="text-sm lg:text-lg">
             <tr className="bg-gray-200">
               <th className="px-4 py-2">SN</th>
               <th className="px-4 py-2">Title</th>
@@ -97,27 +97,31 @@ const DashboardPage = () => {
             {filteredJobs.map((job, index) => (
               <tr key={job.id}>
                 <td className="border px-4 py-2 ">{index + 1}</td>
-                <td className="border px-4 py-2  break-words">{job.title}</td>
-                <td className="border px-4 py-2 break-words">{job.courseId}</td>
-                <td className="border px-4 py-2 break-words">
+                <td className="border px-4 py-2  truncate w-40 max-w-60">
+                  {job.title}
+                </td>
+                <td className="border px-4 py-2 truncate w-40 max-w-40">
+                  {job.courseId}
+                </td>
+                <td className="border px-4 py-2 truncate w-40 max-w-40">
                   {job.department}
                 </td>
-                <td className="border px-4 py-2 break-words">
+                <td className="border px-4 py-2 truncate w-40 max-w-40">
                   {job.instructor}
                 </td>
-                <td className="border px-4 py-2 break-words">
+                <td className="border px-4 py-2 truncate w-40 max-w-80">
                   {job.requiredSkills}
                 </td>
-                <td className="border px-4 py-2 flex justify-center items-center">
+                <td className="border px-4 py-2 ">
                   <div className="flex flex-col">
                     <button
-                      className="bg-red-500 text-white px-6 py-1 rounded hover:bg-red-600 mb-2"
+                      className="bg-red-500 text-white lg:px-6 py-1 px-3 rounded hover:bg-red-600 mb-2"
                       onClick={() => handleDeleteJob(job._id)}
                     >
                       Delete
                     </button>
                     <button
-                      className="bg-red-500 text-white px-7 py-1 rounded hover:bg-red-600"
+                      className="bg-yellow-400 text-white lg:px-7 py-1 px-3 rounded hover:bg-yellow-500"
                       onClick={() => handleDeleteJob(job._id)}
                     >
                       View

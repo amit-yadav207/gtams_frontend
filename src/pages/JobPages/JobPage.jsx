@@ -73,27 +73,27 @@ const JobPage = () => {
         />
       </div>
       {/* Grid layout for job cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
         {/* Map through filtered job data and render cards */}
         {filteredJobs.map((job) => (
           <div
             key={job._id}
             className="bg-white shadow-md rounded-md p-6 transition duration-300 ease-in-out transform hover:scale-105"
           >
-            <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
-            <p className="mb-2">
+            <h2 className="text-xl font-semibold mb-2 ">{job.title}</h2>
+            <p className="mb-2 overflow-hidden truncate text-ellipsis">
               <strong>Course ID:</strong> {job.courseId}
             </p>
-            <p className="mb-2">
+            <p className="mb-2 overflow-hidden truncate text-ellipsis">
               <strong>Instructor:</strong> {job.instructor}
             </p>
-            <p className="mb-2">
+            <p className="mb-2 overflow-hidden truncate text-ellipsis">
               <strong>Requirements:</strong>{" "}
               {job.requiredSkills.length > 50
                 ? `${job.requiredSkills.slice(0, 50)}...`
                 : job.requiredSkills}
             </p>
-            <p className="mb-2">
+            <p className="mb-2 overflow-hidden truncate text-ellipsis" >
               <strong>Departments:</strong> {job.department}
             </p>
 
