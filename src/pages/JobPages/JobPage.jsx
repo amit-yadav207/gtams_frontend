@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../Helper/axiosInstance";
 import toast from "react-hot-toast";
+
 // import jobs from "./jobsData";
 const JobPage = () => {
   // State for search query

@@ -30,17 +30,18 @@ function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
   return (
     <Router>
+
       <Navbar />
+
       <div>
         <Toaster position="top-center" reverseOrder={false} />
       </div>
+
       <Routes>
+
         <Route path="/" element={<HomePage />} />
         <Route path="/verify/:verificationToken" element={<VerifyAccount />} />
-        <Route
-          path="/email-notification/:emailPrefix"
-          element={<EmailNotificationPage />}
-        />
+        <Route path="/email-notification/:emailPrefix" element={<EmailNotificationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
@@ -68,6 +69,8 @@ function App() {
 
           <Route path="/applications" element={<ApplicationsPage />} />
         </Route>
+
+        <Route element={<RequireAuth allowedRoles={["USER"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["DS"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["TACM"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["INS"]} />}></Route>
