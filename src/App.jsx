@@ -22,6 +22,9 @@ import EmailNotificationPage from "./pages/All/EmailNotificationPage";
 import { useSelector } from "react-redux";
 import Denied from "./pages/All/Denied";
 import ApplicationsPage from "./pages/TApages/ApplicationsPage";
+import ForgetPassword from "./pages/All/ForgetPassword";
+import ResetPassword from "./pages/All/ResetPassword";
+import SetPassword from "./pages/All/SetPassword";
 
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
@@ -39,6 +42,9 @@ function App() {
           element={<EmailNotificationPage />}
         />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/set-password" element={<SetPassword />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/denied" element={<Denied />} />
         <Route path="/about" element={<AboutPage />} />
