@@ -47,8 +47,8 @@ const JobDetailPage = () => {
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold mb-4 text-center">Job Details</h1>
-      <div className="bg-white shadow-md rounded-md p-6">
-        <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
+      <div className="bg-white shadow-md rounded-md p-6 truncate text-ellipsis">
+        <h2 className="text-xl font-semibold mb-2 ">{job.title}</h2>
         <p className="mb-2">
           <strong>Course ID:</strong> {job.courseId}
         </p>
