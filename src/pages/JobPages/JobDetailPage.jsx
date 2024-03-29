@@ -14,17 +14,26 @@ const JobDetailPage = () => {
   // const job = jobs.find((job) => job.id === parseInt(jobId));
 
   const getApplicationByJobId = async () => {
-    const res = await axiosInstance.post(
-      `/application//getApplicationById/${jobId}`
-    );
+    let res = axiosInstance.post(`/application//getApplicationById/${jobId}`);
     console.log(res.data);
+
+    await toast.promise(res, {
+      loading: "Loading...",
+      success: (data) => {
+        console.log('data', data.data);
+        return data?.data?.message;
+      },
+      error: (data) => {
+        return data?.data?.message;
+      },
+    });
+
+    res = await res;
 
     if (res.data.success) {
       setJob(res.data.application);
-      toast.success(res.data.message);
     } else {
-      console.log("error in fetching job");
-      toast.error(res.data.message);
+      console.log('error in fetching job');
     }
   };
 
