@@ -50,20 +50,20 @@ const JobDetailPage = () => {
       <div className="bg-white shadow-md rounded-md p-6">
         <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
         <p className="mb-2">
-          <strong>Course ID:</strong> {job.courseID}
+          <strong>Course ID:</strong> {job.courseId}
         </p>
         <p className="mb-2">
           <strong>Instructor:</strong> {job.instructor}
         </p>
         <p className="mb-2">
-          <strong>Requirements:</strong> {job.requirements}
+          <strong>Requirements:</strong> {job.requiredSkills}
         </p>
         <p className="mb-2">
-          <strong>Departments:</strong> {job.departments}
+          <strong>Departments:</strong> {job.department}
         </p>
-        <p className="text-sm text-gray-500 mb-2">
+        {/* <p className="text-sm text-gray-500 mb-2">
           <strong>Location:</strong> {job.location}
-        </p>
+        </p> */}
         {/* Apply button */}
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-4"
