@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import jobs from "./jobsData";
+import axiosInstance from "../../Helper/axiosInstance";
+import toast from "react-hot-toast";
+// import jobs from "./jobsData";
 const JobPage = () => {
-  // Sample job data imported jobsDataimport jobsData from "./jobsData";
 
   // State for search query
   const [searchQuery, setSearchQuery] = useState("");
+  const [jobs, setJobs] = useState([]);
   const navigate = useNavigate();
 
   // Function to handle search input change
@@ -18,13 +20,26 @@ const JobPage = () => {
   const filteredJobs = jobs.filter((job) => {
     return (
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.courseID.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      job.courseId.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.instructor.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.departments.some((dept) =>
-        dept.toLowerCase().includes(searchQuery.toLowerCase())
-      ) // Include department search
-    );
-  });
+      job.department.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  })
+
+  const getAllJobs = async () => {
+    const res = await axiosInstance.post("/application/getAllJobs");
+    if (res.data?.success) {
+      toast.success("Application Fetched.");
+    } else {
+      toast.success("Error in fetch.");
+    }
+    console.log(res.data.jobs);
+    setJobs(res.data.jobs);
+  }
+
+  useEffect(() => {
+    getAllJobs();
+  }, [])
 
   //   Function to handle click on "See Details" button
   const handleSeeDetails = (jobId) => {
@@ -53,24 +68,24 @@ const JobPage = () => {
         {/* Map through filtered job data and render cards */}
         {filteredJobs.map((job) => (
           <div
-            key={job.id}
+            key={job._id}
             className="bg-white shadow-md rounded-md p-6 transition duration-300 ease-in-out transform hover:scale-105"
           >
             <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
             <p className="mb-2">
-              <strong>Course ID:</strong> {job.courseID}
+              <strong>Course ID:</strong> {job.courseId}
             </p>
             <p className="mb-2">
               <strong>Instructor:</strong> {job.instructor}
             </p>
             <p className="mb-2">
               <strong>Requirements:</strong>{" "}
-              {job.requirements.length > 50
-                ? `${job.requirements.slice(0, 50)}...`
-                : job.requirements}
+              {job.requiredSkills.length > 50
+                ? `${job.requiredSkills.slice(0, 50)}...`
+                : job.requiredSkills}
             </p>
             <p className="mb-2">
-              <strong>Departments:</strong> {job.departments.join(", ")}
+              <strong>Departments:</strong> {job.department}
             </p>
 
             <button

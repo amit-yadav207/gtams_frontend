@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import jobs from "./jobsData";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from '../../Helper/axiosInstance.js';
+
 const JobDetailPage = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const { jobId } = useParams();
 
+  const [job, setJob] = useState();
+
   // Find the job with the matching jobId
-  const job = jobs.find((job) => job.id === parseInt(jobId));
+  // const job = jobs.find((job) => job.id === parseInt(jobId));
+
+  const getApplicationByJobId = async () => {
+    const res = await axiosInstance.post(`/application//getApplicationById/${jobId}`);
+    console.log(res.data);
+
+    if (res.data.success) {
+      setJob(res.data.application);
+      toast.success(res.data.message)
+    } else {
+      console.log('error in fetching job');
+      toast.error(res.data.message)
+    }
+  }
+
+  useEffect(() => {
+    getApplicationByJobId();
+  }, [jobId])
 
   // If job not found, display a message
   if (!job) {
@@ -39,7 +59,7 @@ const JobDetailPage = () => {
           <strong>Requirements:</strong> {job.requirements}
         </p>
         <p className="mb-2">
-          <strong>Departments:</strong> {job.departments.join(", ")}
+          <strong>Departments:</strong> {job.departments}
         </p>
         <p className="text-sm text-gray-500 mb-2">
           <strong>Location:</strong> {job.location}
