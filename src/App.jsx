@@ -45,16 +45,17 @@ function App() {
         <Route path="/job/:jobId" element={<JobDetailsPage />} />
         <Route path="/dashboardDS" element={<DashboardPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
+        <Route path="/profile" element={<ProfilePage user={loggedInUser} />} />
         <Route
           path="/dashboard/create-job"
           element={<JobCreationForm />}
         />{" "}
         //Define route for job creation form
         <Route element={<RequireAuth allowedRoles={["USER", "DS"]} />}>
-          <Route
+          {/*<Route
             path="/profile"
             element={<ProfilePage user={loggedInUser} />}
-          />
+  />*/}
 
           <Route path="/applications" element={<ApplicationsPage />} />
         </Route>
