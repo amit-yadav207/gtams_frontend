@@ -7,6 +7,7 @@ import LoginPage from "./pages/All/LoginPage";
 import SignupPage from "./pages/All/SignupPage";
 // import ProfilePage from "./pages/All/ProfilePage";
 import ProfilePage from "./pages/TApages/ProfilePage";
+import UpdateProfilePage from "./pages/TApages/UpdateProfilePage";
 import ContactPage from "./pages/All/ContactPage";
 import AboutPage from "./pages/All/AboutPage";
 import JobPage from "./pages/JobPages/JobPage";
@@ -21,6 +22,7 @@ import EmailNotificationPage from "./pages/All/EmailNotificationPage";
 import { useSelector } from "react-redux";
 import Denied from "./pages/All/Denied";
 import ApplicationsPage from "./pages/TApages/ApplicationsPage";
+
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
   return (
@@ -47,9 +49,10 @@ function App() {
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
         <Route path="/profile" element={<ProfilePage user={loggedInUser} />} />
         <Route
-          path="/dashboard/create-job"
-          element={<JobCreationForm />}
-        />{" "}
+          path="/update-profile"
+          element={<UpdateProfilePage user={loggedInUser} />}
+        />
+        <Route path="/dashboard/create-job" element={<JobCreationForm />} />{" "}
         //Define route for job creation form
         <Route element={<RequireAuth allowedRoles={["USER", "DS"]} />}>
           {/*<Route
