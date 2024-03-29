@@ -36,11 +36,12 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 flex justify-center bg-slate-100">
+    <div className="lg:w-5/12 w-full py-8 lg:px-0 px-6 shadow-md bg-white rounded-lg">
       <h1 className="text-3xl font-bold mb-8 text-center">Contact Us</h1>
       <form onSubmit={onSubmit} className="max-w-md mx-auto space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="name" className="block text-md font-medium text-gray-800 mb-2">
             Name
           </label>
           <input
@@ -54,7 +55,7 @@ const ContactPage = () => {
           />
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="email" className="block text-md font-medium text-gray-800 mb-2">
             Email
           </label>
           <input
@@ -68,7 +69,7 @@ const ContactPage = () => {
           />
         </div>
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="message" className="block text-md font-medium text-gray-800 mb-2">
             Message
           </label>
           <textarea
@@ -88,6 +89,7 @@ const ContactPage = () => {
           Submit
         </button>
       </form>
+    </div>
     </div>
   );
 };
