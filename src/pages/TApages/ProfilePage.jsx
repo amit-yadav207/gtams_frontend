@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { CgProfile } from "react-icons/cg";
+import { FaGraduationCap } from "react-icons/fa";
+import { RiBriefcaseLine } from "react-icons/ri";
+import { IoMdConstruct } from 'react-icons/io';
 const dummyUserData = {
   fullName: "John Doe",
   email: "john@example.com",
@@ -39,7 +42,7 @@ function ProfilePage({ user }) {
       className="container sm:p-1 h-full  lg:min-h-screen "
       style={{ minHeight: "85vh" }}
     >
-      <div className=" sm:m-1 border border-black">
+      <div className=" sm:m-1 lg:m-4 ">
         <div className="flex flex-col p-4 border border-pink-400 rounded-md m-3 items-center">
           <img
             src="https://avatar.iran.liara.run/public/boy"
@@ -50,11 +53,11 @@ function ProfilePage({ user }) {
             AMIT YADAV
           </div>
         </div>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md m-3">
+        <button className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
           Edit
         </button>
         {/*<div className="block border border-red-400 rounded-md p-5 m-3">Resume</div>*/}
-        <div className="block border border-red-400 rounded-md p-5 m-3">
+        <div className="block border border-red-400 rounded-md p-5 m-3  ">
           <div className="flex items-center">
             <CgProfile className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans">Contact Details</span>
@@ -81,19 +84,93 @@ function ProfilePage({ user }) {
             </tbody>
           </table>
         </div>
-        <div className="block border border-red-400 rounded-md p-5 m-3">
-          Higher Education
+
+        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+          <div className="flex items-center">
+            <FaGraduationCap className="h-12 w-12 mr-4 text-orange-600" />
+            <span className="text-2xl font-sans"> Higher Education</span>
+          </div>
+
+          <table className="text-gray-800">
+            <tbody className="">
+              <tr>
+                <td className="p-2 font-semibold align-top">Name</td>
+                <td className="p-2 align-top">{dummyUserData.fullName}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Email</td>
+                <td className="p-2 align-top">{dummyUserData.email}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Contact</td>
+                <td className="p-2 align-top">{dummyUserData.contact}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Address</td>
+                <td className="p-2 align-top">{dummyUserData.address}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div className="block border border-red-400 rounded-md p-5 m-3">
-          Prev experience
+
+        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+          <div className="flex items-center">
+            <RiBriefcaseLine className="h-12 w-12 mr-4 text-orange-600" />
+            <span className="text-2xl font-sans">Previous Experience</span>
+          </div>
+
+          <table className="text-gray-800">
+            <tbody className="">
+              <tr>
+                <td className="p-2 font-semibold align-top">Name</td>
+                <td className="p-2 align-top">{dummyUserData.fullName}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Email</td>
+                <td className="p-2 align-top">{dummyUserData.email}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Contact</td>
+                <td className="p-2 align-top">{dummyUserData.contact}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Address</td>
+                <td className="p-2 align-top">{dummyUserData.address}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div className="block border border-red-400 rounded-md p-5 m-3">
-          Skills
+        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+          <div className="flex items-center">
+            <IoMdConstruct className="h-12 w-12 mr-4 text-orange-600" />
+            <span className="text-2xl font-sans">Skills</span>
+          </div>
+
+          <table className="text-gray-800">
+            <tbody className="">
+              <tr>
+                <td className="p-2 font-semibold align-top">Name</td>
+                <td className="p-2 align-top">{dummyUserData.fullName}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Email</td>
+                <td className="p-2 align-top">{dummyUserData.email}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Contact</td>
+                <td className="p-2 align-top">{dummyUserData.contact}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Address</td>
+                <td className="p-2 align-top">{dummyUserData.address}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         {/*<div className="block border border-red-400 rounded-md p-5 m-3">
           Cover letter
   </div>*/}
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md m-3">
+        <button className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
           Edit
         </button>
       </div>
