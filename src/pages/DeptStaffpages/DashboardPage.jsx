@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
-import { FaSearch } from 'react-icons/fa'; // Import the search icon from FontAwesome
+import { FaSearch } from "react-icons/fa"; // Import the search icon from FontAwesome
 
 // import jobs from "../jobsData";
 import axiosInstance from "../../Helper/axiosInstance";
@@ -12,18 +12,18 @@ const DashboardPage = () => {
 
   const [jobs, setJobs] = useState([]);
   const getAllJobs = async () => {
-    const res = await axiosInstance.post('/application/getAllJobs');
+    const res = await axiosInstance.post("/application/getAllJobs");
     if (res.data?.success) {
-      toast.success('Application Fetched.')
+      toast.success("Application Fetched.");
     } else {
-      toast.success('Error in fetch.')
+      toast.success("Error in fetch.");
     }
     console.log(res.data.jobs);
     setJobs(res.data.jobs);
-  }
+  };
   useEffect(() => {
     getAllJobs();
-  }, [])
+  }, []);
 
   const handleCreateJob = () => {
     console.log("Create Job button clicked");
@@ -35,10 +35,10 @@ const DashboardPage = () => {
 
     const res = await axiosInstance.delete(`/application/delete/${jobId}`);
     if (res.data?.success) {
-      toast.success('Application Deleted.')
+      toast.success("Application Deleted.");
       getAllJobs();
     } else {
-      toast.success('Error in Delete.')
+      toast.success("Error in Delete.");
     }
   };
 
@@ -48,17 +48,14 @@ const DashboardPage = () => {
       job.instructor.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.courseId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.department.toLowerCase().includes(searchQuery.toLowerCase()
-      )
+      job.department.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="p-4">
-
       <h1 className="text-3xl font-bold mb-4 ">Dashboard</h1>
 
       <div className="flex justify-between items-center mb-4 border-green-500">
-
         <div className="w-full md:w-4/5 border-green-500 relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <FaSearch className="text-gray-400" /> {/* Add the search icon */}
@@ -84,7 +81,7 @@ const DashboardPage = () => {
       </div>
 
       <div className="overflow-x-auto mb-4">
-        <table className="w-full table-auto">
+        <table className="w-full table-fixed">
           <thead>
             <tr className="bg-gray-200">
               <th className="px-4 py-2">SN</th>
@@ -99,21 +96,33 @@ const DashboardPage = () => {
           <tbody>
             {filteredJobs.map((job, index) => (
               <tr key={job.id}>
-                <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{job.title}</td>
-                <td className="border px-4 py-2">{job.courseId}</td>
-                <td className="border px-4 py-2">
+                <td className="border px-4 py-2 ">{index + 1}</td>
+                <td className="border px-4 py-2  break-words">{job.title}</td>
+                <td className="border px-4 py-2 break-words">{job.courseId}</td>
+                <td className="border px-4 py-2 break-words">
                   {job.department}
                 </td>
-                <td className="border px-4 py-2">{job.instructor}</td>
-                <td className="border px-4 py-2">{job.requiredSkills}</td>
-                <td className="border px-4 py-2 text-right">
-                  <button
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 mr-2"
-                    onClick={() => handleDeleteJob(job._id)}
-                  >
-                    Delete
-                  </button>
+                <td className="border px-4 py-2 break-words">
+                  {job.instructor}
+                </td>
+                <td className="border px-4 py-2 break-words">
+                  {job.requiredSkills}
+                </td>
+                <td className="border px-4 py-2 flex justify-center items-center">
+                  <div className="flex flex-col">
+                    <button
+                      className="bg-red-500 text-white px-6 py-1 rounded hover:bg-red-600 mb-2"
+                      onClick={() => handleDeleteJob(job._id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-7 py-1 rounded hover:bg-red-600"
+                      onClick={() => handleDeleteJob(job._id)}
+                    >
+                      View
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

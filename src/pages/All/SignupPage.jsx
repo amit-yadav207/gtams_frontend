@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { createAccount } from "../Redux/authSlice";
+import { createAccount } from "../../Redux/authSlice";
 import toast from "react-hot-toast";
 
 const SignupPage = () => {

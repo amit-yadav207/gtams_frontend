@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import jobs from "./jobsData";
+import jobs from "../JobPages/jobsData";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 import toast from "react-hot-toast";
-import axiosInstance from "../Helper/axiosInstance";
+import axiosInstance from "../../Helper/axiosInstance";
 
 const JobCreationForm = () => {
   const navigate = useNavigate(); // Initialize navigate function
