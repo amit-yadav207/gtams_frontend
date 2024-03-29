@@ -2,25 +2,24 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import ProfilePage from "./pages/ProfilePage";
-import ContactPage from "./pages/ContactPage";
-import AboutPage from "./pages/AboutPage";
-import JobPage from "./pages/JobPage";
-import JobCreationForm from "./pages/JobCreationForm";
-import JobDetailsPage from "./pages/JobDetailPage";
-import DashboardPage from "./pages/DeptStaffpages/DashboardPage";
-import UsersPage from "./pages/UsersPage";
+import HomePage from "./pages/All/HomePage";
+import LoginPage from "./pages/All/LoginPage";
+import SignupPage from "./pages/All/SignupPage";
+import ProfilePage from "./pages/All/ProfilePage";
+import ContactPage from "./pages/All/ContactPage";
+import AboutPage from "./pages/All/AboutPage";
+import JobPage from "./pages/JobPages/JobPage";
+import JobCreationForm from "./pages/DeptStaffPages/JobCreationForm";
+import JobDetailsPage from "./pages/JobPages/JobDetailPage";
+import DashboardPage from "./pages/DeptStaffPages/DashboardPage";
 import RequireAuth from "./components/Auth/RequireAuth";
 import NotRequireAuth from "./components/Auth/NotRequireAuth";
 import { Toaster } from "react-hot-toast";
 import VerifyAccount from "./pages/User/Verification";
-import EmailNotificationPage from "./pages/EmailNotificationPage";
+import EmailNotificationPage from "./pages/All/EmailNotificationPage";
 import { useSelector } from "react-redux";
-import Denied from "./pages/Denied";
-import ApplicationsPage from "./pages/ApplicationsPage";
+import Denied from "./pages/All/Denied";
+import ApplicationsPage from "./pages/TApages/ApplicationsPage";
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
   return (
@@ -44,14 +43,13 @@ function App() {
         <Route path="/job" element={<JobPage />} />
         <Route path="/job/:jobId" element={<JobDetailsPage />} />
         <Route path="/dashboardDS" element={<DashboardPage />} />
-        <Route path="/users" element={<UsersPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
         <Route
           path="/dashboard/create-job"
           element={<JobCreationForm />}
         />{" "}
         //Define route for job creation form
-        <Route element={<RequireAuth allowedRoles={["USER","DS"]} />}>
+        <Route element={<RequireAuth allowedRoles={["USER", "DS"]} />}>
           <Route
             path="/profile"
             element={<ProfilePage user={loggedInUser} />}
