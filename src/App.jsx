@@ -5,7 +5,9 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/All/HomePage";
 import LoginPage from "./pages/All/LoginPage";
 import SignupPage from "./pages/All/SignupPage";
-import ProfilePage from "./pages/All/ProfilePage";
+// import ProfilePage from "./pages/All/ProfilePage";
+import ProfilePage from "./pages/TApages/ProfilePage";
+import UpdateProfilePage from "./pages/TApages/UpdateProfilePage";
 import ContactPage from "./pages/All/ContactPage";
 import AboutPage from "./pages/All/AboutPage";
 import JobPage from "./pages/JobPages/JobPage";
@@ -20,6 +22,7 @@ import EmailNotificationPage from "./pages/All/EmailNotificationPage";
 import { useSelector } from "react-redux";
 import Denied from "./pages/All/Denied";
 import ApplicationsPage from "./pages/TApages/ApplicationsPage";
+
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
   return (
@@ -45,13 +48,19 @@ function App() {
         <Route path="/job/:jobId" element={<JobDetailsPage />} />
         <Route path="/dashboardDS" element={<DashboardPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
-        <Route path="/dashboard/create-job" element={<JobCreationForm />} />
-        
-        <Route element={<RequireAuth allowedRoles={["USER", "DS", "TACM", "ADMIN", "INS"]} />}>
-          <Route
+        <Route path="/profile" element={<ProfilePage user={loggedInUser} />} />
+        <Route
+          path="/update-profile"
+          element={<UpdateProfilePage user={loggedInUser} />}
+        />
+        <Route path="/dashboard/create-job" element={<JobCreationForm />} />{" "}
+        //Define route for job creation form
+        <Route element={<RequireAuth allowedRoles={["USER", "DS"]} />}>
+          {/*<Route
             path="/profile"
             element={<ProfilePage user={loggedInUser} />}
-          />
+  />*/}
+
           <Route path="/applications" element={<ApplicationsPage />} />
         </Route>
 
