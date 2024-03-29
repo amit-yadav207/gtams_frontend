@@ -27,13 +27,22 @@ const JobPage = () => {
   })
 
   const getAllJobs = async () => {
-    const res = await axiosInstance.post("/application/getAllJobs");
-    if (res.data?.success) {
-      toast.success("Application Fetched.");
-    } else {
-      toast.success("Error in fetch.");
-    }
-    console.log(res.data.jobs);
+    let res = axiosInstance.post("/application/getAllJobs");
+
+    await toast.promise(res, {
+      loading: "Loading...",
+      success: (data) => {
+        // console.log(data.data);
+        return data?.data?.message;
+      },
+      error: (data) => {
+        return data?.data?.message;
+      },
+    });
+
+    res = await res;
+
+    // console.log(res.data.jobs);
     setJobs(res.data.jobs);
   }
 
@@ -44,7 +53,7 @@ const JobPage = () => {
   //   Function to handle click on "See Details" button
   const handleSeeDetails = (jobId) => {
     // Code to show full details of the job with jobId
-    console.log("See Details clicked for job with ID:", jobId);
+    // console.log("See Details clicked for job with ID:", jobId);
     navigate("/job_details/" + jobId);
   };
 
