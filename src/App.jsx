@@ -24,17 +24,18 @@ function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
   return (
     <Router>
+
       <Navbar />
+
       <div>
         <Toaster position="top-center" reverseOrder={false} />
       </div>
+
       <Routes>
+
         <Route path="/" element={<HomePage />} />
         <Route path="/verify/:verificationToken" element={<VerifyAccount />} />
-        <Route
-          path="/email-notification/:emailPrefix"
-          element={<EmailNotificationPage />}
-        />
+        <Route path="/email-notification/:emailPrefix" element={<EmailNotificationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/denied" element={<Denied />} />
@@ -44,19 +45,17 @@ function App() {
         <Route path="/job/:jobId" element={<JobDetailsPage />} />
         <Route path="/dashboardDS" element={<DashboardPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
-        <Route
-          path="/dashboard/create-job"
-          element={<JobCreationForm />}
-        />{" "}
-        //Define route for job creation form
-        <Route element={<RequireAuth allowedRoles={["USER", "DS"]} />}>
+        <Route path="/dashboard/create-job" element={<JobCreationForm />} />
+        
+        <Route element={<RequireAuth allowedRoles={["USER", "DS", "TACM", "ADMIN", "INS"]} />}>
           <Route
             path="/profile"
             element={<ProfilePage user={loggedInUser} />}
           />
-
           <Route path="/applications" element={<ApplicationsPage />} />
         </Route>
+
+        <Route element={<RequireAuth allowedRoles={["USER"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["DS"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["TACM"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["INS"]} />}></Route>

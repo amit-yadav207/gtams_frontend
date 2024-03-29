@@ -1,10 +1,7 @@
-// Import necessary components and icons
 import { NavLink } from "react-router-dom";
-import { HiUser, HiCog, HiBell, HiOutlineBell, HiLogout } from "react-icons/hi";
-import { IoIosNotificationsOutline } from "react-icons/io";
 import "./Navbar.css";
 import GTAMS from "../assets/images/logo3.png";
-import { useState } from "react"; // Importing useState hook from React
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../Redux/authSlice";
@@ -12,6 +9,7 @@ import { logout } from "../Redux/authSlice";
 function Navbar() {
   // State for toggling navbar
   const [isOpen, setIsOpen] = useState(false);
+
   // Redux state for checking if the user is logged in
   const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
   const role = useSelector((state) => state?.auth?.role);
@@ -24,7 +22,6 @@ function Navbar() {
     { to: "/about", text: "About", role: "ALL" },
     { to: "/contact", text: "Contact", role: "ALL" },
     { to: "/job", text: "Jobs", role: "ALL" },
-    // { to: "/profile", text: "Profile", role: "ALL" },
     { to: "/applications", text: "My Applications", role: "USER" },
     { to: "/dashboardAdmin", text: "Dashboard", role: "ADMIN" },
     { to: "/dashboardTACM", text: "Dashboard", role: "TACM" },
@@ -32,17 +29,13 @@ function Navbar() {
     { to: "/dashboardINS", text: "Dashboard", role: "INS" },
   ];
 
-  // Function to handle login button click
   const handleLogin = () => {
     navigate("/login");
   };
 
-  // Function to handle logout button click
   const handleLogout = async (event) => {
     event.preventDefault();
     const res = await dispatch(logout());
-
-    // Redirect to home page if logout is successful
     if (res?.payload?.success) navigate("/");
   };
 
@@ -58,8 +51,10 @@ function Navbar() {
       {/* Hamburger menu for mobile */}
       <span>
         {isLoggedIn && (
-          <div className="lg:hidden inline-block">
-            {/* Replace the src with the actual path to the user's profile picture */}
+          <div
+            className="lg:hidden inline-block"
+            onClick={() => navigate('/profile')}
+          >
             <img
               className="h-8 w-8 rounded-full hover:border-white-900"
               src="https://avatar.iran.liara.run/public/boy"
@@ -93,10 +88,9 @@ function Navbar() {
 
       {/* Navigation links */}
       <div
-        className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${
-          isOpen ? "block" : "hidden"
-        }`}
-        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${isOpen ? "block" : "hidden"
+          }`}
+        onClick={() => setIsOpen(false)}
       >
         <div className="text-sm lg:flex-grow navbar">
           {/* Iterate over the array of navLinks and create NavLink components */}
@@ -143,7 +137,10 @@ function Navbar() {
         {/* Profile picture icon for large screens */}
         {isLoggedIn ? (
           <div className="flex justify-between items-center space-x-4">
-            <div className="hidden lg:inline-block">
+            <div
+              className="hidden lg:inline-block"
+              onClick={() => navigate('/profile')}
+            >
               {/* Replace the src with the actual path to the user's profile picture */}
               <img
                 className="h-8 w-8 rounded-full"
