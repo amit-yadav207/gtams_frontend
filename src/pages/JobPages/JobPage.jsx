@@ -5,7 +5,6 @@ import axiosInstance from "../../Helper/axiosInstance";
 import toast from "react-hot-toast";
 // import jobs from "./jobsData";
 const JobPage = () => {
-
   // State for search query
   const [searchQuery, setSearchQuery] = useState("");
   const [jobs, setJobs] = useState([]);
@@ -23,8 +22,8 @@ const JobPage = () => {
       job.courseId.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.instructor.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.department.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })
+    );
+  });
 
   const getAllJobs = async () => {
     const res = await axiosInstance.post("/application/getAllJobs");
@@ -35,11 +34,11 @@ const JobPage = () => {
     }
     console.log(res.data.jobs);
     setJobs(res.data.jobs);
-  }
+  };
 
   useEffect(() => {
     getAllJobs();
-  }, [])
+  }, []);
 
   //   Function to handle click on "See Details" button
   const handleSeeDetails = (jobId) => {
@@ -69,9 +68,11 @@ const JobPage = () => {
         {filteredJobs.map((job) => (
           <div
             key={job._id}
-            className="bg-white shadow-md rounded-md p-6 transition duration-300 ease-in-out transform hover:scale-105"
+            className="bg-white shadow-md rounded-md p-6 text-sm transition duration-300 ease-in-out transform hover:scale-105"
           >
-            <h2 className="text-xl font-semibold mb-2 ">{job.title}</h2>
+            <h2 className="text-2xl font-semibold mb-2 truncate text-ellipsis">
+              {job.title}
+            </h2>
             <p className="mb-2 overflow-hidden truncate text-ellipsis">
               <strong>Course ID:</strong> {job.courseId}
             </p>
@@ -84,12 +85,12 @@ const JobPage = () => {
                 ? `${job.requiredSkills.slice(0, 50)}...`
                 : job.requiredSkills}
             </p>
-            <p className="mb-2 overflow-hidden truncate text-ellipsis" >
+            <p className="mb-2 overflow-hidden truncate text-ellipsis">
               <strong>Departments:</strong> {job.department}
             </p>
 
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-3"
               onClick={() => handleSeeDetails(job.jobId)}
             >
               See Details
