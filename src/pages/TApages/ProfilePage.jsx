@@ -38,12 +38,12 @@ function ProfilePage({ user }) {
             JOHN DOE
           </div>
         </div>
-        <button
+        {/*<button
           className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3"
           onClick={handleEditClick}
         >
           Edit
-        </button>
+        </button>*/}
         {/*<div className="block border border-red-400 rounded-md p-5 m-3">Resume</div>*/}
         <div className="block border border-red-400 rounded-md p-5 m-3  ">
           <div className="flex items-center">
@@ -53,7 +53,7 @@ function ProfilePage({ user }) {
 
           <table className="text-gray-800 ">
             <colgroup>
-              <col style={{ width: "15%" }} /> {/* Set width of first column */}
+              <col style={{ width: "15%" }} />
               <col style={{ width: "60%" }} />{" "}
               {/* Set width of second column */}
             </colgroup>
@@ -78,15 +78,15 @@ function ProfilePage({ user }) {
           </table>
         </div>
 
-        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+        {/* <div className="block border border-red-400 rounded-md p-5 m-3  ">
           <div className="flex items-center">
             <FaGraduationCap className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans"> Higher Education</span>
           </div>
 
           <table className="text-gray-800">
-            <col style={{ width: "15%" }} /> {/* Set width of first column */}
-            <col style={{ width: "60%" }} /> {/* Set width of second column */}
+            <col style={{ width: "15%" }} /> 
+            <col style={{ width: "60%" }} />
             <tbody className="">
               <tr>
                 <td className="p-2 font-semibold align-top">School</td>
@@ -108,16 +108,16 @@ function ProfilePage({ user }) {
               </tr>
             </tbody>
           </table>
-        </div>
+  </div>*/}
 
-        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+        {/*<div className="block border border-red-400 rounded-md p-5 m-3  ">
           <div className="flex items-center">
             <RiBriefcaseLine className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans">Previous Experience</span>
           </div>
           <p className="p-2 font-semibold ">Applying for your first job</p>
           <p className="p-2 ">Yes</p>
-          {/** 
+          
             <table className="text-gray-800">
               <col style={{ width: "15%" }} /> 
               <col style={{ width: "60%" }} />{" "}
@@ -131,17 +131,17 @@ function ProfilePage({ user }) {
                 </tr>
               </tbody>
             </table> 
-          */}
-        </div>
-        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+          
+        </div>*/}
+        {/*<div className="block border border-red-400 rounded-md p-5 m-3  ">
           <div className="flex items-center">
             <IoMdConstruct className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans">Skills</span>
           </div>
 
           <table className="text-gray-800">
-            <col style={{ width: "15%" }} /> {/* Set width of first column */}
-            <col style={{ width: "60%" }} /> {/* Set width of second column */}
+            <col style={{ width: "15%" }} /> 
+            <col style={{ width: "60%" }} /> 
             <tbody className="">
               <tr>
                 <td className="p-2 font-semibold align-top">Spoken Language</td>
@@ -157,13 +157,15 @@ function ProfilePage({ user }) {
               </tr>
             </tbody>
           </table>
-        </div>
+      </div>*/}
         {/*<div className="block border border-red-400 rounded-md p-5 m-3">
           Cover letter
   </div>*/}
-        <button className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
-          Edit
-        </button>
+        <div className="text-right">
+          <button className="text-right border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3"  onClick={handleEditClick}>
+            Edit
+          </button>
+        </div>
       </div>
     </div>
   );
