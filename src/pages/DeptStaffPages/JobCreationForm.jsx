@@ -169,7 +169,7 @@ const JobCreationForm = () => {
               htmlFor="jobId"
               className="block text-gray-700 font-semibold mb-2"
             >
-              jobId:
+              Job ID:
             </label>
             <input
               type="text"

@@ -10,9 +10,6 @@ const JobDetailPage = () => {
 
   const [job, setJob] = useState();
 
-  // Find the job with the matching jobId
-  // const job = jobs.find((job) => job.id === parseInt(jobId));
-
   const getApplicationByJobId = async () => {
     let res = axiosInstance.post(`/application//getApplicationById/${jobId}`);
     console.log(res.data);
@@ -20,7 +17,7 @@ const JobDetailPage = () => {
     await toast.promise(res, {
       loading: "Loading...",
       success: (data) => {
-        console.log('data', data.data);
+        console.log("data", data.data);
         return data?.data?.message;
       },
       error: (data) => {
@@ -33,7 +30,7 @@ const JobDetailPage = () => {
     if (res.data.success) {
       setJob(res.data.application);
     } else {
-      console.log('error in fetching job');
+      console.log("error in fetching job");
     }
   };
 
@@ -41,47 +38,63 @@ const JobDetailPage = () => {
     getApplicationByJobId();
   }, [jobId]);
 
-  // If job not found, display a message
   if (!job) {
     return <div>Job not found</div>;
   }
 
-  // Function to simulate applying for the job
   const handleApply = () => {
-    // Code to handle applying for the job
     toast.success(`Applied for job:${job.title}`);
     console.log("Applying for job:", job.title);
     navigate("/job");
   };
 
   return (
-    <div className="container mx-auto px-4 mb-4">
-      <h1 className="text-3xl font-bold mb-4 text-center mt-3 sm:text-md">Job Details</h1>
-      <div className="bg-white shadow-md rounded-md p-6">
-        <h2 className="text-2xl font-semibold mb-2 px-3 text-pretty">
-          {job.title}
-        </h2>
-        <p className="mb-2 px-3 text-pretty">
-          <strong>Course ID:</strong> {job.courseId}
-        </p>
-        <p className="mb-2 px-3 text-pretty">
-          <strong>Instructor:</strong> {job.instructor}
-        </p>
-        <p className="mb-2 px-3 text-pretty ">
-          <strong>Requirements:</strong> {job.requiredSkills}
-        </p>
-        <p className="mb-2 px-3 text-pretty">
-          <strong>Departments:</strong> {job.department}
-        </p>
-        {/* Apply button */}
-        <div className="p-3">
+    <div className="container lg:mx-auto bg-slate-200 min-h-screen flex flex-col items-center">
+      <h1 className="lg:text-3xl font-bold mb-4 text-center mt-3 sm:text-md">
+        Job Details
+      </h1>
+      <div className="bg-white shadow-md rounded-md p-6 lg:m-4 m-12 mx-20 min-h-96 lg:w-1/2 w-11/12 sm:m-10">
+        <table className="w-full border-separate lg:border-spacing-y-4  border-spacing-y-2  ">
+          <tbody>
+            <tr className="">
+              <td className="font-semibold mb-2 px-3 text-pretty align-top">
+                Title
+              </td>
+              <td className="mb-2 text-pretty">{job.title}</td>
+            </tr>
+            <tr className="">
+              <td className="font-semibold mb-2 px-3 text-pretty align-top">
+                Course ID
+              </td>
+              <td className="mb-2 text-pretty">{job.courseId}</td>
+            </tr>
+            <tr className="mb-4">
+              <td className="font-semibold mb-2 px-3 text-pretty align-top">
+                Instructor
+              </td>
+              <td className="mb-2 text-pretty">{job.instructor}</td>
+            </tr>
+            <tr className="mb-4">
+              <td className="font-semibold mb-2 px-3 text-pretty align-top">
+                Departments
+              </td>
+              <td className="mb-2 text-pretty">{job.department}</td>
+            </tr>
+            <tr className="mb-4">
+              <td className="font-semibold mb-2 px-3 text-pretty align-top">
+                Requirements
+              </td>
+              <td className="mb-2 text-pretty">{job.requiredSkills}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div className="p-3 mt-3">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-4"
             onClick={handleApply}
           >
             Apply
           </button>
-          {/* Back button */}
           <Link
             to="/job"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
@@ -89,16 +102,19 @@ const JobDetailPage = () => {
             Back
           </Link>
         </div>
-        {/* Attach PDFs */}
-        <div className="mt-4 p-3">
+        <div className="mt-2 p-3">
           <h3 className="text-lg font-semibold mb-2">Attached Documents</h3>
           <ul>
             <li>
-              <a href="/path/to/pdf" target="_blank" rel="noopener noreferrer">
+              <a
+                href="/path/to/pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-700 hover:underline"
+              >
                 Sample PDF
               </a>
             </li>
-            {/* Add more PDFs as needed */}
           </ul>
         </div>
       </div>
