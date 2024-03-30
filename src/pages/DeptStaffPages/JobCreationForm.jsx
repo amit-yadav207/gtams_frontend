@@ -28,13 +28,21 @@ const JobCreationForm = () => {
 
   const createJob = async () => {
     try {
-      const res = await axiosInstance.post("/application/create", formData);
-      if (res.data?.success) {
-        toast.success("Application created.");
-      } else {
-        toast.success("Error in fetch.");
-      }
-      console.log(res.data.data);
+      let res = axiosInstance.post("/application/create", formData);
+
+      await toast.promise(res, {
+        loading: "Creating...",
+        success: (data) => {
+          // console.log(data.data);
+          return data?.data?.message;
+        },
+        error: (data) => {
+          // console.log('data', data?.response?.data.message)
+          return data?.response?.data.message;
+        },
+      });
+
+      res = await res;
     } catch (error) {
       console.error(error);
     }
