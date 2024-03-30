@@ -1,16 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { forgetPassword } from "../../Redux/authSlice";
 
 const ForgetPassword = () => {
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+
   const handleCancel = () => {
     // Go back to the previous page
     navigate(-1);
     // window.history.back();
   };
 
-  const handleSubmit = () => {
-    // Handle submit logic here
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // checking for the empty field
+    if (!email) {
+      toast.error("All fields are mandatory");
+      return;
+    }
+
+    // email validation using regex
+    if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+      toast.error("Invalid email id");
+      return;
+    }
+
+    // calling the api from auth slice
+    const res = await dispatch(forgetPassword(email));
+
+    // clearing the input fields
+    setEmail("");
   };
 
   return (
@@ -29,6 +55,8 @@ const ForgetPassword = () => {
           placeholder="Email address"
           className="sm:w-full w-4/5 focus:outline-none border border-gray-500 rounded-md px-2 py-2 mt-2 "
           autoFocus
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         ></input>
         <div className="flex justify-end mt-4">
           <button
