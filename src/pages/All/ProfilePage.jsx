@@ -1,175 +1,188 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { CgProfile } from "react-icons/cg";
+import { useDispatch } from "react-redux";
+import { getUserData } from "../../Redux/authSlice";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-const dummyUserData = {
-  fullName: "John Doe",
-  email: "john@example.com",
-  contact: "+1234567890",
-  address:
-    "123 Main St, City, Country123 Main St, City, Country123 Main St, City, Country123 Main St, City, Country123 Main St, City, Country123 Main St, City, Country123 Main St, City, Country",
-  qualification: "Bachelor's Degree in Computer Science",
-  imageUrl: "https://avatar.iran.liara.run/public/boy", // Placeholder image URL
-};
 
-function ProfilePage({ user }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedUser, setEditedUser] = useState({ ...dummyUserData });
+function ProfilePage() {
+  const [user, setUser] = useState({});
+  const navigate = useNavigate();
+
+
+  const dispatch = useDispatch();
 
   const handleEditClick = () => {
-    setIsEditing(!isEditing);
+    navigate("/update-profile", { state: user });
   };
+  const getUser = async () => {
+    let res = dispatch(getUserData());
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setEditedUser((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+    await toast.promise(res, {
+      loading: "Fetching profile...",
+      success: (data) => {
+        // console.log('data hai',data.payload);
+        return data?.payload?.message;
+      },
+      error: (data) => {
+        // console.log('data', data?.response?.data.message)
+        return data?.response?.data.message;
+      },
+    });
 
-  const handleSaveClick = () => {
-    // Here you can perform any action with the editedUser data
-    // For example, you can send it to an API for updating the user data
-    console.log("Edited user data:", editedUser);
-    // Once saved, toggle back to read-only mode
-    setIsEditing(false);
-  };
+    res = await res;
+    // console.log('data 2 hai', res.payload.user);
+    setUser(res.payload.user);
+  }
+
+  useEffect(() => {
+    getUser();
+  }, [setUser]);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4 text-center">Your Profile</h1>
-      <hr className="my-4" />
-      <div>second</div>
-      <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-        <div className="flex justify-center">
+    <div
+      className="container sm:p-1 h-full  lg:min-h-screen "
+      style={{ minHeight: "85vh" }}
+    >
+      <div className=" sm:m-1 lg:m-4 ">
+        <div className="flex flex-col p-4 border border-pink-400 rounded-md m-3 items-center">
           <img
-            className="w-32 h-32 rounded-full mt-6"
-            src={dummyUserData.imageUrl}
-            alt="Profile"
+            src="https://avatar.iran.liara.run/public/boy"
+            alt="image of user"
+            className="w-32 h-32 mb-0.5 hover:border-2 rounded-full border-red-200"
           />
-        </div>
-        <div className="p-6">
-          <h2 className="text-xl font-semibold mb-2">Profile Information</h2>
-          {/* Full Name */}
-          <div className="mb-4">
-            <label htmlFor="fullName" className="block font-medium mb-1">
-              Full Name:
-            </label>
-            {isEditing ? (
-              <input
-                type="text"
-                id="fullName"
-                name="fullName"
-                value={editedUser.fullName}
-                onChange={handleInputChange}
-                className="w-full border rounded-md p-2 "
-              />
-            ) : (
-              <p className="w-full bg-gray-100 rounded-md p-2 text-gray-800">
-                {editedUser.fullName}
-              </p>
-            )}
-          </div>
-          {/* Email */}
-          <div className="mb-4">
-            <label htmlFor="email" className="block font-medium mb-1">
-              Email:
-            </label>
-            {isEditing ? (
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={editedUser.email}
-                onChange={handleInputChange}
-                className="w-full border rounded-md p-2 "
-              />
-            ) : (
-              <p className="w-full bg-gray-100 rounded-md p-2 text-gray-800">
-                {editedUser.email}
-              </p>
-            )}
-          </div>
-          {/* Contact Details */}
-          <div className="mb-4">
-            <label htmlFor="contact" className="block font-medium mb-1">
-              Contact Number:
-            </label>
-            {isEditing ? (
-              <input
-                type="text"
-                id="contact"
-                name="contact"
-                value={editedUser.contact}
-                onChange={handleInputChange}
-                className="w-full border rounded-md p-2 "
-              />
-            ) : (
-              <p className="w-full bg-gray-100 rounded-md p-2 text-gray-800">
-                {editedUser.contact}
-              </p>
-            )}
-          </div>
-          {/* Address */}
-          <div className="mb-4">
-            <label htmlFor="address" className="block font-medium mb-1">
-              Address:
-            </label>
-            {isEditing ? (
-              <textarea
-                id="address"
-                name="address"
-                rows="3"
-                value={editedUser.address}
-                onChange={handleInputChange}
-                className="w-full border rounded-md p-2 resize-none"
-              ></textarea>
-            ) : (
-              <p className="w-full bg-gray-100 rounded-md p-2 text-gray-800">
-                {editedUser.address}
-              </p>
-            )}
-          </div>
-          {/* Higher Qualification */}
-          <div className="mb-4">
-            <label htmlFor="qualification" className="block font-medium mb-1">
-              Higher Qualification:
-            </label>
-            {isEditing ? (
-              <input
-                type="text"
-                id="qualification"
-                name="qualification"
-                value={editedUser.qualification}
-                onChange={handleInputChange}
-                className="w-full border rounded-md p-2 "
-              />
-            ) : (
-              <p className="w-full bg-gray-100 rounded-md p-2 text-gray-800">
-                {editedUser.qualification}
-              </p>
-            )}
-          </div>
-          {/* Edit Button */}
-          <div className="flex justify-end">
-            {isEditing ? (
-              <button
-                onClick={handleSaveClick}
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded mr-2"
-              >
-                Save
-              </button>
-            ) : (
-              <button
-                onClick={handleEditClick}
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded mr-2"
-              >
-                Edit
-              </button>
-            )}
+          <div className="w-half   text-gray-700  rounded-md lg:text-md  text-center font-bold font-sans">
+            {user.fullName}
           </div>
         </div>
+        {/* <button
+          className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3"
+          onClick={handleEditClick}
+        >
+          Edit
+        </button> */}
+        {/*<div className="block border border-red-400 rounded-md p-5 m-3">Resume</div>*/}
+        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+          <div className="flex items-center">
+            <CgProfile className="h-12 w-12 mr-4 text-orange-600" />
+            <span className="text-2xl font-sans">Contact Details</span>
+          </div>
+
+          <table className="text-gray-800 ">
+            <colgroup>
+              <col style={{ width: "15%" }} /> {/* Set width of first column */}
+              <col style={{ width: "60%" }} />{" "}
+              {/* Set width of second column */}
+            </colgroup>
+            <tbody className="">
+              <tr>
+                <td className="p-2 font-semibold align-top ">Name</td>
+                <td className="p-2 align-top">{user?.fullName}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Email</td>
+                <td className="p-2 align-top">{user?.email}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Phone</td>
+                <td className="p-2 align-top">{user?.phone}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Address</td>
+                <td className="p-2 align-top">{user?.address}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* <div className="block border border-red-400 rounded-md p-5 m-3  ">
+          <div className="flex items-center">
+            <FaGraduationCap className="h-12 w-12 mr-4 text-orange-600" />
+            <span className="text-2xl font-sans"> Higher Education</span>
+          </div>
+
+          <table className="text-gray-800">
+            <col style={{ width: "15%" }} /> 
+            <col style={{ width: "60%" }} /> 
+            <tbody className="">
+              <tr>
+                <td className="p-2 font-semibold align-top">School</td>
+                <td className="p-2 align-top">{dummyUserData.school}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Degree</td>
+                <td className="p-2 align-top">{dummyUserData.degree}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Degree Status</td>
+                <td className="p-2 align-top">{dummyUserData.dstatus}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">
+                  Major/Area of Study
+                </td>
+                <td className="p-2 align-top">{dummyUserData.major}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+          <div className="flex items-center">
+            <RiBriefcaseLine className="h-12 w-12 mr-4 text-orange-600" />
+            <span className="text-2xl font-sans">Previous Experience</span>
+          </div>
+          <p className="p-2 font-semibold ">Applying for your first job</p>
+          <p className="p-2 ">Yes</p>
+            <table className="text-gray-800">
+              <col style={{ width: "15%" }} /> 
+              <col style={{ width: "60%" }} />{" "}
+              
+              <tbody className="">
+                <tr>
+                  <td className="p-2 font-semibold align-top">
+                    Applying for your first job
+                  </td>
+                  <td className="p-2 align-top">{dummyUserData.experience}</td>
+                </tr>
+              </tbody>
+            </table> 
+        </div>
+       
+        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+          <div className="flex items-center">
+            <IoMdConstruct className="h-12 w-12 mr-4 text-orange-600" />
+            <span className="text-2xl font-sans">Skills</span>
+          </div>
+
+          <table className="text-gray-800">
+            <col style={{ width: "15%" }} />
+            <col style={{ width: "60%" }} /> 
+            <tbody className="">
+              <tr>
+                <td className="p-2 font-semibold align-top">Spoken Language</td>
+                <td className="p-2 align-top">{dummyUserData.languages}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">General</td>
+                <td className="p-2 align-top">{dummyUserData.general}</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-semibold align-top">Technical</td>
+                <td className="p-2 align-top">{dummyUserData.technical}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div> */}
+
+        <button
+          className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3"
+          onClick={handleEditClick}
+        >
+          Edit
+        </button>
       </div>
-      <hr className="my-4" />
     </div>
   );
 }
