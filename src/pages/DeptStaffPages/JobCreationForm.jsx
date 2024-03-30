@@ -126,7 +126,7 @@ const JobCreationForm = () => {
               htmlFor="requiredSkills"
               className="block text-gray-700 font-semibold mb-2"
             >
-              requiredSkills:
+              Required Skills:
             </label>
             <textarea
               id="requiredSkills"

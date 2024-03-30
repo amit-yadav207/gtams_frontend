@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
 import { FaSearch } from "react-icons/fa"; // Import the search icon from FontAwesome
-import { FaTrashAlt, FaPencilAlt } from "react-icons/fa";
+import { FaTrashAlt, FaPencilAlt, FaEye } from "react-icons/fa";
 // import jobs from "../jobsData";
 import axiosInstance from "../../Helper/axiosInstance";
 
@@ -52,40 +52,40 @@ const DashboardPage = () => {
   );
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4 ">Dashboard</h1>
+    <div className="p-4 flex flex-col items-center min-h-screen">
+      <h1 className="text-3xl ms:text-md font-bold mb-2 ">Dashboard</h1>
 
-      <div className="flex justify-between items-center mb-4 border-green-500">
-        <div className="w-full md:w-4/5 border-green-500 relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FaSearch className="text-gray-400" /> {/* Add the search icon */}
+      <div className=" mb-4 m-10 text-sm flex flex-col justify-center items-center">
+        <div className="w-full flex justify-between items-center mb-4 border-green-500">
+          <div className="w-full md:w-4/5 border-green-500 relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FaSearch className="text-gray-400" /> {/* Add the search icon */}
+            </div>
+            <input
+              type="text"
+              placeholder="Search by ID, Instructor, Title, Course ID, Department..."
+              className="w-full px-4 py-2 pl-10 rounded border border-gray-300"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+            />
           </div>
-          <input
-            type="text"
-            placeholder="Search by ID, Instructor, Title, Course ID, Department..."
-            className="w-full px-4 py-2 pl-10 rounded border border-gray-300"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            autoFocus
-          />
-        </div>
 
-        <div className="w-full md:w-1/5 text-right">
-          <button
-            className="bg-green-700 text-white px-4 py-2 rounded"
-            onClick={handleCreateJob}
-          >
-            + Add Job
-          </button>
+          <div className="w-full md:w-1/5 text-right">
+            <button
+              className="bg-green-700 text-white px-4 py-2 rounded"
+              onClick={handleCreateJob}
+            >
+              + Add Job
+            </button>
+          </div>
         </div>
-      </div>
-
-      <div className="overflow-x-auto mb-4 text-sm ">
         <table className="w-full table-auto">
           <thead className="text-sm lg:text-lg">
             <tr className="bg-gray-200">
               <th className="px-4 py-2">SN</th>
               <th className="px-4 py-2">Title</th>
+              <th className="px-4 py-2">Job ID</th>
               <th className="px-4 py-2">Course ID</th>
               <th className="px-4 py-2">Departments</th>
               <th className="px-4 py-2">Instructor</th>
@@ -96,10 +96,13 @@ const DashboardPage = () => {
           </thead>
           <tbody>
             {filteredJobs.map((job, index) => (
-              <tr key={job.id}>
+              <tr key={job._id}>
                 <td className="border px-4 py-2 ">{index + 1}</td>
                 <td className="border px-4 py-2  truncate w-40 max-w-60">
                   {job.title}
+                </td>
+                <td className="border px-4 py-2 truncate w-40 max-w-40">
+                  {job.jobId}
                 </td>
                 <td className="border px-4 py-2 truncate w-40 max-w-40">
                   {job.courseId}
@@ -117,24 +120,24 @@ const DashboardPage = () => {
                   {job.isApplicationOpen ? "Yes" : "No"}
                 </td>
                 <td className="border px-4 py-2 ">
-                  <div className="flex flex-col max-w-32">
+                  <div className="flex justify-evenly max-w-32">
                     <button
-                      className="bg-red-500 text-white lg:px-6 py-1 px-3 rounded hover:bg-red-600 mb-2 flex items-center justify-center"
+                      className="bg-red-500 text-white m-2 p-2 rounded hover:bg-red-600 mb-2 flex items-center justify-center"
                       onClick={() => handleDeleteJob(job._id)}
                     >
                       <FaTrashAlt />
                     </button>
                     <button
-                      className="bg-yellow-400 text-white lg:px-7 py-1 px-3 rounded hover:bg-yellow-500 flex items-center justify-center"
-                      onClick={() => handleDeleteJob(job._id)}
+                      className="bg-yellow-400 text-white m-2 p-2 rounded hover:bg-yellow-500 flex items-center justify-center"
+                      onClick={() => handleEditJob(job._id)}
                     >
                       <FaPencilAlt />
                     </button>
                     <button
-                      className="bg-blue-500 text-white lg:px-7 py-1 px-3 rounded hover:bg-blue-500 flex items-center justify-center"
-                      onClick={() => handleDeleteJob(job._id)}
+                      className="bg-blue-500 text-white m-2 p-2 rounded hover:bg-blue-600 flex items-center justify-center"
+                      onClick={() => handleViewJob(job._id)}
                     >
-                      View
+                      <FaEye />
                     </button>
                   </div>
                 </td>
