@@ -1,58 +1,58 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
-import { FaSearch } from "react-icons/fa"; // Import the search icon from FontAwesome
-import { FaTrashAlt, FaPencilAlt, FaEye } from "react-icons/fa";
-// import jobs from "../jobsData";
+import { toast } from "react-hot-toast";
+import { FaSearch, FaTrashAlt, FaPencilAlt, FaEye } from "react-icons/fa";
 import axiosInstance from "../../Helper/axiosInstance";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-
   const [jobs, setJobs] = useState([]);
+
   const getAllJobs = async () => {
-    const res = await axiosInstance.post("/application/getAllJobs");
-    if (res.data?.success) {
-      toast.success("Application Fetched.");
-    } else {
-      toast.success("Error in fetch.");
+    try {
+      const res = await axiosInstance.post("/application/getAllJobs");
+      if (res.data?.success) {
+        toast.success("Application Fetched.");
+        setJobs(res.data.jobs);
+      } else {
+        toast.error("Error in fetch.");
+      }
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      toast.error("Error fetching jobs.");
     }
-    console.log(res.data.jobs);
-    setJobs(res.data.jobs);
   };
+
   useEffect(() => {
     getAllJobs();
   }, []);
 
   const handleCreateJob = () => {
-    console.log("Create Job button clicked");
     navigate("/dashboard/create-job");
   };
 
   const handleDeleteJob = async (jobId) => {
-    console.log("Delete job with ID:", jobId);
-
-    let res = axiosInstance.delete(`/application/delete/${jobId}`);
-
-
-    await toast.promise(res, {
-      loading: "Deleting...",
-      success: (data) => {
-        // console.log(data.data);
-        return data?.data?.message;
-      },
-      error: (data) => {
-        // console.log('data', data?.response?.data.message)
-        return data?.response?.data.message;
-      },
-    });
-
-    res = await res;
-
-    if (res.data?.success) {
-      getAllJobs();
+    try {
+      const res = await axiosInstance.delete(`/application/delete/${jobId}`);
+      if (res.data?.success) {
+        toast.success("Application Deleted.");
+        getAllJobs();
+      } else {
+        toast.error("Error deleting job.");
+      }
+    } catch (error) {
+      console.error("Error deleting job:", error);
+      toast.error("Error deleting job.");
     }
+  };
+
+  const handleEditJob = (jobId) => {
+    // Handle edit job functionality
+  };
+
+  const handleViewJob = (jobId) => {
+    // Handle view job functionality
   };
 
   const filteredJobs = jobs.filter(
@@ -65,38 +65,37 @@ const DashboardPage = () => {
   );
 
   return (
-    <div className="p-4 flex flex-col items-center min-h-screen">
-      <h1 className="text-3xl ms:text-md font-bold mb-2 ">Dashboard</h1>
-
-      <div className=" mb-4 m-10 text-sm flex flex-col justify-center items-center">
-        <div className="w-full flex justify-between items-center mb-4 border-green-500">
-          <div className="w-full md:w-4/5 border-green-500 relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaSearch className="text-gray-400" /> {/* Add the search icon */}
-            </div>
-            <input
-              type="text"
-              placeholder="Search by ID, Instructor, Title, Course ID, Department..."
-              className="w-full px-4 py-2 pl-10 rounded border border-gray-300"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoFocus
-            />
+    <div className="p-4  items-center min-h-screen lg:m-5 m-1">
+      <h1 className="text-3xl sm:text-medium font-bold mb-2 ">Dashboard</h1>
+      <div className="w-full flex justify-between items-center mb-4 border-green-500">
+        <div className="w-full md:w-4/5 border-green-500 relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FaSearch className="text-gray-400" />
           </div>
-
-          <div className="w-full md:w-1/5 text-right">
-            <button
-              className="bg-green-700 text-white px-4 py-2 rounded"
-              onClick={handleCreateJob}
-            >
-              + Add Job
-            </button>
-          </div>
+          <input
+            type="text"
+            placeholder="Search by ID, Instructor, Title, Course ID, Department..."
+            className="w-full sm:w-4/5 px-4 py-2 pl-10 rounded border border-gray-300"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            autoFocus
+          />
         </div>
-        <table className="w-full table-auto">
+
+        <div className="w-full md:w-1/5 text-right">
+          <button
+            className="bg-green-700 text-white px-4 py-2 rounded"
+            onClick={handleCreateJob}
+          >
+            + Add Job
+          </button>
+        </div>
+      </div>
+      <div className="border rounded-md hover:shadow-md text-sm overflow-x-auto mt-10">
+        <table className="w-full table-auto ">
           <thead className="text-sm lg:text-lg">
             <tr className="bg-gray-200">
-              <th className="px-4 py-2">SN</th>
+              <th className="px-4  lg:py-2">SN</th>
               <th className="px-4 py-2">Title</th>
               <th className="px-4 py-2">Job ID</th>
               <th className="px-4 py-2">Course ID</th>
@@ -110,47 +109,52 @@ const DashboardPage = () => {
           <tbody>
             {filteredJobs.map((job, index) => (
               <tr key={job._id}>
-                <td className="border px-4 py-2 ">{index + 1}</td>
-                <td className="border px-4 py-2  truncate w-40 max-w-60">
+                <td className="text-sm  border px-4 lg:py-2 truncate w-40 max-w-10">
+                  {index + 1}
+                </td>
+                <td className=" text-sm  border px-4 py-2 truncate w-40 max-w-60">
                   {job.title}
                 </td>
-                <td className="border px-4 py-2 truncate w-40 max-w-40">
+                <td className="text-sm  border px-4 py-2 truncate w-40 max-w-40">
                   {job.jobId}
                 </td>
-                <td className="border px-4 py-2 truncate w-40 max-w-40">
+                <td className="text-sm  border px-4 py-2 truncate w-40 max-w-40">
                   {job.courseId}
                 </td>
-                <td className="border px-4 py-2 truncate w-40 max-w-40">
+                <td className="text-sm border px-4 py-2 truncate w-40 max-w-40">
                   {job.department}
                 </td>
-                <td className="border px-4 py-2 truncate w-40 max-w-40">
+                <td className="text-sm border px-4 py-2 truncate w-40 max-w-40">
                   {job.instructor}
                 </td>
-                <td className="border px-4 py-2 truncate w-40 max-w-80">
+                <td className="text-sm border px-4 py-2 truncate w-40 max-w-80">
                   {job.requiredSkills}
                 </td>
-                <td className="border px-4 py-2 text-center">
+                <td className="text-sm border px-4 py-2 text-center w-40 max-w-20">
                   {job.isApplicationOpen ? "Yes" : "No"}
                 </td>
-                <td className="border px-4 py-2 ">
-                  <div className="flex justify-evenly max-w-32">
+                <td className="border px-2 text-sm  text-center py-2 w-40 max-w-48">
+                  <div className="flex justify-evenly max-w-50 items-center">
                     <button
-                      className="bg-red-500 text-white m-2 p-2 rounded hover:bg-red-600 mb-2 flex items-center justify-center"
+                      className="text-red-600 m-1 p-1 rounded hover:bg-red-600 hover:text-white "
                       onClick={() => handleDeleteJob(job._id)}
+                      title="Delete"
                     >
-                      <FaTrashAlt />
+                      <FaTrashAlt size={10} />
                     </button>
                     <button
-                      className="bg-yellow-400 text-white m-2 p-2 rounded hover:bg-yellow-500 flex items-center justify-center"
+                      className="text-black m-1 p-1 rounded hover:bg-gray-500 hover:text-white "
                       onClick={() => handleEditJob(job._id)}
+                      title="Edit"
                     >
-                      <FaPencilAlt />
+                      <FaPencilAlt size={10} />
                     </button>
                     <button
-                      className="bg-blue-500 text-white m-2 p-2 rounded hover:bg-blue-600 flex items-center justify-center"
+                      className="text-blue-600 m-1 p-1 rounded hover:bg-blue-600 hover:text-white "
                       onClick={() => handleViewJob(job._id)}
+                      title="View Applications"
                     >
-                      <FaEye />
+                      <FaEye size={10} />
                     </button>
                   </div>
                 </td>
