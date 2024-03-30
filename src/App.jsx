@@ -44,7 +44,7 @@ function App() {
         <Route path="/email-notification/:emailPrefix" element={<EmailNotificationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
         <Route path="/set-password" element={<SetPassword />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/denied" element={<Denied />} />
