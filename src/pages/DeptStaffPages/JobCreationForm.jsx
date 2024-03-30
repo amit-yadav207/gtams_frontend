@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import jobs from "../JobPages/jobsData";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helper/axiosInstance";
 
 const JobCreationForm = () => {
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     courseId: "",
@@ -13,66 +12,58 @@ const JobCreationForm = () => {
     requiredSkills: "",
     department: "",
     jobId: "",
+    isApplicationOpen: true, // Default value for isApplicationOpen
   });
 
-  // Function to handle form field changes
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: newValue,
     });
+    console.log(formData);
   };
 
-
-
   const createJob = async () => {
-    const res = await axiosInstance.post('/application/create', formData);
-    if (res.data?.success) {
-      toast.success('Application created.')
-    } else {
-      toast.success('Error in fetch.')
+    try {
+      const res = await axiosInstance.post("/application/create", formData);
+      if (res.data?.success) {
+        toast.success("Application created.");
+      } else {
+        toast.success("Error in fetch.");
+      }
+      console.log(res.data.data);
+    } catch (error) {
+      console.error(error);
     }
-    console.log(res.data.data);
-  }
+  };
 
-
-  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       await createJob();
-    } catch (err) {
-      console.error(err);
+      setFormData({
+        title: "",
+        courseId: "",
+        instructor: "",
+        requiredSkills: "",
+        department: "",
+        jobId: "",
+        isApplicationOpen: true, // Reset isApplicationOpen after submission
+      });
+      navigate("/dashboardDS");
+    } catch (error) {
+      console.error(error);
     }
-
-    // const newJob = {
-    //   id: jobs.length + 1, // Generate a new ID (assuming IDs are consecutive)
-    //   ...formData,
-    // };
-    // jobs.push(newJob);
-    // // Log the updated jobs array
-    // toast.success("Job added!")
-    // console.log("Updated jobs array:", jobs);
-    // // Reset form data after submission
-    setFormData({
-      title: "",
-      courseId: "",
-      instructor: "",
-      requiredSkills: "",
-      department: "",
-      jobId: "",
-    });
-    navigate('/dashboardDS')
   };
 
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center items-center">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md m-3">
         <h1 className="text-2xl font-bold mb-4 text-center">Create New Job</h1>
-        {/* Job creation form */}
         <form onSubmit={handleSubmit}>
-          {/* Title */}
           <div className="mb-4">
             <label
               htmlFor="title"
@@ -90,6 +81,9 @@ const JobCreationForm = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
+
+          {/* Other input fields... */}
+
           {/* Course ID */}
           <div className="mb-4">
             <label
@@ -164,21 +158,16 @@ const JobCreationForm = () => {
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="jobId"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              jobId:
+            <label className=" text-gray-700 font-semibold mb-2 flex justify-start items-center">
+              <input
+                type="checkbox"
+                name="isApplicationOpen"
+                checked={formData.isApplicationOpen}
+                onChange={handleChange}
+                className="mr-3 h-4 w-5"
+              />
+              <span>Is Application Open</span>
             </label>
-            <input
-              type="text"
-              id="jobId"
-              name="jobId"
-              value={formData.jobId} // Convert array to comma-separated string
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-            />
           </div>
           <button
             type="submit"

@@ -106,7 +106,7 @@ function UpdateProfilePage({ user }) {
                 <td className="p-2 align-top">
                   <input
                     type="text"
-                    placeholder="Major/Area of Study"
+                    placeholder="Permanent Address"
                     className="p-1 px-2 w-5/6 border border-red-500 rounded-md"
                   ></input>
                 </td>

@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HiEye, HiEyeOff } from "react-icons/hi"; // Import icons from HeroIcons
+
 const SetPassword = () => {
   const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const handleCancel = () => {
     // Go back to the previous page
@@ -13,6 +18,13 @@ const SetPassword = () => {
 
   const handleSubmit = () => {
     // Handle submit logic here
+    // You can perform further validation here if needed
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    }
+    // If all validations pass, proceed with submission
+    // For example, you can submit the form data
   };
 
   const togglePasswordVisibility = () => {
@@ -21,6 +33,37 @@ const SetPassword = () => {
 
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
+
+  const handlePasswordBlur = () => {
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
+      return;
+    }
+    const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    if (!specialCharacters.test(password)) {
+      setPasswordError("Password must contain special characters");
+      return;
+    }
+    const lowercaseLetters = /[a-z]+/;
+    if (!lowercaseLetters.test(password)) {
+      setPasswordError("Password must contain lowercase letters");
+      return;
+    }
+    const uppercaseLetters = /[A-Z]+/;
+    if (!uppercaseLetters.test(password)) {
+      setPasswordError("Password must contain uppercase letters");
+      return;
+    }
+    setPasswordError("");
+  };
+
+  const handleConfirmPasswordBlur = () => {
+    if (confirmPassword !== password) {
+      setConfirmPasswordError("Passwords do not match");
+    } else {
+      setConfirmPasswordError("");
+    }
   };
 
   return (
@@ -36,6 +79,9 @@ const SetPassword = () => {
           <input
             type={passwordVisible ? "text" : "password"}
             placeholder="Enter new password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onBlur={handlePasswordBlur}
             autoFocus
             className="focus:outline-none  w-11/12"
           />
@@ -46,12 +92,18 @@ const SetPassword = () => {
             {passwordVisible ? <HiEyeOff /> : <HiEye />}
           </span>
         </div>
+        {passwordError && (
+          <span className="text-red-500 text-sm">{passwordError}</span>
+        )}
 
         <p className="text-sm mt-4 font-semibold ">Confirm Password</p>
         <div className="relative w-full focus:outline-none border border-gray-500 rounded-md px-2 py-2 mt-2">
           <input
             type={confirmPasswordVisible ? "text" : "password"}
             placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onBlur={handleConfirmPasswordBlur}
             className="focus:outline-none w-11/12"
           />
 
@@ -62,6 +114,9 @@ const SetPassword = () => {
             {confirmPasswordVisible ? <HiEyeOff /> : <HiEye />}
           </span>
         </div>
+        {confirmPasswordError && (
+          <span className="text-red-500 text-sm">{confirmPasswordError}</span>
+        )}
 
         <div className="flex justify-end mt-5">
           <button

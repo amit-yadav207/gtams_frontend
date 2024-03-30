@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
 import { FaSearch } from "react-icons/fa"; // Import the search icon from FontAwesome
-
+import { FaTrashAlt, FaPencilAlt } from "react-icons/fa";
 // import jobs from "../jobsData";
 import axiosInstance from "../../Helper/axiosInstance";
 
@@ -90,6 +90,7 @@ const DashboardPage = () => {
               <th className="px-4 py-2">Departments</th>
               <th className="px-4 py-2">Instructor</th>
               <th className="px-4 py-2">Requirements</th>
+              <th className="px-4 py-2">Open</th>
               <th className="px-4 py-2">Action</th>
             </tr>
           </thead>
@@ -112,16 +113,25 @@ const DashboardPage = () => {
                 <td className="border px-4 py-2 truncate w-40 max-w-80">
                   {job.requiredSkills}
                 </td>
+                <td className="border px-4 py-2 text-center">
+                  {job.isApplicationOpen ? "Yes" : "No"}
+                </td>
                 <td className="border px-4 py-2 ">
-                  <div className="flex flex-col">
+                  <div className="flex flex-col max-w-32">
                     <button
-                      className="bg-red-500 text-white lg:px-6 py-1 px-3 rounded hover:bg-red-600 mb-2"
+                      className="bg-red-500 text-white lg:px-6 py-1 px-3 rounded hover:bg-red-600 mb-2 flex items-center justify-center"
                       onClick={() => handleDeleteJob(job._id)}
                     >
-                      Delete
+                      <FaTrashAlt />
                     </button>
                     <button
-                      className="bg-yellow-400 text-white lg:px-7 py-1 px-3 rounded hover:bg-yellow-500"
+                      className="bg-yellow-400 text-white lg:px-7 py-1 px-3 rounded hover:bg-yellow-500 flex items-center justify-center"
+                      onClick={() => handleDeleteJob(job._id)}
+                    >
+                      <FaPencilAlt />
+                    </button>
+                    <button
+                      className="bg-blue-500 text-white lg:px-7 py-1 px-3 rounded hover:bg-blue-500 flex items-center justify-center"
                       onClick={() => handleDeleteJob(job._id)}
                     >
                       View
