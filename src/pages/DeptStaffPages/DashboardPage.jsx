@@ -33,12 +33,25 @@ const DashboardPage = () => {
   const handleDeleteJob = async (jobId) => {
     console.log("Delete job with ID:", jobId);
 
-    const res = await axiosInstance.delete(`/application/delete/${jobId}`);
+    let res = axiosInstance.delete(`/application/delete/${jobId}`);
+
+
+    await toast.promise(res, {
+      loading: "Deleting...",
+      success: (data) => {
+        // console.log(data.data);
+        return data?.data?.message;
+      },
+      error: (data) => {
+        // console.log('data', data?.response?.data.message)
+        return data?.response?.data.message;
+      },
+    });
+
+    res = await res;
+
     if (res.data?.success) {
-      toast.success("Application Deleted.");
       getAllJobs();
-    } else {
-      toast.success("Error in Delete.");
     }
   };
 
