@@ -15,9 +15,32 @@ const dummyUserData = {
 
 function UpdateProfilePage({ user }) {
   const [editedUser, setEditedUser] = useState({ ...dummyUserData });
+  const [isFirstJob, setIsFirstJob] = useState(true);
 
+  const [courses, setCourses] = useState([]);
+  const [newCourse, setNewCourse] = useState("");
+
+  const handleCourseInputChange = (e) => {
+    setNewCourse(e.target.value);
+  };
+
+  const handleAddCourse = () => {
+    if (newCourse.trim() !== "") {
+      setCourses([...courses, newCourse]);
+      setNewCourse("");
+    }
+  };
+
+  const handleRemoveCourse = (index) => {
+    const updatedCourses = [...courses];
+    updatedCourses.splice(index, 1);
+    setCourses(updatedCourses);
+  };
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    if (name == "applyingForFirstJob") {
+      setIsFirstJob(value == "yes");
+    }
     setEditedUser((prevState) => ({
       ...prevState,
       [name]: value,
@@ -48,14 +71,14 @@ function UpdateProfilePage({ user }) {
             JOHN DOE
           </div>
         </div>
-        <div className="flex justify-between">
+        {/* <div className="flex justify-between">
           <button className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
             Cancel
           </button>
           <button className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
             Save
           </button>
-        </div>
+  </div>*/}
         {/*<div className="block border border-red-400 rounded-md p-5 m-3">Resume</div>*/}
 
         <div className="block border border-red-400 rounded-md p-5 m-3  ">
@@ -65,8 +88,8 @@ function UpdateProfilePage({ user }) {
           </div>
 
           <table className="text-gray-800">
-            <col style={{ width: "15%" }} /> {/* Set width of first column */}
-            <col style={{ width: "60%" }} /> {/* Set width of second column */}
+            <col style={{ width: "15%" }} /> 
+            <col style={{ width: "60%" }} /> 
             <tbody className="">
               <tr>
                 <td className="p-2 font-semibold align-top">Name</td>
@@ -115,15 +138,15 @@ function UpdateProfilePage({ user }) {
           </table>
         </div>
 
-        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+      { /* <div className="block border border-red-400 rounded-md p-5 m-3  ">
           <div className="flex items-center">
             <FaGraduationCap className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans"> Higher Education</span>
           </div>
 
           <table className="text-gray-800">
-            <col style={{ width: "15%" }} /> {/* Set width of first column */}
-            <col style={{ width: "60%" }} /> {/* Set width of second column */}
+            <col style={{ width: "15%" }} /> 
+            <col style={{ width: "60%" }} /> 
             <tbody className="">
               <tr>
                 <td className="p-2 font-semibold align-top">School</td>
@@ -206,10 +229,55 @@ function UpdateProfilePage({ user }) {
                 />
                 <span className="ml-2">No</span>
               </label>
+              {!isFirstJob && (
+                <div className="mt-4">
+                  <label htmlFor="courses">
+                    <span className=" font-semibold align-top mr-12">
+                      {" "}
+                      Courses{" "}
+                    </span>
+                    <input
+                      type="text"
+                      id="courses"
+                      name="courses"
+                      value={newCourse}
+                      onChange={handleCourseInputChange}
+                      onKeyPress={(e) => e.key === "Enter" && handleAddCourse()}
+                      placeholder="Enter course name"
+                      className="p-1 px-2 border border-red-500 rounded-md"
+                    />
+                  </label>
+                  <div className="flex flex-wrap items-center mt-2 ml-28">
+                    {courses.map((course, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center bg-gray-200 rounded-md px-2 py-1 mr-2 mb-2"
+                      >
+                        <span className="mr-2">{course}</span>
+                        <button
+                          onClick={() => handleRemoveCourse(index)}
+                          className="text-red-500 hover:text-red-700 focus:outline-none"
+                        >
+                          <svg
+                            className="w-4 h-4 fill-current"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M14.707 5.293a1 1 0 0 1 0 1.414L11.414 10l3.293 3.293a1 1 0 1 1-1.414 1.414L10 11.414l-3.293 3.293a1 1 0 1 1-1.414-1.414L8.586 10 5.293 6.707a1 1 0 0 1 1.414-1.414L10 8.586l3.293-3.293a1 1 0 0 1 1.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/** 
+        
             <table className="text-gray-800">
               <col style={{ width: "15%" }} /> 
               <col style={{ width: "60%" }} />{" "}
@@ -223,7 +291,7 @@ function UpdateProfilePage({ user }) {
                 </tr>
               </tbody>
             </table> 
-          */}
+       
         </div>
         <div className="block border border-red-400 rounded-md p-5 m-3  ">
           <div className="flex items-center">
@@ -232,8 +300,8 @@ function UpdateProfilePage({ user }) {
           </div>
 
           <table className="text-gray-800">
-            <col style={{ width: "15%" }} /> {/* Set width of first column */}
-            <col style={{ width: "60%" }} /> {/* Set width of second column */}
+            <col style={{ width: "15%" }} /> 
+            <col style={{ width: "60%" }} /> 
             <tbody className="">
               <tr>
                 <td className="p-2 font-semibold align-top">Spoken Language</td>
@@ -267,11 +335,9 @@ function UpdateProfilePage({ user }) {
               </tr>
             </tbody>
           </table>
-        </div>
-        {/*<div className="block border border-red-400 rounded-md p-5 m-3">
-          Cover letter
-  </div>*/}
-        <div className="flex justify-between">
+        </div>*/}
+        
+        <div className="flex justify-end">
           <button className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
             Cancel
           </button>
