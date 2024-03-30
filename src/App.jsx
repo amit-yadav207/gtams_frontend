@@ -54,7 +54,7 @@ function App() {
         <Route path="/job/:jobId" element={<JobDetailsPage />} />
         <Route path="/dashboardDS" element={<DashboardPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
-        <Route path="/profile" element={<ProfilePage user={loggedInUser} />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route
           path="/update-profile"
           element={<UpdateProfilePage user={loggedInUser} />}

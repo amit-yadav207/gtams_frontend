@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
+// import { FaGraduationCap } from "react-icons/fa";
+// import { RiBriefcaseLine } from "react-icons/ri";
+// import { IoMdConstruct } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { getUserData } from "../../Redux/authSlice";
 import toast from "react-hot-toast";
@@ -14,7 +17,7 @@ function ProfilePage() {
   const dispatch = useDispatch();
 
   const handleEditClick = () => {
-    navigate("/update-profile", { state: user });
+    navigate("/update-profile");
   };
   const getUser = async () => {
     let res = dispatch(getUserData());
