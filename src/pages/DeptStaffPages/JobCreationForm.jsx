@@ -53,12 +53,12 @@ const JobCreationForm = () => {
     { value: "CIVIL", label: "Civil" },
   ]);
 
-  const updateJob = async () => {
+  const createJob = async () => {
     try {
-      const res = await axiosInstance.put(`/application/update/${jobId}`, formData);
-  
+      let res = axiosInstance.post("/application/create", formData);
+
       await toast.promise(res, {
-        loading: "Updating...",
+        loading: "Creating...",
         success: (data) => {
           return data?.data?.message;
         },
@@ -66,14 +66,12 @@ const JobCreationForm = () => {
           return data?.response?.data.message;
         },
       });
-  
-      // Handle success or error as needed
+
+      res = await res;
     } catch (error) {
       console.error(error);
-      // Handle error as needed
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -99,7 +97,6 @@ const JobCreationForm = () => {
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md m-3">
         <h1 className="text-2xl font-bold mb-4 text-center">Create New Job</h1>
         <form onSubmit={handleSubmit}>
-          
           {/* Title */}
           <div className="mb-4">
             <label
@@ -132,45 +129,6 @@ const JobCreationForm = () => {
               value={formData.courseId}
               handleChange={handleChange}
               name="courseId"
-            />
-          </div>
-
-          {/* Job id */}
-          <div className="mb-4">
-            <label
-              htmlFor="jobId"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Job ID:
-            </label>
-            <input
-              type="text"
-              id="jobId"
-              name="jobId"
-              value={formData.jobId}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-            />
-          </div>
-
-
-          {/* Department */}
-          <div className="mb-4">
-            <label
-              htmlFor="department"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Department:
-            </label>
-            <input
-              type="text"
-              id="department"
-              name="department"
-              value={formData.department}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
 
@@ -209,7 +167,42 @@ const JobCreationForm = () => {
             />
           </div>
 
-          {/* is application is accepting response */}
+          {/* Department */}
+          <div className="mb-4">
+            <label
+              htmlFor="department"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Department:
+            </label>
+            <Dropdown
+              options={departmentOptions}
+              value={formData.department}
+              handleChange={handleChange}
+              name="department"
+            />
+          </div>
+
+          {/* Job ID */}
+          <div className="mb-4">
+            <label
+              htmlFor="jobId"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Job ID:
+            </label>
+            <input
+              type="text"
+              id="jobId"
+              name="jobId"
+              value={formData.jobId}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
+          {/* Is Application Open */}
           <div className="mb-4">
             <label className=" text-gray-700 font-semibold mb-2 flex justify-start items-center">
               <input
@@ -223,7 +216,7 @@ const JobCreationForm = () => {
             </label>
           </div>
 
-          {/* submit */}
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded font-semibold hover:bg-blue-700 transition duration-300"
