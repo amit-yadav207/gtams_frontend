@@ -61,17 +61,6 @@ function JobApplyPage() {
     setIsFirstJob(event.target.value);
   };
 
-  //   const handleAddDetails = () => {
-  //     if (course.trim() === "" || duration.trim() === "") {
-  //       toast.error("Please enter course and duration.");
-  //       return;
-  //     }
-
-  //     setJobDetails([...jobDetails, { course, duration }]);
-  //     setCourse("");
-  //     setDuration("");
-  //   };
-
   const handleAddDetails = () => {
     // Check if any of the fields are empty
     if (!course || !fromDate || !toDate) {
@@ -102,6 +91,15 @@ function JobApplyPage() {
     setToDate("");
   };
 
+  const handleDeleteDetail = (indexToDelete) => {
+    // Create a copy of the jobDetails array
+    const updatedJobDetails = [...jobDetails];
+    // Remove the detail at the specified index
+    updatedJobDetails.splice(indexToDelete, 1);
+    // Update the jobDetails state with the modified array
+    setJobDetails(updatedJobDetails);
+  };
+
   return (
     <div
       className="items-center sm:p-1 h-full  lg:min-h-screen "
@@ -110,7 +108,7 @@ function JobApplyPage() {
       <div className=" sm:m-1 lg:mx-16 lg:my-12 ">
         <div className="flex flex-col p-4 border border-pink-400 rounded-md m-3 items-center text-wrap">
           <h1 className="lg:text-3xl text-2xl font-semibold text-wrap">
-            Welcome,{user.fullName}
+            Welcome! {user.fullName}
           </h1>
           <span className="block mt-6 font-lg font-semibold">{jobId}</span>
         </div>
@@ -242,9 +240,10 @@ function JobApplyPage() {
                   />
                 </div>
               </div>
+
               <button
                 onClick={handleAddDetails}
-                className="border border-blue-500 px-6 rounded-md lg:m-2 mt-3 p-1"
+                className="border bg-red-500 text-white  hover:bg-red-600 hover:text-white font-semibold px-6 rounded-md lg:m-2 mt-3 p-1"
               >
                 Add
               </button>
@@ -253,7 +252,7 @@ function JobApplyPage() {
 
           {/* Display added job details */}
           {jobDetails.length != 0 && (
-            <div className="border rounded-md hover:shadow-md text-sm overflow-x-auto">
+            <div className="border rounded-md hover:shadow-md text-sm overflow-x-auto m-2">
               <table className="w-full rounded-md text-sm">
                 <thead className="bg-gray-200">
                   <tr>
