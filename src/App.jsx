@@ -13,8 +13,9 @@ import AboutPage from "./pages/All/AboutPage";
 import JobPage from "./pages/JobPages/JobPage";
 import JobCreationForm from "./pages/DeptStaffPages/JobCreationForm";
 import JobDetailsPage from "./pages/JobPages/JobDetailPage";
+import JobApplyPage from "./pages/JobPages/JobApplyPage";
 import DashboardPage from "./pages/DeptStaffPages/DashboardPage";
-import EditJobPage from "./pages/DeptStaffPages/EditJobPage"; 
+import EditJobPage from "./pages/DeptStaffPages/EditJobPage";
 import RequireAuth from "./components/Auth/RequireAuth";
 import NotRequireAuth from "./components/Auth/NotRequireAuth";
 import { Toaster } from "react-hot-toast";
@@ -31,7 +32,6 @@ function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
   return (
     <Router>
-
       <Navbar />
 
       <div>
@@ -39,10 +39,12 @@ function App() {
       </div>
 
       <Routes>
-
         <Route path="/" element={<HomePage />} />
         <Route path="/verify/:verificationToken" element={<VerifyAccount />} />
-        <Route path="/email-notification/:emailPrefix" element={<EmailNotificationPage />} />
+        <Route
+          path="/email-notification/:emailPrefix"
+          element={<EmailNotificationPage />}
+        />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
@@ -53,6 +55,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/job" element={<JobPage />} />
         <Route path="/job/:jobId" element={<JobDetailsPage />} />
+        <Route path="/job/job-apply/:jobId" element={<JobApplyPage />} />
         <Route path="/dashboardDS" element={<DashboardPage />} />
         <Route path="/dashboardDS/edit-job/:jobId" element={<EditJobPage />} />
         <Route path="/dashboard/edit-job/:jobId" element={<EditJobPage />} />
@@ -72,7 +75,6 @@ function App() {
 
           <Route path="/applications" element={<ApplicationsPage />} />
         </Route>
-
         <Route element={<RequireAuth allowedRoles={["USER"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["DS"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["TACM"]} />}></Route>

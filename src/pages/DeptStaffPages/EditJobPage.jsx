@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../../Helper/axiosInstance";
 import toast from "react-hot-toast";
-
+import Dropdown from "./Dropdown";
 const EditJobPage = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
@@ -16,6 +16,33 @@ const EditJobPage = () => {
     jobId: "",
     isApplicationOpen: true,
   });
+
+  const [courseOptions, setCourseOptions] = useState([
+    { value: "", label: "Select Course ID" },
+    { value: "CS101", label: "CS101" },
+    { value: "ENG201", label: "ENG201" },
+    { value: "MATH301", label: "MATH301" },
+    { value: "PHY101", label: "PHY101" },
+    { value: "CH201", label: "CH201" },
+    { value: "CE301", label: "CE01" },
+  ]);
+
+  const [instructorOptions, setInstructorOptions] = useState([
+    { value: "", label: "Select Instructor" },
+    { value: "John Doe", label: "John Doe" },
+    { value: "Jane Smith", label: "Jane Smith" },
+    { value: "Alex Johnson", label: "Alex Johnson" },
+  ]);
+
+  const [departmentOptions, setDepartmentOptions] = useState([
+    { value: "", label: "Select Department" },
+    { value: "CS", label: "Computer Science" },
+    { value: "ENG", label: "English" },
+    { value: "MATH", label: "Mathematics" },
+    { value: "PHYSICS", label: "Physics" },
+    { value: "CHEM", label: "Chemistry" },
+    { value: "CIVIL", label: "Civil" },
+  ]);
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -58,10 +85,7 @@ const EditJobPage = () => {
 
   const updateJob = async () => {
     try {
-      let res = axiosInstance.put(
-        `/application/update/${job._id}`,
-        formData
-      );
+      let res = axiosInstance.put(`/application/update/${job._id}`, formData);
 
       await toast.promise(res, {
         loading: "Updating...",
@@ -104,7 +128,7 @@ const EditJobPage = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 lg:m-4">
       <h1 className="text-3xl font-bold mb-4">Edit Job</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -131,14 +155,11 @@ const EditJobPage = () => {
           >
             Course ID:
           </label>
-          <input
-            type="text"
-            id="courseId"
-            name="courseId"
+          <Dropdown
+            options={courseOptions}
             value={formData.courseId}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            handleChange={handleChange}
+            name="courseId"
           />
         </div>
         <div className="mb-4">
@@ -148,14 +169,11 @@ const EditJobPage = () => {
           >
             Instructor:
           </label>
-          <input
-            type="text"
-            id="instructor"
-            name="instructor"
+          <Dropdown
+            options={instructorOptions}
             value={formData.instructor}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            handleChange={handleChange}
+            name="instructor"
           />
         </div>
         <div className="mb-4">
@@ -182,14 +200,11 @@ const EditJobPage = () => {
           >
             Department:
           </label>
-          <input
-            type="text"
-            id="department"
-            name="department"
+          <Dropdown
+            options={departmentOptions}
             value={formData.department}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            handleChange={handleChange}
+            name="department"
           />
         </div>
         <div className="mb-4">
