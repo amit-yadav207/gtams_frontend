@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { FaTrashAlt } from "react-icons/fa";
-
+import { FaFilePdf } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 // import { FaGraduationCap } from "react-icons/fa";
 import { RiBriefcaseLine } from "react-icons/ri";
 // import { IoMdConstruct } from "react-icons/io";
@@ -18,6 +19,8 @@ function JobApplyPage() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [jobDetails, setJobDetails] = useState([]);
+
+  const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
   const { jobId } = useParams();
   const dispatch = useDispatch();
@@ -55,6 +58,27 @@ function JobApplyPage() {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file.size <= 500 * 1024) {
+      // Max size 500KB
+      setSelectedFile(file);
+    } else {
+      alert("File size exceeds 500KB limit");
+      setSelectedFile(null);
+    }
+  };
+
+  const handleDelete = () => {
+    setSelectedFile(null);
+  };
+
+  const handleUpload = () => {
+    // Handle file upload logic here
+    console.log("Selected file:", selectedFile);
+    // You can send the file to the server or perform any other action
   };
 
   const handleRadioChange = (event) => {
@@ -185,7 +209,7 @@ function JobApplyPage() {
             <RiBriefcaseLine className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans">Previous Experience</span>
           </div>
-          <p className="p-2 font-semibold ">Applying for your first job</p>
+          <p className="p-2 font-semibold ">Applying for your first job?</p>
           <div className="p-2">
             <label className="inline-flex items-center">
               <input
@@ -291,7 +315,38 @@ function JobApplyPage() {
           )}
         </div>
 
-        <button className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
+        <div className="block border border-red-400 rounded-md p-5 m-3  ">
+          <div className="flex items-center">
+            <FaFilePdf className="h-12 w-12 mr-4 text-orange-600" />
+            <span className="text-2xl font-sans">Resume</span>
+          </div>
+          <p className="p-2 font-semibold ">Upload your resume</p>
+          <div className="p-2 lg:text-md text-sm">
+            {!selectedFile ? (
+              <div>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept=".pdf,.doc,.docx"
+                />
+                <button
+                  onClick={handleUpload}
+                  className="lg:ml-1 border border-red-500 px-2 py-1 rounded-md  bg-red-500 text-white  hover:bg-red-600 hover:text-white font-semibold   mt-2"
+                >
+                  Upload
+                </button>
+              </div>
+            ) : (
+              <div className="border border-black flex space-x-2  text-sm rounded-md lg:justify-between lg:w-1/2 bg-slate-100 max-w-1/3">
+                <p className="p-2">{selectedFile.name}</p>
+                <button onClick={handleDelete} className="hover:bg-gray-200 rounded-full p-2 px-3" >
+                  <RxCross2 />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+        <button className="border border-red-500 bg-red-500  text-white hover:bg-red-600 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
           Submit
         </button>
       </div>
