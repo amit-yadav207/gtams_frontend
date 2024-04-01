@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../../Helper/axiosInstance";
+import toast from "react-hot-toast";
 
 const EditJobPage = () => {
   const { jobId } = useParams();
@@ -16,7 +17,6 @@ const EditJobPage = () => {
     isApplicationOpen: true,
   });
 
-  let id;
   useEffect(() => {
     const fetchJob = async () => {
       try {
@@ -35,9 +35,6 @@ const EditJobPage = () => {
             jobId: fetchedJob.jobId,
             isApplicationOpen: fetchedJob.isApplicationOpen,
           });
-          console.log(fetchedJob)
-          id = fetchedJob._id;
-
         } else {
           console.error("Error fetching job:", res.data?.message);
         }
@@ -60,14 +57,9 @@ const EditJobPage = () => {
   };
 
   const updateJob = async () => {
-    console.log("id:", id)
-    if (!id) {
-      console.log("error in id");
-      return;
-    }
     try {
-      const res = await axiosInstance.put(
-        `/application/update/${id}`,
+      let res = axiosInstance.put(
+        `/application/update/${job._id}`,
         formData
       );
 
@@ -80,7 +72,7 @@ const EditJobPage = () => {
           return data?.response?.data.message;
         },
       });
-
+      res = await res;
       // Handle success or error as needed
     } catch (error) {
       console.error(error);
