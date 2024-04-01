@@ -101,7 +101,7 @@ const DashboardPage = () => {
         </div>
       </div>
       <div className="border rounded-md hover:shadow-md text-sm overflow-x-auto mt-10">
-        {(jobs.length > 0) ? (<table className="w-full table-auto ">
+        {(filteredJobs.length > 0) ? (<table className="w-full table-auto ">
           <thead className="text-sm lg:text-lg">
             <tr className="bg-gray-200">
               <th className="px-4  lg:py-2">SN</th>
