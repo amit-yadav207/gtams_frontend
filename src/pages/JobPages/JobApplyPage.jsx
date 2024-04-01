@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { FaTrashAlt } from "react-icons/fa";
-
-// import { FaGraduationCap } from "react-icons/fa";
 import { RiBriefcaseLine } from "react-icons/ri";
-// import { IoMdConstruct } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { getUserData } from "../../Redux/authSlice";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import axiosInstance from "../../Helper/axiosInstance";
 
 function JobApplyPage() {
+
   const [user, setUser] = useState({});
   const [isFirstJob, setIsFirstJob] = useState("No");
-  const [course, setCourse] = useState("");
 
+  const [course, setCourse] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [jobDetails, setJobDetails] = useState([]);
+
   const navigate = useNavigate();
   const { jobId } = useParams();
   const dispatch = useDispatch();
-
-  const fullName = user.fullName;
 
   const getUser = async () => {
     let res = dispatch(getUserData());
@@ -83,7 +81,7 @@ function JobApplyPage() {
 
     setJobDetails([...jobDetails, newDetail]);
 
-    console.log("New Detail:", newDetail);
+    // console.log("New Detail:", newDetail);
 
     // Optionally, you can clear the input fields after adding the detail
     setCourse("");
@@ -100,6 +98,38 @@ function JobApplyPage() {
     setJobDetails(updatedJobDetails);
   };
 
+  const handleSubmit = async () => {
+    // console.log('all job details', jobDetails);
+    const formData = {
+      appliedDate: new Date(),
+      applicantName: user.fullName,
+      email: user.email,
+      previousExperience: jobDetails,
+    };
+
+
+    try {
+      let res = axiosInstance.post(`/application/apply/${jobId}`, formData);
+      await toast.promise(res, {
+        loading: "Submitting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+
+      if (res.data.success) {
+        navigate(-1);
+      }
+    } catch (error) {
+      // console.error("Error deleting job:", error);
+      toast.error("Error deleting job.");
+    }
+  }
+
   return (
     <div
       className="items-center sm:p-1 h-full  lg:min-h-screen "
@@ -108,7 +138,6 @@ function JobApplyPage() {
       <div className=" sm:m-1 lg:mx-16 lg:my-12 ">
         <div className="flex flex-col p-4 border border-pink-400 rounded-md m-3 items-center text-wrap">
           <h1 className="lg:text-3xl text-2xl font-semibold text-wrap">
-            Welcome! {user.fullName}
             Welcome! {user.fullName}
           </h1>
           <span className="block mt-6 font-lg font-semibold">{jobId}</span>
@@ -293,7 +322,10 @@ function JobApplyPage() {
           )}
         </div>
 
-        <button className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
+        <button
+          className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3"
+          onClick={handleSubmit}
+        >
           Submit
         </button>
       </div>
