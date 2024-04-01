@@ -43,8 +43,8 @@ const JobDetailPage = () => {
   }
 
   const handleApply = () => {
-    toast.success(`Applied for job:${job.title}`);
-    console.log("Applying for job:", job.title);
+    // toast.success(`Applied for job:${job.title}`);
+    // console.log("Applying for job:", job.title);
     navigate(`/job/job-apply/${jobId}`);
   };
 

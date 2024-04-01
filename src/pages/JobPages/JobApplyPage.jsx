@@ -378,7 +378,9 @@ function JobApplyPage() {
             )}
           </div>
         </div>
-        <button className="border border-red-500 bg-red-500  text-white hover:bg-red-600 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
+        <button 
+        className="border border-red-500 bg-red-500  text-white hover:bg-red-600 hover:text-white font-semibold py-2 px-8 rounded-md m-3"
+        onClick={handleSubmit}>
           Submit
         </button>
       </div>
