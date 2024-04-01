@@ -34,13 +34,20 @@ const DashboardPage = () => {
 
   const handleDeleteJob = async (jobId) => {
     try {
-      const res = await axiosInstance.delete(`/application/delete/${jobId}`);
-      if (res.data?.success) {
-        toast.success("Application Deleted.");
-        getAllJobs();
-      } else {
-        toast.error("Error deleting job.");
-      }
+      let res = axiosInstance.delete(`/application/delete/${jobId}`);
+
+      await toast.promise(res, {
+        loading: "Deleting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      // Handle success or error as needed
+
     } catch (error) {
       console.error("Error deleting job:", error);
       toast.error("Error deleting job.");
@@ -94,7 +101,7 @@ const DashboardPage = () => {
         </div>
       </div>
       <div className="border rounded-md hover:shadow-md text-sm overflow-x-auto mt-10">
-        <table className="w-full table-auto ">
+        {(jobs.length > 0) ? (<table className="w-full table-auto ">
           <thead className="text-sm lg:text-lg">
             <tr className="bg-gray-200">
               <th className="px-4  lg:py-2">SN</th>
@@ -163,7 +170,9 @@ const DashboardPage = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>) : (<div>
+          No jobs to show.
+        </div>)}
       </div>
     </div>
   );
