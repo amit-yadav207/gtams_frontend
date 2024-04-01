@@ -26,7 +26,7 @@ const JobCreationForm = () => {
     });
   };
 
-  const courseOptions = [
+  const [courseOptions, setCourseOptions] = useState([
     { value: "", label: "Select Course ID" },
     { value: "CS101", label: "CS101" },
     { value: "ENG201", label: "ENG201" },
@@ -34,16 +34,16 @@ const JobCreationForm = () => {
     { value: "PHY101", label: "PHY101" },
     { value: "CH201", label: "CH201" },
     { value: "CE301", label: "CE01" },
-  ];
+  ]);
 
-  const instructorOptions = [
+  const [instructorOptions, setInstructorOptions] = useState([
     { value: "", label: "Select Instructor" },
     { value: "John Doe", label: "John Doe" },
     { value: "Jane Smith", label: "Jane Smith" },
     { value: "Alex Johnson", label: "Alex Johnson" },
-  ];
+  ]);
 
-  const departmentOptions = [
+  const [departmentOptions, setDepartmentOptions] = useState([
     { value: "", label: "Select Department" },
     { value: "CS", label: "Computer Science" },
     { value: "ENG", label: "English" },
@@ -51,14 +51,14 @@ const JobCreationForm = () => {
     { value: "PHYSICS", label: "Physics" },
     { value: "CHEM", label: "Chemistry" },
     { value: "CIVIL", label: "Civil" },
-  ];
+  ]);
 
-  const createJob = async () => {
+  const updateJob = async () => {
     try {
-      let res = axiosInstance.post("/application/create", formData);
-
+      const res = await axiosInstance.put(`/application/update/${jobId}`, formData);
+  
       await toast.promise(res, {
-        loading: "Creating...",
+        loading: "Updating...",
         success: (data) => {
           return data?.data?.message;
         },
@@ -66,12 +66,14 @@ const JobCreationForm = () => {
           return data?.response?.data.message;
         },
       });
-
-      res = await res;
+  
+      // Handle success or error as needed
     } catch (error) {
       console.error(error);
+      // Handle error as needed
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();

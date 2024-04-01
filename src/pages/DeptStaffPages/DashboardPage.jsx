@@ -49,6 +49,8 @@ const DashboardPage = () => {
 
   const handleEditJob = (jobId) => {
     // Handle edit job functionality
+
+    navigate(`/dashboardDS/edit-job/${jobId}`);
   };
 
   const handleViewJob = (jobId) => {
@@ -144,7 +146,7 @@ const DashboardPage = () => {
                     </button>
                     <button
                       className="text-black m-1 p-1 rounded hover:bg-gray-500 hover:text-white "
-                      onClick={() => handleEditJob(job._id)}
+                      onClick={() => handleEditJob(job.jobId)}
                       title="Edit"
                     >
                       <FaPencilAlt size={10} />
