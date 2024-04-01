@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helper/axiosInstance";
+import Dropdown from "./Dropdown";
 
 const JobCreationForm = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const JobCreationForm = () => {
     requiredSkills: "",
     department: "",
     jobId: "",
-    isApplicationOpen: true, // Default value for isApplicationOpen
+    isApplicationOpen: true,
   });
 
   const handleChange = (e) => {
@@ -23,8 +24,34 @@ const JobCreationForm = () => {
       ...formData,
       [name]: newValue,
     });
-    console.log(formData);
   };
+
+  const courseOptions = [
+    { value: "", label: "Select Course ID" },
+    { value: "CS101", label: "CS101" },
+    { value: "ENG201", label: "ENG201" },
+    { value: "MATH301", label: "MATH301" },
+    { value: "PHY101", label: "PHY101" },
+    { value: "CH201", label: "CH201" },
+    { value: "CE301", label: "CE01" },
+  ];
+
+  const instructorOptions = [
+    { value: "", label: "Select Instructor" },
+    { value: "John Doe", label: "John Doe" },
+    { value: "Jane Smith", label: "Jane Smith" },
+    { value: "Alex Johnson", label: "Alex Johnson" },
+  ];
+
+  const departmentOptions = [
+    { value: "", label: "Select Department" },
+    { value: "CS", label: "Computer Science" },
+    { value: "ENG", label: "English" },
+    { value: "MATH", label: "Mathematics" },
+    { value: "PHYSICS", label: "Physics" },
+    { value: "CHEM", label: "Chemistry" },
+    { value: "CIVIL", label: "Civil" },
+  ];
 
   const createJob = async () => {
     try {
@@ -33,11 +60,9 @@ const JobCreationForm = () => {
       await toast.promise(res, {
         loading: "Creating...",
         success: (data) => {
-          // console.log(data.data);
           return data?.data?.message;
         },
         error: (data) => {
-          // console.log('data', data?.response?.data.message)
           return data?.response?.data.message;
         },
       });
@@ -59,7 +84,7 @@ const JobCreationForm = () => {
         requiredSkills: "",
         department: "",
         jobId: "",
-        isApplicationOpen: true, // Reset isApplicationOpen after submission
+        isApplicationOpen: true,
       });
       navigate("/dashboardDS");
     } catch (error) {
@@ -100,14 +125,11 @@ const JobCreationForm = () => {
             >
               Course ID:
             </label>
-            <input
-              type="text"
-              id="courseId"
-              name="courseId"
+            <Dropdown
+              options={courseOptions}
               value={formData.courseId}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              handleChange={handleChange}
+              name="courseId"
             />
           </div>
 
@@ -158,18 +180,15 @@ const JobCreationForm = () => {
             >
               Instructor:
             </label>
-            <input
-              type="text"
-              id="instructor"
-              name="instructor"
+            <Dropdown
+              options={instructorOptions}
               value={formData.instructor}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              handleChange={handleChange}
+              name="instructor"
             />
           </div>
 
-          {/* requiredSkills */}
+          {/* Required Skills */}
           <div className="mb-4">
             <label
               htmlFor="requiredSkills"
