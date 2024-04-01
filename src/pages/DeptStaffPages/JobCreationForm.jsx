@@ -72,6 +72,8 @@ const JobCreationForm = () => {
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md m-3">
         <h1 className="text-2xl font-bold mb-4 text-center">Create New Job</h1>
         <form onSubmit={handleSubmit}>
+          
+          {/* Title */}
           <div className="mb-4">
             <label
               htmlFor="title"
@@ -89,8 +91,6 @@ const JobCreationForm = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
-
-          {/* Other input fields... */}
 
           {/* Course ID */}
           <div className="mb-4">
@@ -110,6 +110,46 @@ const JobCreationForm = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
+
+          {/* Job id */}
+          <div className="mb-4">
+            <label
+              htmlFor="jobId"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Job ID:
+            </label>
+            <input
+              type="text"
+              id="jobId"
+              name="jobId"
+              value={formData.jobId}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
+
+          {/* Department */}
+          <div className="mb-4">
+            <label
+              htmlFor="department"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Department:
+            </label>
+            <input
+              type="text"
+              id="department"
+              name="department"
+              value={formData.department}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
           {/* Instructor */}
           <div className="mb-4">
             <label
@@ -128,6 +168,7 @@ const JobCreationForm = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
+
           {/* requiredSkills */}
           <div className="mb-4">
             <label
@@ -146,42 +187,8 @@ const JobCreationForm = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
-          {/* Department */}
-          <div className="mb-4">
-            <label
-              htmlFor="department"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Department:
-            </label>
-            <input
-              type="text"
-              id="department"
-              name="department"
-              value={formData.department} // Convert array to comma-separated string
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="jobId"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Job ID:
-            </label>
-            <input
-              type="text"
-              id="jobId"
-              name="jobId"
-              value={formData.jobId} // Convert array to comma-separated string
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-            />
-          </div>
 
+          {/* is application is accepting response */}
           <div className="mb-4">
             <label className=" text-gray-700 font-semibold mb-2 flex justify-start items-center">
               <input
@@ -194,6 +201,8 @@ const JobCreationForm = () => {
               <span>Is Application Open</span>
             </label>
           </div>
+
+          {/* submit */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded font-semibold hover:bg-blue-700 transition duration-300"
