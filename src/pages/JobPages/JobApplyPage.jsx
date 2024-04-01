@@ -12,7 +12,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../Helper/axiosInstance";
 
 function JobApplyPage() {
-
   const [user, setUser] = useState({});
   const [isFirstJob, setIsFirstJob] = useState("No");
 
@@ -132,7 +131,6 @@ function JobApplyPage() {
       previousExperience: jobDetails,
     };
 
-
     try {
       let res = axiosInstance.post(`/application/apply/${jobId}`, formData);
       await toast.promise(res, {
@@ -153,7 +151,7 @@ function JobApplyPage() {
       // console.error("Error deleting job:", error);
       toast.error("Error deleting job.");
     }
-  }
+  };
 
   return (
     <div
@@ -241,7 +239,7 @@ function JobApplyPage() {
             <RiBriefcaseLine className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans">Previous Experience</span>
           </div>
-          <p className="p-2 font-semibold ">Applying for your first job?</p>
+          <p className="p-2 font-semibold "><span className="text-red-500 ">*</span>Applying for your first job?</p>
           <div className="p-2">
             <label className="inline-flex items-center">
               <input
@@ -283,6 +281,7 @@ function JobApplyPage() {
                     type="date"
                     value={fromDate}
                     onChange={(e) => setFromDate(e.target.value)}
+                    
                     className="text-sm lg:border-2 border-red-500  lg:p-1 ml-2 rounded-md"
                   />
                 </div>
@@ -352,35 +351,42 @@ function JobApplyPage() {
             <FaFilePdf className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans">Resume</span>
           </div>
-          <p className="p-2 font-semibold ">Upload your resume</p>
+          <p className="p-2 font-semibold "><span className="text-red-500 font-semibold">*</span>Upload your resume</p>
           <div className="p-2 lg:text-md text-sm">
             {!selectedFile ? (
-              <div>
+              <div className="inline-block">
                 <input
                   type="file"
                   onChange={handleFileChange}
                   accept=".pdf,.doc,.docx"
+                  required
                 />
-                <button
-                  onClick={handleUpload}
-                  className="lg:ml-1 border border-red-500 px-2 py-1 rounded-md  bg-red-500 text-white  hover:bg-red-600 hover:text-white font-semibold   mt-2"
-                >
-                  Upload
-                </button>
               </div>
             ) : (
-              <div className="border border-black flex space-x-2  text-sm rounded-md lg:justify-between lg:w-1/2 bg-slate-100 max-w-1/3">
-                <p className="p-2">{selectedFile.name}</p>
-                <button onClick={handleDelete} className="hover:bg-gray-200 rounded-full p-2 px-3" >
+              <div className="border border-red-500 flex  text-sm rounded-md lg:justify-between lg:w-1/2 bg-slate-100 max-w-1/3 ">
+                <p className="p-2 inline-flex">{selectedFile.name}</p>
+                <button
+                  onClick={handleDelete}
+                  className="hover:bg-gray-200 hover:text-red-500 rounded-full p-2 px-3"
+                >
                   <RxCross2 />
                 </button>
               </div>
             )}
+            {selectedFile && (
+              <button
+                onClick={handleUpload}
+                className=" border border-red-500 px-2 py-1 rounded-md  bg-red-500 text-white  hover:bg-red-600 hover:text-white font-semibold   mt-2"
+              >
+                Upload
+              </button>
+            )}
           </div>
         </div>
-        <button 
-        className="border border-red-500 bg-red-500  text-white hover:bg-red-600 hover:text-white font-semibold py-2 px-8 rounded-md m-3"
-        onClick={handleSubmit}>
+        <button
+          className="border border-red-500 bg-red-500  text-white hover:bg-red-600 hover:text-white font-semibold py-2 px-8 rounded-md m-3"
+          onClick={handleSubmit}
+        >
           Submit
         </button>
       </div>
