@@ -5,17 +5,18 @@ import { FaFilePdf } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 // import { FaGraduationCap } from "react-icons/fa";
 import { RiBriefcaseLine } from "react-icons/ri";
-// import { IoMdConstruct } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { getUserData } from "../../Redux/authSlice";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import axiosInstance from "../../Helper/axiosInstance";
 
 function JobApplyPage() {
+
   const [user, setUser] = useState({});
   const [isFirstJob, setIsFirstJob] = useState("No");
-  const [course, setCourse] = useState("");
 
+  const [course, setCourse] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [jobDetails, setJobDetails] = useState([]);
@@ -24,8 +25,6 @@ function JobApplyPage() {
   const navigate = useNavigate();
   const { jobId } = useParams();
   const dispatch = useDispatch();
-
-  const fullName = user.fullName;
 
   const getUser = async () => {
     let res = dispatch(getUserData());
@@ -107,7 +106,7 @@ function JobApplyPage() {
 
     setJobDetails([...jobDetails, newDetail]);
 
-    console.log("New Detail:", newDetail);
+    // console.log("New Detail:", newDetail);
 
     // Optionally, you can clear the input fields after adding the detail
     setCourse("");
@@ -123,6 +122,38 @@ function JobApplyPage() {
     // Update the jobDetails state with the modified array
     setJobDetails(updatedJobDetails);
   };
+
+  const handleSubmit = async () => {
+    // console.log('all job details', jobDetails);
+    const formData = {
+      appliedDate: new Date(),
+      applicantName: user.fullName,
+      email: user.email,
+      previousExperience: jobDetails,
+    };
+
+
+    try {
+      let res = axiosInstance.post(`/application/apply/${jobId}`, formData);
+      await toast.promise(res, {
+        loading: "Submitting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+
+      if (res.data.success) {
+        navigate(-1);
+      }
+    } catch (error) {
+      // console.error("Error deleting job:", error);
+      toast.error("Error deleting job.");
+    }
+  }
 
   return (
     <div
@@ -167,7 +198,8 @@ function JobApplyPage() {
                     placeholder="Enter your email"
                     className="p-1 px-2 w-5/6 border border-red-500 rounded-md"
                     value={user.email}
-                    disabled
+                    onChange={handleInputChange}
+                    name="email"
                   ></input>
                 </td>
               </tr>
