@@ -99,6 +99,7 @@ const JobCreationForm = () => {
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md m-3">
         <h1 className="text-2xl font-bold mb-4 text-center">Create New Job</h1>
         <form onSubmit={handleSubmit}>
+          
           {/* Title */}
           <div className="mb-4">
             <label
@@ -131,6 +132,45 @@ const JobCreationForm = () => {
               value={formData.courseId}
               handleChange={handleChange}
               name="courseId"
+            />
+          </div>
+
+          {/* Job id */}
+          <div className="mb-4">
+            <label
+              htmlFor="jobId"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Job ID:
+            </label>
+            <input
+              type="text"
+              id="jobId"
+              name="jobId"
+              value={formData.jobId}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
+
+          {/* Department */}
+          <div className="mb-4">
+            <label
+              htmlFor="department"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Department:
+            </label>
+            <input
+              type="text"
+              id="department"
+              name="department"
+              value={formData.department}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
 
@@ -169,42 +209,7 @@ const JobCreationForm = () => {
             />
           </div>
 
-          {/* Department */}
-          <div className="mb-4">
-            <label
-              htmlFor="department"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Department:
-            </label>
-            <Dropdown
-              options={departmentOptions}
-              value={formData.department}
-              handleChange={handleChange}
-              name="department"
-            />
-          </div>
-
-          {/* Job ID */}
-          <div className="mb-4">
-            <label
-              htmlFor="jobId"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Job ID:
-            </label>
-            <input
-              type="text"
-              id="jobId"
-              name="jobId"
-              value={formData.jobId}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-            />
-          </div>
-
-          {/* Is Application Open */}
+          {/* is application is accepting response */}
           <div className="mb-4">
             <label className=" text-gray-700 font-semibold mb-2 flex justify-start items-center">
               <input
@@ -218,7 +223,7 @@ const JobCreationForm = () => {
             </label>
           </div>
 
-          {/* Submit Button */}
+          {/* submit */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded font-semibold hover:bg-blue-700 transition duration-300"
