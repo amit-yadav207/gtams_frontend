@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helper/axiosInstance";
+import Dropdown from "./Dropdown";
 
 const JobCreationForm = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const JobCreationForm = () => {
     requiredSkills: "",
     department: "",
     jobId: "",
-    isApplicationOpen: true, // Default value for isApplicationOpen
+    isApplicationOpen: true,
   });
 
   const handleChange = (e) => {
@@ -23,8 +24,34 @@ const JobCreationForm = () => {
       ...formData,
       [name]: newValue,
     });
-    console.log(formData);
   };
+
+  const courseOptions = [
+    { value: "", label: "Select Course ID" },
+    { value: "CS101", label: "CS101" },
+    { value: "ENG201", label: "ENG201" },
+    { value: "MATH301", label: "MATH301" },
+    { value: "PHY101", label: "PHY101" },
+    { value: "CH201", label: "CH201" },
+    { value: "CE301", label: "CE01" },
+  ];
+
+  const instructorOptions = [
+    { value: "", label: "Select Instructor" },
+    { value: "John Doe", label: "John Doe" },
+    { value: "Jane Smith", label: "Jane Smith" },
+    { value: "Alex Johnson", label: "Alex Johnson" },
+  ];
+
+  const departmentOptions = [
+    { value: "", label: "Select Department" },
+    { value: "CS", label: "Computer Science" },
+    { value: "ENG", label: "English" },
+    { value: "MATH", label: "Mathematics" },
+    { value: "PHYSICS", label: "Physics" },
+    { value: "CHEM", label: "Chemistry" },
+    { value: "CIVIL", label: "Civil" },
+  ];
 
   const createJob = async () => {
     try {
@@ -33,11 +60,9 @@ const JobCreationForm = () => {
       await toast.promise(res, {
         loading: "Creating...",
         success: (data) => {
-          // console.log(data.data);
           return data?.data?.message;
         },
         error: (data) => {
-          // console.log('data', data?.response?.data.message)
           return data?.response?.data.message;
         },
       });
@@ -59,7 +84,7 @@ const JobCreationForm = () => {
         requiredSkills: "",
         department: "",
         jobId: "",
-        isApplicationOpen: true, // Reset isApplicationOpen after submission
+        isApplicationOpen: true,
       });
       navigate("/dashboardDS");
     } catch (error) {
@@ -72,6 +97,7 @@ const JobCreationForm = () => {
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md m-3">
         <h1 className="text-2xl font-bold mb-4 text-center">Create New Job</h1>
         <form onSubmit={handleSubmit}>
+          {/* Title */}
           <div className="mb-4">
             <label
               htmlFor="title"
@@ -90,8 +116,6 @@ const JobCreationForm = () => {
             />
           </div>
 
-          {/* Other input fields... */}
-
           {/* Course ID */}
           <div className="mb-4">
             <label
@@ -100,16 +124,14 @@ const JobCreationForm = () => {
             >
               Course ID:
             </label>
-            <input
-              type="text"
-              id="courseId"
-              name="courseId"
+            <Dropdown
+              options={courseOptions}
               value={formData.courseId}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              handleChange={handleChange}
+              name="courseId"
             />
           </div>
+
           {/* Instructor */}
           <div className="mb-4">
             <label
@@ -118,17 +140,15 @@ const JobCreationForm = () => {
             >
               Instructor:
             </label>
-            <input
-              type="text"
-              id="instructor"
-              name="instructor"
+            <Dropdown
+              options={instructorOptions}
               value={formData.instructor}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              handleChange={handleChange}
+              name="instructor"
             />
           </div>
-          {/* requiredSkills */}
+
+          {/* Required Skills */}
           <div className="mb-4">
             <label
               htmlFor="requiredSkills"
@@ -146,6 +166,7 @@ const JobCreationForm = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
+
           {/* Department */}
           <div className="mb-4">
             <label
@@ -154,16 +175,15 @@ const JobCreationForm = () => {
             >
               Department:
             </label>
-            <input
-              type="text"
-              id="department"
+            <Dropdown
+              options={departmentOptions}
+              value={formData.department}
+              handleChange={handleChange}
               name="department"
-              value={formData.department} // Convert array to comma-separated string
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
+
+          {/* Job ID */}
           <div className="mb-4">
             <label
               htmlFor="jobId"
@@ -175,13 +195,14 @@ const JobCreationForm = () => {
               type="text"
               id="jobId"
               name="jobId"
-              value={formData.jobId} // Convert array to comma-separated string
+              value={formData.jobId}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
 
+          {/* Is Application Open */}
           <div className="mb-4">
             <label className=" text-gray-700 font-semibold mb-2 flex justify-start items-center">
               <input
@@ -194,6 +215,8 @@ const JobCreationForm = () => {
               <span>Is Application Open</span>
             </label>
           </div>
+
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded font-semibold hover:bg-blue-700 transition duration-300"
