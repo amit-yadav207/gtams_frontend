@@ -45,11 +45,11 @@ const JobDetailPage = () => {
   const handleApply = () => {
     toast.success(`Applied for job:${job.title}`);
     console.log("Applying for job:", job.title);
-    navigate("/job");
+    navigate(`/job/job-apply/${jobId}`);
   };
 
   return (
-    <div className="container lg:mx-auto bg-slate-200 min-h-screen flex flex-col items-center">
+    <div className=" lg:mx-auto bg-slate-200 min-h-screen flex flex-col items-center">
       <h1 className="lg:text-3xl font-bold mb-4 text-center mt-3 sm:text-md">
         Job Details
       </h1>
@@ -102,7 +102,7 @@ const JobDetailPage = () => {
             Back
           </Link>
         </div>
-        <div className="mt-2 p-3">
+        {/* <div className="mt-2 p-3">
           <h3 className="text-lg font-semibold mb-2">Attached Documents</h3>
           <ul>
             <li>
@@ -116,7 +116,7 @@ const JobDetailPage = () => {
               </a>
             </li>
           </ul>
-        </div>
+  </div>*/}
       </div>
     </div>
   );
