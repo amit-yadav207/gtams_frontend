@@ -61,16 +61,6 @@ function JobApplyPage() {
     setIsFirstJob(event.target.value);
   };
 
-  //   const handleAddDetails = () => {
-  //     if (course.trim() === "" || duration.trim() === "") {
-  //       toast.error("Please enter course and duration.");
-  //       return;
-  //     }
-
-  //     setJobDetails([...jobDetails, { course, duration }]);
-  //     setCourse("");
-  //     setDuration("");
-  //   };
 
   const handleAddDetails = () => {
     // Check if any of the fields are empty
@@ -110,7 +100,7 @@ function JobApplyPage() {
       <div className=" sm:m-1 lg:mx-16 lg:my-12 ">
         <div className="flex flex-col p-4 border border-pink-400 rounded-md m-3 items-center text-wrap">
           <h1 className="lg:text-3xl text-2xl font-semibold text-wrap">
-            Welcome,{user.fullName}
+            Welcome! {user.fullName}
           </h1>
           <span className="block mt-6 font-lg font-semibold">{jobId}</span>
         </div>
@@ -145,7 +135,8 @@ function JobApplyPage() {
                     placeholder="Enter your email"
                     className="p-1 px-2 w-5/6 border border-red-500 rounded-md"
                     value={user.email}
-                    disabled
+                    onChange={handleInputChange}
+                    name="email"
                   ></input>
                 </td>
               </tr>
