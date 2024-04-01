@@ -58,9 +58,9 @@ const JobPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 p-4">
+    (jobs.length>0)?(<div className="container mx-auto px-4 p-4">
       <h1 className="text-3xl font-bold mb-4">Job Listings</h1>
-      {/* Search bar with icon */}
+
       <div className="relative mb-4">
         <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
         <input
@@ -68,13 +68,13 @@ const JobPage = () => {
           placeholder="Search by title, course, instructor, or department"
           value={searchQuery}
           onChange={handleSearchInputChange}
-          className="border border-gray-300 rounded px-4 py-2 pl-10 w-full" // Adjusted padding for the input
+          className="border border-gray-300 rounded px-4 py-2 pl-10 w-full"
           autoFocus
         />
       </div>
-      {/* Grid layout for job cards */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
-        {/* Map through filtered job data and render cards */}
+
         {filteredJobs.map((job) => (
           <div
             key={job._id}
@@ -108,7 +108,9 @@ const JobPage = () => {
           </div>
         ))}
       </div>
-    </div>
+    </div>) : (<div className="border rounded-md hover:shadow-md text-sm overflow-x-auto mt-10 min-h-screen">
+        No Jobs to show
+    </div>)
   );
 };
 
