@@ -26,7 +26,7 @@ const ApplicationDetailsPage = () => {
         res = await res;
         console.log("data", res.data);
 
-        setApplication(res.data.application);
+        setApplication(res.data.form);
       } catch (error) {
         toast.error("Failed to fetch application details");
       }
@@ -82,7 +82,7 @@ const ApplicationDetailsPage = () => {
         </p>
 
         <p className="text-lg font-semibold mt-4">Applied Date:</p>
-        <p className="text-gray-700">{formatDate(application.appliedDate)}</p>
+        
       </div>
     </div>
   );
