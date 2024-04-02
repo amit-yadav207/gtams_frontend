@@ -27,6 +27,7 @@ import ApplicationsPage from "./pages/TApages/ApplicationsPage";
 import ForgetPassword from "./pages/All/ForgetPassword";
 import ResetPassword from "./pages/All/ResetPassword";
 import SetPassword from "./pages/All/SetPassword";
+import ApplicationReview from "./pages/Applications/ApplicationReview";
 
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
@@ -57,6 +58,10 @@ function App() {
         <Route path="/job/:jobId" element={<JobDetailsPage />} />
         <Route path="/job/job-apply/:jobId" element={<JobApplyPage />} />
         <Route path="/dashboardDS" element={<DashboardPage />} />
+        <Route
+          path="dashboardDS/application-review/:jobId"
+          element={<ApplicationReview />}
+        />
         <Route path="/dashboardDS/edit-job/:jobId" element={<EditJobPage />} />
         <Route path="/dashboard/edit-job/:jobId" element={<EditJobPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
