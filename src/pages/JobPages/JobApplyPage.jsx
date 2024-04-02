@@ -64,19 +64,13 @@ function JobApplyPage() {
       // Max size 500KB
       setSelectedFile(file);
     } else {
-      alert("File size exceeds 500KB limit");
+      toast.error("File size exceeds 500KB limit");
       setSelectedFile(null);
     }
   };
 
   const handleDelete = () => {
     setSelectedFile(null);
-  };
-
-  const handleUpload = () => {
-    // Handle file upload logic here
-    console.log("Selected file:", selectedFile);
-    // You can send the file to the server or perform any other action
   };
 
   const handleRadioChange = (event) => {
@@ -124,17 +118,28 @@ function JobApplyPage() {
 
   const handleSubmit = async () => {
     // console.log('all job details', jobDetails);
-    const formData = {
-      appliedDate: new Date(),
-      applicantName: user.fullName,
-      email: user.email,
-      previousExperience: jobDetails,
-    };
+
+    // Create a FormData object to hold form data and the selected file
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    // Append other form data fields as needed
+    formData.append("appliedDate", new Date());
+    formData.append("applicantName", user.fullName);
+    formData.append("email", user.email);
+    formData.append("previousExperience", JSON.stringify(jobDetails));
+
 
     try {
-      let res = axiosInstance.post(`/application/apply/${jobId}`, formData);
+      // Make a POST request to upload the file along with form data
+      let res = axiosInstance.post(`/application/apply/${jobId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       await toast.promise(res, {
-        loading: "Submitting...",
+        loading: "Applying...",
         success: (data) => {
           return data?.data?.message;
         },
@@ -143,13 +148,12 @@ function JobApplyPage() {
         },
       });
       res = await res;
+      // Handle success or error as needed
 
-      if (res.data.success) {
-        navigate(-1);
-      }
     } catch (error) {
-      // console.error("Error deleting job:", error);
-      toast.error("Error deleting job.");
+      // Handle error
+      console.error("Error uploading file:", error);
+      toast.error("Error submitting application.");
     }
   };
 
@@ -281,7 +285,7 @@ function JobApplyPage() {
                     type="date"
                     value={fromDate}
                     onChange={(e) => setFromDate(e.target.value)}
-                    
+
                     className="text-sm lg:border-2 border-red-500  lg:p-1 ml-2 rounded-md"
                   />
                 </div>
@@ -373,14 +377,14 @@ function JobApplyPage() {
                 </button>
               </div>
             )}
-            {selectedFile && (
+            {/*selectedFile && (
               <button
                 onClick={handleUpload}
                 className=" border border-red-500 px-2 py-1 rounded-md  bg-red-500 text-white  hover:bg-red-600 hover:text-white font-semibold   mt-2"
               >
                 Upload
               </button>
-            )}
+            )*/}
           </div>
         </div>
         <button
