@@ -148,6 +148,14 @@ function JobApplyPage() {
         },
       });
       res = await res;
+      
+      console.log(res.data);
+      if (res.data.success) {
+        navigate(-1);
+      } else {
+        console.log("Error applying");
+      }
+
       // Handle success or error as needed
 
     } catch (error) {
