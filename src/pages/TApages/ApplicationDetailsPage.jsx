@@ -12,7 +12,20 @@ const ApplicationDetailsPage = () => {
   useEffect(() => {
     const getApplicationDetails = async () => {
       try {
-        const res = await axiosInstance.get(`/application/${jobId}`); // Fetch application details using jobId
+        let res = axiosInstance.post(`/form/${jobId}`); // Fetch application details using jobId
+        await toast.promise(res, {
+          loading: "Loading...",
+          success: (data) => {
+            return data?.data?.message;
+          },
+          error: (data) => {
+            return data?.data?.message;
+          },
+        });
+
+        res = await res;
+        console.log("data", res.data);
+
         setApplication(res.data.application);
       } catch (error) {
         toast.error("Failed to fetch application details");
@@ -32,19 +45,44 @@ const ApplicationDetailsPage = () => {
         Application Details
       </h1>
       <div className="m-6 p-4 rounded-xl border-gray-300 shadow-md">
-        <h1 className="text-2xl font-semibold text-gray-800">
-          {application.title}
-        </h1>
-        <p className="text-gray-700 mt-3 ">
-          Job Id: {application.jobId}
-        </p>
+        <p className="text-lg font-semibold">Applicant Name:</p>
+        <p className="text-gray-700">{application.applicantName}</p>
+
+        <p className="text-lg font-semibold mt-4">Department:</p>
+        <p className="text-gray-700">{application.department}</p>
+
+        <p className="text-lg font-semibold mt-4">Course ID:</p>
+        <p className="text-gray-700">{application.courseId}</p>
+
+        <p className="text-lg font-semibold mt-4">Email:</p>
+        <p className="text-gray-700">{application.email}</p>
+
+        <p className="text-lg font-semibold mt-4">Previous Experience:</p>
+        {application.previousExperience.map((exp, index) => (
+          <div key={index} className="mt-2">
+            <p className="text-gray-700">{exp.course}</p>
+            <p className="text-gray-700">From: {exp.fromDate}</p>
+            <p className="text-gray-700">To: {exp.toDate}</p>
+          </div>
+        ))}
+
+        <p className="text-lg font-semibold mt-4">Resume:</p>
         <p className="text-gray-700">
-          Applied on: {formatDate(application.appliedDate)}
+          File Name: {application.resume.fileName}
         </p>
-        <p className="text-gray-700">
-          Status: {application.status}
+        <p className="text-gray-700">Size: {application.resume.size}</p>
+
+        <p className="text-lg font-semibold mt-4">Status:</p>
+        <p
+          className={`text-lg ${
+            application.status === "Pending" ? "font-bold" : ""
+          }`}
+        >
+          {application.status}
         </p>
-        {/* Display other application details as needed */}
+
+        <p className="text-lg font-semibold mt-4">Applied Date:</p>
+        <p className="text-gray-700">{formatDate(application.appliedDate)}</p>
       </div>
     </div>
   );

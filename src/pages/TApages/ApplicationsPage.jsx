@@ -75,9 +75,9 @@ const ApplicationsPage = () => {
 
   useEffect(() => {
     setSubmitted(jobs.filter((job) => job.status === "Pending"));
-    console.log("submitted", submitted);
+    // console.log("submitted", submitted);
     setArchived(jobs.filter((job) => job.status !== "Pending"));
-    console.log("archived", archived);
+    // console.log("archived", archived);
   }, [jobs]);
 
   const handleViewApplication = (jobId) => {
