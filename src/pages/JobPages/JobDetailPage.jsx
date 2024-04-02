@@ -11,7 +11,7 @@ const JobDetailPage = () => {
   const [job, setJob] = useState();
 
   const getApplicationByJobId = async () => {
-    let res = axiosInstance.post(`/application//getApplicationById/${jobId}`);
+    let res = axiosInstance.post(`/application/getApplicationById/${jobId}`);
     console.log(res.data);
 
     await toast.promise(res, {

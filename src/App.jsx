@@ -43,10 +43,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/verify/:verificationToken" element={<VerifyAccount />} />
-        <Route
-          path="/email-notification/:emailPrefix"
-          element={<EmailNotificationPage />}
-        />
+        <Route path="/email-notification/:emailPrefix" element={<EmailNotificationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
@@ -56,13 +53,11 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/job" element={<JobPage />} />
-        <Route path="/job/:jobId" element={<JobDetailsPage />} />
+        
+        {/* <Route path="/job/:jobId" element={<JobDetailsPage />} /> */}
         <Route path="/job/job-apply/:jobId" element={<JobApplyPage />} />
         <Route path="/dashboardDS" element={<DashboardPage />} />
-        <Route
-          path="dashboardDS/application-review/:jobId"
-          element={<ApplicationReview />}
-        />
+        <Route path="dashboardDS/application-review/:jobId" element={<ApplicationReview />} />
         <Route path="/dashboardDS/edit-job/:jobId" element={<EditJobPage />} />
         <Route path="/dashboard/edit-job/:jobId" element={<EditJobPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
@@ -72,13 +67,9 @@ function App() {
           element={<UpdateProfilePage user={loggedInUser} />}
         />
         <Route path="/dashboard/create-job" element={<JobCreationForm />} />{" "}
-        //Define route for job creation form
+        
+        {/* Define route for job creation form */}
         <Route element={<RequireAuth allowedRoles={["USER", "DS"]} />}>
-          {/*<Route
-            path="/profile"
-            element={<ProfilePage user={loggedInUser} />}
-  />*/}
-
           <Route path="/applications" element={<ApplicationsPage />} />
           <Route path="/applications/:jobId" element={<ApplicationDetailsPage />} />
         </Route>
