@@ -5,6 +5,29 @@ import axiosInstance from "../../Helper/axiosInstance";
 import toast from "react-hot-toast";
 
 
+function formatDate(mongoTimestamp) {
+  const months = [
+    'January', 'February', 'March', 'April',
+    'May', 'June', 'July', 'August',
+    'September', 'October', 'November', 'December'
+  ];
+
+  const date = new Date(mongoTimestamp);
+
+  const day = date.getDate().toString().padStart(2, '0');
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear().toString();
+
+  const monthName = months[monthIndex];
+
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+
+  return `${hours}:${minutes} ,${day} ${monthName} ${year} `;
+}
+
+
 const ApplicationsPage = () => {
   const userData = useSelector((state) => state?.auth?.data);
   const [activeTab, setActiveTab] = useState("submitted");
@@ -21,7 +44,7 @@ const ApplicationsPage = () => {
     await toast.promise(res, {
       loading: "Loading...",
       success: (data) => {
-        console.log('data applicationpage', data.data);
+        // console.log('data applicationpage', data.data);
         return data?.data?.message;
       },
       error: (data) => {
@@ -31,12 +54,24 @@ const ApplicationsPage = () => {
 
     res = await res;
     setJobs(res?.data?.applications);
+    // console.log('data recived', res?.data?.applications);
+    console.log('jobs', jobs);
   }
 
   useEffect(() => {
     getAllJobs();
   }, [])
 
+  const [submitted, setSubmitted] = useState([]);
+  const [archived, setArchived] = useState([]);
+
+  useEffect(() => {
+    setSubmitted(jobs.filter(job => job.status === 'Pending'))
+    console.log('submitted',submitted)
+    setArchived(jobs.filter(job => job.status !== 'Pending'))
+    console.log('archived', archived)
+
+  }, [jobs])
 
   return (
     <div className="m-8 sm:m-2">
@@ -73,7 +108,7 @@ const ApplicationsPage = () => {
               }`}
             onClick={() => handleTabChange("submitted")}
           >
-            Submitted <span>(4)</span>
+            Submitted <span>({submitted.length})</span>
           </button>
           <button
             className={`px-4 py-2 ${activeTab === "archived"
@@ -82,7 +117,7 @@ const ApplicationsPage = () => {
               }`}
             onClick={() => handleTabChange("archived")}
           >
-            Archived <span>(5)</span>
+            Archived <span>({archived.length})</span>
           </button>
         </div>
 
@@ -92,19 +127,16 @@ const ApplicationsPage = () => {
 
         {activeTab === "submitted" && (
           <div>
-            {/* Content for Submitted tab */}
 
             <div className="grid lg:grid-cols-3 md:grid-cols-2">
 
-
-              {jobs && jobs.map((job) => {
-
-                <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 " key={job.formId}>
+              {(submitted.length > 0) ? (submitted.map((job) => {
+                return <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 " key={job.formId}>
                   <h1 className="font-semibold text-xl">
                     {job.title}
                   </h1>
-                  <h3>Course Id : {job.courseId}</h3>
-                  <h3>Applied Date: {job.appliedDate}</h3>
+                  <h3>Job Id : {job.jobId}</h3>
+                  <h3>Applied on: <span className="ml-2">{formatDate(job.appliedDate)}</span></h3>
                   <h3>
                     Status:{" "}
                     <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
@@ -116,8 +148,11 @@ const ApplicationsPage = () => {
                   </button>
                 </div>
 
-              })}
-
+              })) :
+                <div>
+                  No application to show.
+                </div>}
+              {/* 
 
               <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700  ">
                 <h1 className="font-semibold text-xl">
@@ -185,7 +220,7 @@ const ApplicationsPage = () => {
                 <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
                   View application
                 </button>
-              </div>
+              </div> */}
 
             </div>
           </div>
@@ -196,6 +231,47 @@ const ApplicationsPage = () => {
           <div>
             {/* Content for Archived tab */}
             <div className="grid lg:grid-cols-3 md:grid-cols-2">
+
+              {(archived.length > 0) ? (archived.map((job) => {
+                return <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 " key={job.formId}>
+                  <h1 className="font-semibold text-xl">
+                    {job.title}
+                  </h1>
+                  <h3>Job Id : {job.jobId}</h3>
+                  <h3>Applied on: {formatDate(job.appliedDate)}</h3>
+                  <h3>
+                    Status:{" "}
+                    <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
+                      {job.status}
+                    </span>
+                  </h3>
+                  <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
+                    View application
+                  </button>
+                </div>
+
+              })) :
+                <div>
+                  No application to show.
+                </div>}
+
+              {/* <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
+                <h1 className="font-semibold text-xl">
+                  Teaching Assisstent Requirement
+                </h1>
+                <h3>Course Id : CSPC 302</h3>
+                <h3>Applied Date: March 29, 2024</h3>
+                <h3>
+                  Status:{" "}
+                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
+                    pending
+                  </span>
+                </h3>
+                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
+                  View application
+                </button>
+              </div>
+
               <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
                 <h1 className="font-semibold text-xl">
                   Teaching Assisstent Requirement
@@ -212,6 +288,8 @@ const ApplicationsPage = () => {
                   View application
                 </button>
               </div>
+
+
               <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
                 <h1 className="font-semibold text-xl">
                   Teaching Assisstent Requirement
@@ -228,6 +306,8 @@ const ApplicationsPage = () => {
                   View application
                 </button>
               </div>
+
+
               <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
                 <h1 className="font-semibold text-xl">
                   Teaching Assisstent Requirement
@@ -244,6 +324,8 @@ const ApplicationsPage = () => {
                   View application
                 </button>
               </div>
+
+
               <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
                 <h1 className="font-semibold text-xl">
                   Teaching Assisstent Requirement
@@ -259,23 +341,8 @@ const ApplicationsPage = () => {
                 <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
                   View application
                 </button>
-              </div>
-              <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div>
+              </div> */}
+
             </div>
           </div>
         )}
