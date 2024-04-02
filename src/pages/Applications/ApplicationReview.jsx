@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./ApplicationReview.css";
@@ -147,7 +145,9 @@ const ApplicationReview = () => {
       <div className="flex justify-between font-semibold md:p-1 text-xs md:text-lg">
         <h1>
           Applications For Job id:{" "}
-          <span className="bg-slate-200 px-2 rounded-md md:text-sm">{jobId}</span>
+          <span className="bg-slate-200 px-2 rounded-md md:text-sm">
+            {jobId}
+          </span>
         </h1>
         <h1>
           Total Applications Received:{" "}
@@ -164,7 +164,7 @@ const ApplicationReview = () => {
           </h2>
           {selectedApplicant ? (
             <div className="text-xs md:text-md overflow-x-auto overflow-y-auto mx-0.5 md:mx-2 px-1 md:px-2 min-h-screen scroll-smooth">
-              <div className="mt-2 rounded-md shadow-md overflow-auto">
+              <div className="md:block hidden mt-2 rounded-md shadow-md overflow-auto">
                 <table className="w-full rounded">
                   <thead>
                     <tr className="bg-gray-500 text-white">
@@ -193,11 +193,40 @@ const ApplicationReview = () => {
                 </table>
               </div>
 
+              <div className="block md:hidden mt-2 rounded-md shadow-md overflow-auto max-h-48">
+              <table className="w-full rounded">
+                <thead className="sticky top-0 bg-gray-500 text-white">
+                  <tr>
+                    <th className="p-0.5 md:p-2">Sr. No.</th>
+                    <th className="p-0.5 md:p-2">Application ID</th>
+                    <th className="p-0.5 md:p-2">Name</th>
+                    <th className="p-0.5 md:p-2">Email</th>
+                    <th className="p-0.5 md:p-2">Contact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {applicationList.map((application, index) => (
+                    <tr
+                      key={application.id}
+                      className={`text-center ${
+                        selectedApplicant && selectedApplicant.id === application.id
+                          ? 'bg-gray-200 text-blue-700'
+                          : ''
+                      }`}
+                    >
+                      <td className="p-0.5 md:p-2">{index + 1}</td>
+                      <td className="p-0.5 md:p-2">{application.applicationId}</td>
+                      <td className="p-0.5 md:p-2">{application.applicant}</td>
+                      <td className="p-0.5 md:p-2">{application.email}</td>
+                      <td className="p-0.5 md:p-2">{application.contact}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
 
 
-
-
-              
               {/**back and next button on small screens */}
               <div className=" md:hidden flex justify-between  items-center my-4">
                 <button
