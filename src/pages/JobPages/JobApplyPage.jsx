@@ -13,7 +13,7 @@ import axiosInstance from "../../Helper/axiosInstance";
 
 function JobApplyPage() {
   const [user, setUser] = useState({});
-  const [isFirstJob, setIsFirstJob] = useState("No");
+  const [isFirstJob, setIsFirstJob] = useState("Yes");
 
   const [course, setCourse] = useState("");
   const [fromDate, setFromDate] = useState("");
@@ -74,6 +74,12 @@ function JobApplyPage() {
   };
 
   const handleRadioChange = (event) => {
+    if (event.target.value == "Yes") {
+      setCourse("");
+      setFromDate("");
+      setToDate("");
+      setJobDetails([]);
+    }
     setIsFirstJob(event.target.value);
   };
 
@@ -129,7 +135,6 @@ function JobApplyPage() {
     formData.append("email", user.email);
     formData.append("previousExperience", JSON.stringify(jobDetails));
 
-
     try {
       // Make a POST request to upload the file along with form data
       let res = axiosInstance.post(`/application/apply/${jobId}`, formData, {
@@ -149,7 +154,6 @@ function JobApplyPage() {
       });
       res = await res;
       // Handle success or error as needed
-
     } catch (error) {
       // Handle error
       console.error("Error uploading file:", error);
@@ -243,7 +247,9 @@ function JobApplyPage() {
             <RiBriefcaseLine className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans">Previous Experience</span>
           </div>
-          <p className="p-2 font-semibold "><span className="text-red-500 ">*</span>Applying for your first job?</p>
+          <p className="p-2 font-semibold ">
+            <span className="text-red-500 ">*</span>Applying for your first job?
+          </p>
           <div className="p-2">
             <label className="inline-flex items-center">
               <input
@@ -268,7 +274,7 @@ function JobApplyPage() {
               <span className="ml-2">No</span>
             </label>
           </div>
-          {isFirstJob === "Yes" && (
+          {isFirstJob === "No" && (
             <div className="p-2 lg:flex items-center ">
               <input
                 type="text"
@@ -285,7 +291,6 @@ function JobApplyPage() {
                     type="date"
                     value={fromDate}
                     onChange={(e) => setFromDate(e.target.value)}
-
                     className="text-sm lg:border-2 border-red-500  lg:p-1 ml-2 rounded-md"
                   />
                 </div>
@@ -355,7 +360,10 @@ function JobApplyPage() {
             <FaFilePdf className="h-12 w-12 mr-4 text-orange-600" />
             <span className="text-2xl font-sans">Resume</span>
           </div>
-          <p className="p-2 font-semibold "><span className="text-red-500 font-semibold">*</span>Upload your resume</p>
+          <p className="p-2 font-semibold ">
+            <span className="text-red-500 font-semibold">*</span>Upload your
+            resume
+          </p>
           <div className="p-2 lg:text-md text-sm">
             {!selectedFile ? (
               <div className="inline-block">

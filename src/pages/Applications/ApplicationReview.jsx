@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { FiExternalLink } from "react-icons/fi";
 import "./ApplicationReview.css";
 
 const ApplicationReview = () => {
@@ -12,7 +13,9 @@ const ApplicationReview = () => {
       email: "alice.johnson@example.com",
       contact: "1234567890",
       applicationId: "APP123456",
-      resumeLink: "https://example.com/alice_resume",
+      resumeLink:
+        "https://res.cloudinary.com/kunal24kmr/image/upload/v1712072900/resume/zv3f53bl5y2uyxqmxsgm.pdf",
+
       recommended: true,
     },
     {
@@ -21,7 +24,8 @@ const ApplicationReview = () => {
       email: "bob.smith@example.com",
       contact: "2345678901",
       applicationId: "APP789012",
-      resumeLink: "https://example.com/bob_resume",
+      resumeLink:
+        "https://res.cloudinary.com/kunal24kmr/image/upload/v1712072900/resume/zv3f53bl5y2uyxqmxsgm.pdf",
       recommended: false,
     },
     {
@@ -30,7 +34,8 @@ const ApplicationReview = () => {
       email: "eve.anderson@example.com",
       contact: "3456789012",
       applicationId: "APP345678",
-      resumeLink: "https://example.com/eve_resume",
+      resumeLink:
+        "https://res.cloudinary.com/kunal24kmr/image/upload/v1712072900/resume/zv3f53bl5y2uyxqmxsgm.pdf",
       recommended: true,
     },
     {
@@ -117,7 +122,7 @@ const ApplicationReview = () => {
     // Add more entries as needed...
   ];
 
-  const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(null);
+  const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(0);
 
   const handleNextClick = () => {
     setSelectedApplicantIndex((prevIndex) =>
@@ -163,8 +168,9 @@ const ApplicationReview = () => {
             Applicant Details
           </h2>
           {selectedApplicant ? (
-            <div className="text-xs md:text-md overflow-x-auto overflow-y-auto mx-0.5 md:mx-2 px-1 md:px-2 min-h-screen scroll-smooth">
-              <div className="md:block hidden mt-2 rounded-md shadow-md overflow-auto">
+            <div className="text-xs md:text-md overflow-x-auto overflow-y-auto mx-0.5 md:mx-2 px-1 md:px-2 min-h-screen scroll-smooth ">
+              {/**below div will be hidden on small screens */}
+              <div className="md:block hidden mt-2 rounded-md shadow-md overflow-auto ">
                 <table className="w-full rounded">
                   <thead>
                     <tr className="bg-gray-500 text-white">
@@ -193,39 +199,43 @@ const ApplicationReview = () => {
                 </table>
               </div>
 
-              <div className="block md:hidden mt-2 rounded-md shadow-md overflow-auto max-h-48">
-              <table className="w-full rounded">
-                <thead className="sticky top-0 bg-gray-500 text-white">
-                  <tr>
-                    <th className="p-0.5 md:p-2">Sr. No.</th>
-                    <th className="p-0.5 md:p-2">Application ID</th>
-                    <th className="p-0.5 md:p-2">Name</th>
-                    <th className="p-0.5 md:p-2">Email</th>
-                    <th className="p-0.5 md:p-2">Contact</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {applicationList.map((application, index) => (
-                    <tr
-                      key={application.id}
-                      className={`text-center ${
-                        selectedApplicant && selectedApplicant.id === application.id
-                          ? 'bg-gray-200 text-blue-700'
-                          : ''
-                      }`}
-                    >
-                      <td className="p-0.5 md:p-2">{index + 1}</td>
-                      <td className="p-0.5 md:p-2">{application.applicationId}</td>
-                      <td className="p-0.5 md:p-2">{application.applicant}</td>
-                      <td className="p-0.5 md:p-2">{application.email}</td>
-                      <td className="p-0.5 md:p-2">{application.contact}</td>
+              {/**below div will be hidden on medium and laerge screens */}
+              <div className="block md:hidden mt-2 rounded-md shadow-md overflow-auto md:max-h-56 min-h-28 max-h-56">
+                <table className="w-full rounded">
+                  <thead className="sticky top-0 bg-gray-500 text-white">
+                    <tr>
+                      <th className="p-0.5 md:p-3">Sr. No.</th>
+                      <th className="p-0.5 md:p-3">Application ID</th>
+                      <th className="p-0.5 md:p-3">Name</th>
+                      <th className="p-0.5 md:p-3">Email</th>
+                      <th className="p-0.5 md:p-3">Contact</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            
-
+                  </thead>
+                  <tbody>
+                    {applicationList.map((application, index) => (
+                      <tr
+                        key={application.id}
+                        onClick={() => setSelectedApplicantIndex(index)}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${
+                          selectedApplicantIndex === index
+                            ? "bg-gray-200 text-blue-700"
+                            : ""
+                        }`}
+                      >
+                        <td className="p-0.5 md:p-2">{index + 1}</td>
+                        <td className="p-0.5 md:p-2">
+                          {application.applicationId}
+                        </td>
+                        <td className="p-0.5 md:p-2">
+                          {application.applicant}
+                        </td>
+                        <td className="p-0.5 md:p-2">{application.email}</td>
+                        <td className="p-0.5 md:p-2">{application.contact}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               {/**back and next button on small screens */}
               <div className=" md:hidden flex justify-between  items-center my-4">
@@ -235,9 +245,9 @@ const ApplicationReview = () => {
                 >
                   Back
                 </button>
-                <span className="hidden sm:inline">{`${
-                  selectedApplicantIndex + 1
-                }/${applicationList.length}`}</span>
+                <span className="">{`${selectedApplicantIndex + 1}/${
+                  applicationList.length
+                }`}</span>
                 <button
                   onClick={handleNextClick}
                   className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
@@ -247,7 +257,7 @@ const ApplicationReview = () => {
               </div>
               {/**button for mark as recommendation */}
               <button
-                className="hover:bg-slate-200 text-blue-500 font-bold p-2 rounded-md my-2"
+                className="hover:bg-slate-200 text-blue-500 font-bold p-2 rounded-md my-2 hover:underline "
                 onClick={() => handleMarkRecommended(selectedApplicant)}
               >
                 Mark as Recommended
@@ -255,11 +265,26 @@ const ApplicationReview = () => {
 
               {/**resume section */}
               <div className="flex flex-col justify-center min-h-full">
-                <h2 className="font-semibold font-sans text-xl text-center">
+                <h2 className="flex justify-between font-semibold font-sans text-xl text-center">
                   Resume
+                  <button
+                    className="text-right text-blue-500 text-sm hover:bg-slate-200 rounded-md px-2 hover:underline"
+                    onClick={() =>
+                      window.open(selectedApplicant.resumeLink, "_blank")
+                    }
+                  >
+                    View in New Tab
+                    <span className="ml-0.5 inline-block">
+                      <FiExternalLink />
+                    </span>
+                  </button>
                 </h2>
-                <div className="text-center min-h-screen border w-full mb-2 rounded-md shadow-md">
-                  Container for Resume
+                <div className="text-center min-h-full border w-full mb-2 rounded-md shadow-md">
+                  <iframe
+                    title="Resume"
+                    src={selectedApplicant.resumeLink}
+                    className="w-full h-96"
+                  ></iframe>
                 </div>
               </div>
             </div>
@@ -286,7 +311,7 @@ const ApplicationReview = () => {
                   </tr>
                 </thead>
               </table>
-              <div className="shadow-md text-xs md:text-sm overflow-y-auto max-h-96 scroll-smooth scrollBar">
+              <div className="shadow-md  overflow-y-auto max-h-96 scroll-smooth scrollBar">
                 <table className="w-full">
                   <tbody>
                     {applicationList.map((application, index) => (
@@ -299,8 +324,8 @@ const ApplicationReview = () => {
                             : ""
                         }`}
                       >
-                        <td className="p-3">{index + 1}</td>
-                        <td className="p-3">{application.applicant}</td>
+                        <td className="p-3 ">{index + 1}</td>
+                        <td className="p-3 ">{application.applicant}</td>
                         <td className="p-3">{application.applicationId}</td>
                       </tr>
                     ))}
