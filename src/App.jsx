@@ -59,7 +59,7 @@ function App() {
         <Route path="/job/job-apply/:jobId" element={<JobApplyPage />} />
         <Route path="/dashboardDS" element={<DashboardPage />} />
         <Route
-          path="/dashboardDS/application-review/:jobId"
+          path="dashboardDS/application-review/:jobId"
           element={<ApplicationReview />}
         />
         <Route path="/dashboardDS/edit-job/:jobId" element={<EditJobPage />} />

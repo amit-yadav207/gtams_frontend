@@ -60,7 +60,7 @@ const DashboardPage = () => {
   };
 
   const handleViewJob = (jobId) => {
-    navigate(`dashboardDS/application-review/${jobId}`);
+    navigate(`/dashboardDS/application-review/${jobId}`);
 
     // Handle view job functionality
   };
@@ -75,7 +75,7 @@ const DashboardPage = () => {
   );
 
   return (
-    <div className="p-4  items-center min-h-screen lg:m-5 m-1">
+    <div className="p-4  items-center min-h-screen lg:m-5 m-1 ">
       <h1 className="text-3xl sm:text-medium font-bold mb-2 ">Dashboard</h1>
       <div className="w-full flex justify-between items-center mb-4 border-green-500">
         <div className="w-full md:w-4/5 border-green-500 relative">
