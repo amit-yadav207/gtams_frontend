@@ -1,35 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axiosInstance from "../../Helper/axiosInstance";
 import toast from "react-hot-toast";
 
-
 function formatDate(mongoTimestamp) {
   const months = [
-    'January', 'February', 'March', 'April',
-    'May', 'June', 'July', 'August',
-    'September', 'October', 'November', 'December'
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const date = new Date(mongoTimestamp);
 
-  const day = date.getDate().toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, "0");
   const monthIndex = date.getMonth();
   const year = date.getFullYear().toString();
 
   const monthName = months[monthIndex];
 
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const seconds = date.getSeconds().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
 
   return `${hours}:${minutes} ,${day} ${monthName} ${year} `;
 }
 
-
 const ApplicationsPage = () => {
   const userData = useSelector((state) => state?.auth?.data);
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const [activeTab, setActiveTab] = useState("submitted");
 
   const [jobs, setJobs] = useState([]);
@@ -55,23 +63,27 @@ const ApplicationsPage = () => {
     res = await res;
     setJobs(res?.data?.applications);
     // console.log('data recived', res?.data?.applications);
-    console.log('jobs', jobs);
-  }
+    console.log("jobs", jobs);
+  };
 
   useEffect(() => {
     getAllJobs();
-  }, [])
+  }, []);
 
   const [submitted, setSubmitted] = useState([]);
   const [archived, setArchived] = useState([]);
 
   useEffect(() => {
-    setSubmitted(jobs.filter(job => job.status === 'Pending'))
-    console.log('submitted',submitted)
-    setArchived(jobs.filter(job => job.status !== 'Pending'))
-    console.log('archived', archived)
+    setSubmitted(jobs.filter((job) => job.status === "Pending"));
+    console.log("submitted", submitted);
+    setArchived(jobs.filter((job) => job.status !== "Pending"));
+    console.log("archived", archived);
+  }, [jobs]);
 
-  }, [jobs])
+  const handleViewApplication = (jobId) => {
+    // Navigate to the new route with jobId as route parameter
+    navigate(`/applications/${jobId}`);
+  };
 
   return (
     <div className="m-8 sm:m-2">
@@ -98,251 +110,66 @@ const ApplicationsPage = () => {
         <h1 className="mt-2 text-2xl font-semibold text-gray-800">
           Applications
         </h1>
-
-
         <div className="flex mt-4">
           <button
-            className={`mr-2 px-4 py-2  ${activeTab === "submitted"
-              ? "bg-blue-500 text-white font-semibold "
-              : "bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition duration-100"
-              }`}
+            className={`mr-2 px-4 py-2  ${
+              activeTab === "submitted"
+                ? "bg-blue-500 text-white font-semibold "
+                : "bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition duration-100"
+            }`}
             onClick={() => handleTabChange("submitted")}
           >
             Submitted <span>({submitted.length})</span>
           </button>
           <button
-            className={`px-4 py-2 ${activeTab === "archived"
-              ? "bg-blue-500 text-white font-semibold"
-              : "bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition duration-100"
-              }`}
+            className={`px-4 py-2 ${
+              activeTab === "archived"
+                ? "bg-blue-500 text-white font-semibold"
+                : "bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition duration-100"
+            }`}
             onClick={() => handleTabChange("archived")}
           >
             Archived <span>({archived.length})</span>
           </button>
         </div>
-
-
         <hr className="my-1 border-gray-400" /> {/* Horizontal line */}
         {/* Render content based on activeTab */}
-
         {activeTab === "submitted" && (
           <div>
-
             <div className="grid lg:grid-cols-3 md:grid-cols-2">
-
-              {(submitted.length > 0) ? (submitted.map((job) => {
-                return <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 " key={job.formId}>
-                  <h1 className="font-semibold text-xl">
-                    {job.title}
-                  </h1>
-                  <h3>Job Id : {job.jobId}</h3>
-                  <h3>Applied on: <span className="ml-2">{formatDate(job.appliedDate)}</span></h3>
-                  <h3>
-                    Status:{" "}
-                    <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                      {job.status}
-                    </span>
-                  </h3>
-                  <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                    View application
-                  </button>
-                </div>
-
-              })) :
-                <div>
-                  No application to show.
-                </div>}
-              {/* 
-
-              <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700  ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div>
-
-              <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div>
-
-              <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div>
-
-              <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div> */}
-
-            </div>
-          </div>
-        )}
-
-
-        {activeTab === "archived" && (
-          <div>
-            {/* Content for Archived tab */}
-            <div className="grid lg:grid-cols-3 md:grid-cols-2">
-
-              {(archived.length > 0) ? (archived.map((job) => {
-                return <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 " key={job.formId}>
-                  <h1 className="font-semibold text-xl">
-                    {job.title}
-                  </h1>
-                  <h3>Job Id : {job.jobId}</h3>
-                  <h3>Applied on: {formatDate(job.appliedDate)}</h3>
-                  <h3>
-                    Status:{" "}
-                    <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                      {job.status}
-                    </span>
-                  </h3>
-                  <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                    View application
-                  </button>
-                </div>
-
-              })) :
-                <div>
-                  No application to show.
-                </div>}
-
-              {/* <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div>
-
-              <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div>
-
-
-              <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div>
-
-
-              <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div>
-
-
-              <div className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 ">
-                <h1 className="font-semibold text-xl">
-                  Teaching Assisstent Requirement
-                </h1>
-                <h3>Course Id : CSPC 302</h3>
-                <h3>Applied Date: March 29, 2024</h3>
-                <h3>
-                  Status:{" "}
-                  <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
-                    pending
-                  </span>
-                </h3>
-                <button className="mt-10  text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md">
-                  View application
-                </button>
-              </div> */}
-
+              {submitted.length > 0 ? (
+                submitted.map((job) => {
+                  return (
+                    <div
+                      className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 "
+                      key={job.formId}
+                    >
+                      <h1 className="font-semibold text-xl">{job.title}</h1>
+                      <h3>Job Id : {job.jobId}</h3>
+                      <h3>
+                        Applied on:{" "}
+                        <span className="ml-2">
+                          {formatDate(job.appliedDate)}
+                        </span>
+                      </h3>
+                      <h3>
+                        Status:{" "}
+                        <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
+                          {job.status}
+                        </span>
+                      </h3>
+                      <button
+                        className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
+                        onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
+                      >
+                        View application
+                      </button>
+                    </div>
+                  );
+                })
+              ) : (
+                <div>No application to show.</div>
+              )}
             </div>
           </div>
         )}

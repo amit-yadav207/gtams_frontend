@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
+import { FaCheckCircle } from "react-icons/fa";
 import "./ApplicationReview.css";
 
 const ApplicationReview = () => {
@@ -123,6 +124,19 @@ const ApplicationReview = () => {
   ];
 
   const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(0);
+  const [recommendations, setRecommendations] = useState(
+    applicationList.map(() => false)
+  );
+
+  const [showRecommendation, setShowRecommendation] = useState(false); // State to track whether to show the recommendation or not
+
+  const handleToggleRecommendation = (index) => {
+    setRecommendations((prevRecommendations) => {
+      const newRecommendations = [...prevRecommendations];
+      newRecommendations[index] = !newRecommendations[index]; //toggling at particular index
+      return newRecommendations;
+    });
+  };
 
   const handleNextClick = () => {
     setSelectedApplicantIndex((prevIndex) =>
@@ -130,6 +144,7 @@ const ApplicationReview = () => {
         ? 0
         : prevIndex + 1
     );
+    setShowRecommendation(false); // Reset the recommendation visibility when changing applicants
   };
 
   const handleBackClick = () => {
@@ -138,6 +153,7 @@ const ApplicationReview = () => {
         ? applicationList.length - 1
         : prevIndex - 1
     );
+    setShowRecommendation(false); // Reset the recommendation visibility when changing applicants
   };
 
   const selectedApplicant =
@@ -255,16 +271,9 @@ const ApplicationReview = () => {
                   Next
                 </button>
               </div>
-              {/**button for mark as recommendation */}
-              <button
-                className="hover:bg-slate-200 text-blue-500 font-bold p-2 rounded-md my-2 hover:underline "
-                onClick={() => handleMarkRecommended(selectedApplicant)}
-              >
-                Mark as Recommended
-              </button>
 
               {/**resume section */}
-              <div className="flex flex-col justify-center min-h-full">
+              <div className="flex flex-col justify-center min-h-full mt-4">
                 <h2 className="flex justify-between font-semibold font-sans text-xl text-center">
                   Resume
                   <button
@@ -283,9 +292,37 @@ const ApplicationReview = () => {
                   <iframe
                     title="Resume"
                     src={selectedApplicant.resumeLink}
-                    className="w-full h-96"
+                    className="w-full h-96 cursor-move"
                   ></iframe>
+
+                  {/**TICK SYMBOL */}
+                  {recommendations[selectedApplicantIndex] &&
+                    showRecommendation && (
+                      <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+                        <div className="bg-transparent text-green-500">
+                          {/* Big blue check sign */}
+                          <FaCheckCircle className="text-9xl" />
+                        </div>
+                      </div>
+                    )}
                 </div>
+              </div>
+              {/* Checkbox for marking recommendation */}
+              <div className="flex justify-center my-2 ">
+                <label className="flex items-center space-x-2 text-lg cursor-pointer ">
+                  <input
+                    type="checkbox"
+                    checked={recommendations[selectedApplicantIndex]}
+                    onChange={() => {
+                      handleToggleRecommendation(selectedApplicantIndex);
+                      setShowRecommendation(!showRecommendation);
+                    }}
+                    className="h-4 w-4"
+                  />
+                  <span className="text-gray-700 font-semibold">
+                    Mark as Recommended
+                  </span>
+                </label>
               </div>
             </div>
           ) : (

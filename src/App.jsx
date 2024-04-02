@@ -28,6 +28,7 @@ import ForgetPassword from "./pages/All/ForgetPassword";
 import ResetPassword from "./pages/All/ResetPassword";
 import SetPassword from "./pages/All/SetPassword";
 import ApplicationReview from "./pages/Applications/ApplicationReview";
+import ApplicationDetailsPage from "./pages/TApages/ApplicationDetailsPage";
 
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
@@ -79,6 +80,7 @@ function App() {
   />*/}
 
           <Route path="/applications" element={<ApplicationsPage />} />
+          <Route path="/applications/:jobId" element={<ApplicationDetailsPage />} />
         </Route>
         <Route element={<RequireAuth allowedRoles={["USER"]} />}></Route>
         <Route element={<RequireAuth allowedRoles={["DS"]} />}></Route>
