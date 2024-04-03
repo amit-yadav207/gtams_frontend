@@ -1,131 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
 import { FaCheckCircle } from "react-icons/fa";
 import "./ApplicationReview.css";
+import toast from "react-hot-toast";
+import axiosInstance from "../../Helper/axiosInstance";
 
 const ApplicationReview = () => {
   const { jobId } = useParams();
 
-  const applicationList = [
-    {
-      id: 1,
-      applicant: "Alice Johnson",
-      email: "alice.johnson@example.com",
-      contact: "1234567890",
-      applicationId: "APP123456",
-      resumeLink:
-        "https://res.cloudinary.com/kunal24kmr/image/upload/v1712072900/resume/zv3f53bl5y2uyxqmxsgm.pdf",
+  const [forms, setForms] = useState([]);
 
-      recommended: true,
-    },
-    {
-      id: 2,
-      applicant: "Bob Smith",
-      email: "bob.smith@example.com",
-      contact: "2345678901",
-      applicationId: "APP789012",
-      resumeLink:
-        "https://res.cloudinary.com/kunal24kmr/image/upload/v1712072900/resume/zv3f53bl5y2uyxqmxsgm.pdf",
-      recommended: false,
-    },
-    {
-      id: 3,
-      applicant: "Eve Anderson",
-      email: "eve.anderson@example.com",
-      contact: "3456789012",
-      applicationId: "APP345678",
-      resumeLink:
-        "https://res.cloudinary.com/kunal24kmr/image/upload/v1712072900/resume/zv3f53bl5y2uyxqmxsgm.pdf",
-      recommended: true,
-    },
-    {
-      id: 4,
-      applicant: "Charlie Brown",
-      email: "charlie.brown@example.com",
-      contact: "4567890123",
-      applicationId: "APP901234",
-      resumeLink: "https://example.com/charlie_resume",
-      recommended: false,
-    },
-    {
-      id: 5,
-      applicant: "David Miller",
-      email: "david.miller@example.com",
-      contact: "5678901234",
-      applicationId: "APP567890",
-      resumeLink: "https://example.com/david_resume",
-      recommended: true,
-    },
-    {
-      id: 6,
-      applicant: "Emily Clark",
-      email: "emily.clark@example.com",
-      contact: "6789012345",
-      applicationId: "APP678901",
-      resumeLink: "https://example.com/emily_resume",
-      recommended: false,
-    },
-    {
-      id: 7,
-      applicant: "Frank Thomas",
-      email: "frank.thomas@example.com",
-      contact: "7890123456",
-      applicationId: "APP789012",
-      resumeLink: "https://example.com/frank_resume",
-      recommended: true,
-    },
-    {
-      id: 8,
-      applicant: "Grace Davis",
-      email: "grace.davis@example.com",
-      contact: "8901234567",
-      applicationId: "APP890123",
-      resumeLink: "https://example.com/grace_resume",
-      recommended: false,
-    },
-    {
-      id: 9,
-      applicant: "Henry Wilson",
-      email: "henry.wilson@example.com",
-      contact: "9012345678",
-      applicationId: "APP901234",
-      resumeLink: "https://example.com/henry_resume",
-      recommended: true,
-    },
-    {
-      id: 10,
-      applicant: "Isabella Garcia",
-      email: "isabella.garcia@example.com",
-      contact: "0123456789",
-      applicationId: "APP012345",
-      resumeLink: "https://example.com/isabella_resume",
-      recommended: false,
-    },
-    {
-      id: 11,
-      applicant: "Jack Brown",
-      email: "jack.brown@example.com",
-      contact: "1234567890",
-      applicationId: "APP123456",
-      resumeLink: "https://example.com/jack_resume",
-      recommended: true,
-    },
-    {
-      id: 12,
-      applicant: "Kelly White",
-      email: "kelly.white@example.com",
-      contact: "2345678901",
-      applicationId: "APP234567",
-      resumeLink: "https://example.com/kelly_resume",
-      recommended: false,
-    },
-    // Add more entries as needed...
-  ];
+  const getAllForms = async () => {
+    try {
+      let res = axiosInstance.post(`form/getAllFormResponseByJobId/${jobId}`);
+
+      await toast.promise(res, {
+        loading: "Deleting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+
+
+      console.log('received from data', res.data);
+      setForms(res.data.forms);
+
+    } catch (error) {
+      console.error("Error Fetching from.", error);
+      toast.error("Error Fetching from.");
+    }
+  };
+
+  useEffect(() => {
+    getAllForms();
+  }, [setForms]);
 
   const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(0);
   const [recommendations, setRecommendations] = useState(
-    applicationList.map(() => false)
+    forms.map(() => false)
   );
 
   const [showRecommendation, setShowRecommendation] = useState(false); // State to track whether to show the recommendation or not
@@ -140,7 +57,7 @@ const ApplicationReview = () => {
 
   const handleNextClick = () => {
     setSelectedApplicantIndex((prevIndex) =>
-      prevIndex === null || prevIndex === applicationList.length - 1
+      prevIndex === null || prevIndex === forms.length - 1
         ? 0
         : prevIndex + 1
     );
@@ -150,7 +67,7 @@ const ApplicationReview = () => {
   const handleBackClick = () => {
     setSelectedApplicantIndex((prevIndex) =>
       prevIndex === null || prevIndex === 0
-        ? applicationList.length - 1
+        ? forms.length - 1
         : prevIndex - 1
     );
     setShowRecommendation(false); // Reset the recommendation visibility when changing applicants
@@ -158,7 +75,7 @@ const ApplicationReview = () => {
 
   const selectedApplicant =
     selectedApplicantIndex !== null
-      ? applicationList[selectedApplicantIndex]
+      ? forms[selectedApplicantIndex]
       : null;
 
   return (
@@ -173,7 +90,7 @@ const ApplicationReview = () => {
         <h1>
           Total Applications Received:{" "}
           <span className="bg-slate-200 px-2 rounded-md  md:text-sm">
-            {applicationList.length}
+            {forms.length}
           </span>
         </h1>
       </div>
@@ -199,16 +116,16 @@ const ApplicationReview = () => {
                   <tbody>
                     <tr className="text-center">
                       <td className="p-0.5 md:p-2">
-                        {selectedApplicant.applicationId}
+                        {selectedApplicant.formId}
                       </td>
                       <td className="p-0.5 md:p-2">
-                        {selectedApplicant.applicant}
+                        {selectedApplicant.applicantName}
                       </td>
                       <td className="p-0.5 md:p-2">
                         {selectedApplicant.email}
                       </td>
                       <td className="p-0.5 md:p-2">
-                        {selectedApplicant.contact}
+                        {selectedApplicant.phone}
                       </td>
                     </tr>
                   </tbody>
@@ -228,15 +145,14 @@ const ApplicationReview = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {applicationList.map((application, index) => (
+                    {forms.map((application, index) => (
                       <tr
                         key={application.id}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${
-                          selectedApplicantIndex === index
-                            ? "bg-gray-200 text-blue-700"
-                            : ""
-                        }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${selectedApplicantIndex === index
+                          ? "bg-gray-200 text-blue-700"
+                          : ""
+                          }`}
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
@@ -261,9 +177,8 @@ const ApplicationReview = () => {
                 >
                   Back
                 </button>
-                <span className="">{`${selectedApplicantIndex + 1}/${
-                  applicationList.length
-                }`}</span>
+                <span className="">{`${selectedApplicantIndex + 1}/${forms.length
+                  }`}</span>
                 <button
                   onClick={handleNextClick}
                   className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
@@ -279,7 +194,7 @@ const ApplicationReview = () => {
                   <button
                     className="text-right text-blue-500 text-sm hover:bg-slate-200 rounded-md px-2 hover:underline"
                     onClick={() =>
-                      window.open(selectedApplicant.resumeLink, "_blank")
+                      window.open(selectedApplicant.resume.cloudinaryUrl, "_blank")
                     }
                   >
                     View in New Tab
@@ -291,7 +206,7 @@ const ApplicationReview = () => {
                 <div className="text-center min-h-full border w-full mb-2 rounded-md shadow-md">
                   <iframe
                     title="Resume"
-                    src={selectedApplicant.resumeLink}
+                    src={selectedApplicant.resume.cloudinaryUrl}
                     className="w-full h-96 cursor-move"
                   ></iframe>
 
@@ -351,19 +266,18 @@ const ApplicationReview = () => {
               <div className="shadow-md  overflow-y-auto max-h-96 scroll-smooth scrollBar">
                 <table className="w-full">
                   <tbody>
-                    {applicationList.map((application, index) => (
+                    {forms.map((form, index) => (
                       <tr
-                        key={application.id}
+                        key={form.formId}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${
-                          selectedApplicantIndex === index
-                            ? "bg-gray-200 text-blue-700"
-                            : ""
-                        }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${selectedApplicantIndex === index
+                          ? "bg-gray-200 text-blue-700"
+                          : ""
+                          }`}
                       >
                         <td className="p-3 ">{index + 1}</td>
-                        <td className="p-3 ">{application.applicant}</td>
-                        <td className="p-3">{application.applicationId}</td>
+                        <td className="p-3 ">{form.applicantName}</td>
+                        <td className="p-3">{form.formId}</td>
                       </tr>
                     ))}
                   </tbody>
