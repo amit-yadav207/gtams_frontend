@@ -60,7 +60,7 @@ const DashboardPage = () => {
   };
 
   const handleViewJob = (jobId) => {
-    navigate(`/dashboardDS/application-review/${jobId}`);
+    navigate(`/dashboardDS/application-review/${jobId}`)
 
     // Handle view job functionality
   };
@@ -162,7 +162,7 @@ const DashboardPage = () => {
                       </button>
                       <button
                         className="text-blue-600 m-1 p-1 rounded hover:bg-blue-600 hover:text-white "
-                        onClick={() => handleViewJob(job._id)}
+                        onClick={() => handleViewJob(job.jobId)}
                         title="View Applications"
                       >
                         <FaEye size={10} />
