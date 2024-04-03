@@ -135,7 +135,7 @@ function JobApplyPage() {
     formData.append("email", user.email);
     formData.append("phone", user.phone);
     formData.append("address", user.address);
-    // formData.append("address", user.address);
+    formData.append("gender", gender);
     formData.append("previousExperience", JSON.stringify(jobDetails));
 
     try {
