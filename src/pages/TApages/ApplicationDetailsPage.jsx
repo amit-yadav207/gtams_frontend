@@ -90,6 +90,10 @@ const ApplicationDetailsPage = () => {
                 <td className="font-semibold">Contact:</td>
                 <td>{application.phone}</td>
               </tr>
+              <tr className="mb-2 sm:mb-1">
+                <td className="font-semibold align-top">Address:</td>
+                <td>{application.address}</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -195,6 +199,7 @@ const ApplicationDetailsPage = () => {
             <FaCalendarAlt className="mr-2" size={20} />
             <p className="lg:text-2xl text-lg font-semibold">Applied Date</p>
           </div>
+          <p className="p-2">{formatDate(application.appliedDate)}</p>
           {/* Add your applied date here */}
         </div>
       </div>

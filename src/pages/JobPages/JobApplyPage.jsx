@@ -19,7 +19,7 @@ function JobApplyPage() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [jobDetails, setJobDetails] = useState([]);
-
+  const [gender, setGender] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
   const { jobId } = useParams();
@@ -156,7 +156,7 @@ function JobApplyPage() {
         },
       });
       res = await res;
-      
+
       console.log(res.data);
       if (res.data.success) {
         navigate(-1);
@@ -231,6 +231,47 @@ function JobApplyPage() {
                     onChange={handleInputChange}
                     name="phone"
                   ></input>
+                </td>
+              </tr>
+
+              <tr>
+                <td className="p-2 font-semibold align-top">Gender</td>
+                <td className="p-2 align-top">
+                  <div className="p-2">
+                    <label className="inline-flex items-center">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="Male"
+                        checked={gender === "Male"}
+                        onChange={(e) => setGender(e.target.value)}
+                        className="form-radio h-5 w-5 text-blue-500"
+                      />
+                      <span className="ml-2">Male</span>
+                    </label>
+                    <label className="inline-flex items-center ml-6">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="Female"
+                        checked={gender === "Female"}
+                        onChange={(e) => setGender(e.target.value)}
+                        className="form-radio h-5 w-5 text-blue-500"
+                      />
+                      <span className="ml-2">Female</span>
+                    </label>
+                    <label className="inline-flex items-center ml-6">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="Other"
+                        checked={gender === "Other"}
+                        onChange={(e) => setGender(e.target.value)}
+                        className="form-radio h-5 w-5 text-blue-500"
+                      />
+                      <span className="ml-2">Other</span>
+                    </label>
+                  </div>
                 </td>
               </tr>
 
