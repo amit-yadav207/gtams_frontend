@@ -10,11 +10,10 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa";
 
-
 //date format
 const formatDate = (dateString) => {
-  const options = { day: 'numeric', month: 'short', year: 'numeric' };
-  return new Date(dateString).toLocaleDateString('en-US', options);
+  const options = { day: "numeric", month: "short", year: "numeric" };
+  return new Date(dateString).toLocaleDateString("en-US", options);
 };
 // Function to convert bytes to kilobytes
 const bytesToKB = (bytes) => {
@@ -149,9 +148,9 @@ const ApplicationDetailsPage = () => {
 
                 {application.previousExperience.map((exp, index) => (
                   <tr key={index} className="mb-1 sm:mb-0">
-                    <td >{exp.course}</td>
-                    <td >{formatDate(exp.fromDate)}</td>
-                    <td >{formatDate(exp.toDate)}</td>
+                    <td>{exp.course}</td>
+                    <td>{formatDate(exp.fromDate)}</td>
+                    <td>{formatDate(exp.toDate)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -172,7 +171,11 @@ const ApplicationDetailsPage = () => {
             <tbody>
               <tr className="md:mb-2 mb-1">
                 <td className="font-semibold">File Name:</td>
-                <td>{application.resume.fileName}</td>
+                <td>
+                  <a href={application.resume.cloudinaryUrl} target="_blank" className="hover:underline text-blue-500">
+                    {application.resume.fileName}
+                  </a>
+                </td>
               </tr>
               <tr className="md:mb-2 mb-1">
                 <td className="font-semibold">Size:</td>
