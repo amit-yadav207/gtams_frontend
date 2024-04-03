@@ -30,36 +30,36 @@ const HomePage = () => {
               Get Started
             </Link>
 
-            <Link
+            {/* <Link
               to="/update-profile"
               className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
             >
-              Update
-            </Link>
+              Update Profile
+            </Link> */}
 
-            <Link
+            {/* <Link
               to="/forget-password"
               className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
             >
               forget password
-            </Link>
+            </Link> */}
 
 
-
+{/* 
             <Link
               to="/reset-password"
               className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
             >
               reset password
-            </Link>
+            </Link> */}
 
-
+{/* 
             <Link
               to="/set-password"
               className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
             >
               set password
-            </Link>
+            </Link> */}
           </div>
         </section>
       
