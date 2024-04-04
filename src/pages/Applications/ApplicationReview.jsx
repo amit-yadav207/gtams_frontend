@@ -229,7 +229,7 @@ const ApplicationReview = () => {
                     type="checkbox"
                     checked={recommendations[selectedApplicantIndex]}
                     onChange={() => {
-                      handleToggleRecommendation(selectedApplicantIndex);
+                      handleToggleRecommendation(forms[selectedApplicantIndex]._id);
                       setShowRecommendation(!showRecommendation);
                     }}
                     className="h-4 w-4"
