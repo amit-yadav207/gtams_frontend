@@ -53,27 +53,11 @@ const ApplicationReview = () => {
   };
 
   const handleRecommendation = async () => {
-    try {
-      const updatedForms = [...forms];
-      updatedForms[selectedApplicantIndex].status = "Forwarded";
-      setForms(updatedForms);
-      toast.success("Applicant recommended successfully!");
-    } catch (error) {
-      console.error("Error recommending applicant.", error);
-      toast.error("Error recommending applicant.");
-    }
+
   };
 
   const handleRejection = async () => {
-    try {
-      const updatedForms = [...forms];
-      updatedForms[selectedApplicantIndex].status = "Rejected";
-      setForms(updatedForms);
-      toast.success("Applicant rejected successfully!");
-    } catch (error) {
-      console.error("Error rejecting applicant.", error);
-      toast.error("Error rejecting applicant.");
-    }
+    
   };
 
   const selectedApplicant =
@@ -133,7 +117,7 @@ const ApplicationReview = () => {
                 </table>
               </div>
 
-              {/**below div will be hidden on medium and laerge screens */}
+              {/**below div will be hidden on medium and larrge screens */}
               <div className="block md:hidden mt-2 rounded-md shadow-md overflow-auto md:max-h-56 min-h-28 max-h-56">
                 <table className="w-full rounded">
                   <thead className="sticky top-0 bg-gray-500 text-white">
@@ -158,18 +142,54 @@ const ApplicationReview = () => {
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
-                          {application.formId}
+                          {selectedApplicant.formId}
                         </td>
                         <td className="p-0.5 md:p-2">
-                          {application.applicantName}
+                          {selectedApplicant.applicantName}
                         </td>
-                        <td className="p-0.5 md:p-2">{application.email}</td>
-                        <td className="p-0.5 md:p-2">{application.phone}</td>
+                        <td className="p-0.5 md:p-2">
+                          {selectedApplicant.email}
+                        </td>
+                        <td className="p-0.5 md:p-2">
+                          {selectedApplicant.phone}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+
+              {/**show here previous experience if Any  */}
+              {selectedApplicant.previousExperience.length > 0 ? (
+                <div className=" mt-2 rounded-md shadow-md overflow-auto md:max-h-56 min-h-28 max-h-56">
+                  <table className="w-full rounded">
+                    <thead className="sticky top-0 bg-gray-500 text-white">
+                      <tr>
+                        <th className="p-0.5 md:p-3">Sr. No.</th>
+                        <th className="p-0.5 md:p-3">Course</th>
+                        <th className="p-0.5 md:p-3">From </th>
+                        <th className="p-0.5 md:p-3">To</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedApplicant.previousExperience.map(
+                        (exp, index) => (
+                          <tr key={index} className={`  text-center `}>
+                            <td className="p-0.5 md:p-2">{index + 1}</td>
+                            <td className="p-0.5 md:p-2">{exp.course}</td>
+                            <td className="p-0.5 md:p-2">{exp.fromDate}</td>
+                            <td className="p-0.5 md:p-2">{exp.toDate}</td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <h1 className="text-md p-2 md:text-lg font-semibold ">
+                  No Previous Experience
+                </h1>
+              )}
 
               {/**back and next button on small screens */}
               <div className=" md:hidden flex justify-between  items-center my-4">
