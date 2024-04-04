@@ -26,10 +26,8 @@ const ApplicationReview = () => {
       });
       res = await res;
 
-
-      console.log('received from data', res.data);
-      setForms(res.data.forms);
-
+      console.log("received from data", res.data);
+      setForms(res.data.forms.filter((form) => form.status === "Pending"));
     } catch (error) {
       console.error("Error Fetching from.", error);
       toast.error("Error Fetching from.");
@@ -41,42 +39,45 @@ const ApplicationReview = () => {
   }, [setForms]);
 
   const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(0);
-  const [recommendations, setRecommendations] = useState(
-    forms.map(() => false)
-  );
-
-  const [showRecommendation, setShowRecommendation] = useState(false); // State to track whether to show the recommendation or not
-
-  const handleToggleRecommendation = (index) => {
-    setRecommendations((prevRecommendations) => {
-      const newRecommendations = [...prevRecommendations];
-      newRecommendations[index] = !newRecommendations[index]; //toggling at particular index
-      return newRecommendations;
-    });
-  };
 
   const handleNextClick = () => {
     setSelectedApplicantIndex((prevIndex) =>
-      prevIndex === null || prevIndex === forms.length - 1
-        ? 0
-        : prevIndex + 1
+      prevIndex === null || prevIndex === forms.length - 1 ? 0 : prevIndex + 1
     );
-    setShowRecommendation(false); // Reset the recommendation visibility when changing applicants
   };
 
   const handleBackClick = () => {
     setSelectedApplicantIndex((prevIndex) =>
-      prevIndex === null || prevIndex === 0
-        ? forms.length - 1
-        : prevIndex - 1
+      prevIndex === null || prevIndex === 0 ? forms.length - 1 : prevIndex - 1
     );
-    setShowRecommendation(false); // Reset the recommendation visibility when changing applicants
+  };
+
+  const handleRecommendation = async () => {
+    try {
+      const updatedForms = [...forms];
+      updatedForms[selectedApplicantIndex].status = "Forwarded";
+      setForms(updatedForms);
+      toast.success("Applicant recommended successfully!");
+    } catch (error) {
+      console.error("Error recommending applicant.", error);
+      toast.error("Error recommending applicant.");
+    }
+  };
+
+  const handleRejection = async () => {
+    try {
+      const updatedForms = [...forms];
+      updatedForms[selectedApplicantIndex].status = "Rejected";
+      setForms(updatedForms);
+      toast.success("Applicant rejected successfully!");
+    } catch (error) {
+      console.error("Error rejecting applicant.", error);
+      toast.error("Error rejecting applicant.");
+    }
   };
 
   const selectedApplicant =
-    selectedApplicantIndex !== null
-      ? forms[selectedApplicantIndex]
-      : null;
+    selectedApplicantIndex !== null ? forms[selectedApplicantIndex] : null;
 
   return (
     <div className="p-2 items-center min-h-full md:m-2 shadow-md rounded-sm">
@@ -149,10 +150,11 @@ const ApplicationReview = () => {
                       <tr
                         key={application.id}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${selectedApplicantIndex === index
-                          ? "bg-gray-200 text-blue-700"
-                          : ""
-                          }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${
+                          selectedApplicantIndex === index
+                            ? "bg-gray-200 text-blue-700"
+                            : ""
+                        }`}
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
@@ -177,8 +179,9 @@ const ApplicationReview = () => {
                 >
                   Back
                 </button>
-                <span className="">{`${selectedApplicantIndex + 1}/${forms.length
-                  }`}</span>
+                <span className="">{`${selectedApplicantIndex + 1}/${
+                  forms.length
+                }`}</span>
                 <button
                   onClick={handleNextClick}
                   className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
@@ -194,7 +197,10 @@ const ApplicationReview = () => {
                   <button
                     className="text-right text-blue-500 text-sm hover:bg-slate-200 rounded-md px-2 hover:underline"
                     onClick={() =>
-                      window.open(selectedApplicant.resume.cloudinaryUrl, "_blank")
+                      window.open(
+                        selectedApplicant.resume.cloudinaryUrl,
+                        "_blank"
+                      )
                     }
                   >
                     View in New Tab
@@ -209,35 +215,23 @@ const ApplicationReview = () => {
                     src={selectedApplicant.resume.cloudinaryUrl}
                     className="w-full h-96 cursor-move"
                   ></iframe>
-
-                  {/**TICK SYMBOL */}
-                  {recommendations[selectedApplicantIndex] &&
-                    showRecommendation && (
-                      <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-                        <div className="bg-transparent text-green-500">
-                          {/* Big blue check sign */}
-                          <FaCheckCircle className="text-9xl" />
-                        </div>
-                      </div>
-                    )}
                 </div>
               </div>
-              {/* Checkbox for marking recommendation */}
-              <div className="flex justify-center my-2 ">
-                <label className="flex items-center space-x-2 text-lg cursor-pointer ">
-                  <input
-                    type="checkbox"
-                    checked={recommendations[selectedApplicantIndex]}
-                    onChange={() => {
-                      handleToggleRecommendation(selectedApplicantIndex);
-                      setShowRecommendation(!showRecommendation);
-                    }}
-                    className="h-4 w-4"
-                  />
-                  <span className="text-gray-700 font-semibold">
-                    Mark as Recommended
-                  </span>
-                </label>
+              {/* buttons for rejection and recommendation */}
+              <div className="flex justify-between my-2 ">
+                <button
+                  className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border  border-gray-500  rounded-md hover:bg-green-500 hover:text-white"
+                  onClick={handleRecommendation}
+                >
+                  Recommend
+                </button>
+
+                <button
+                  className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border border-gray-500 rounded-md hover:bg-red-500 hover:text-white"
+                  onClick={handleRejection}
+                >
+                  Reject
+                </button>
               </div>
             </div>
           ) : (
@@ -270,10 +264,11 @@ const ApplicationReview = () => {
                       <tr
                         key={form.formId}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${selectedApplicantIndex === index
-                          ? "bg-gray-200 text-blue-700"
-                          : ""
-                          }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${
+                          selectedApplicantIndex === index
+                            ? "bg-gray-200 text-blue-700"
+                            : ""
+                        }`}
                       >
                         <td className="p-3 ">{index + 1}</td>
                         <td className="p-3 ">{form.applicantName}</td>
