@@ -44,8 +44,7 @@ const HomePage = () => {
               forget password
             </Link> */}
 
-
-{/* 
+            {/* 
             <Link
               to="/reset-password"
               className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
@@ -53,16 +52,14 @@ const HomePage = () => {
               reset password
             </Link> */}
 
-{/* 
             <Link
-              to="/set-password"
+              to="/admin"
               className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
             >
-              set password
-            </Link> */}
+              Admin
+            </Link>
           </div>
         </section>
-      
 
         <section className="mt-8">
           <div className="max-w-2xl mx-auto">

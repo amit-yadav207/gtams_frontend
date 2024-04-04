@@ -30,6 +30,7 @@ import SetPassword from "./pages/All/SetPassword";
 import ApplicationReview from "./pages/Applications/ApplicationReview";
 import ApplicationDetailsPage from "./pages/TApages/ApplicationDetailsPage";
 import ApplicationReviewByCommittee from "./pages/Applications/ApplicationReviewByCommittee";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
@@ -76,6 +77,8 @@ function App() {
           element={<UpdateProfilePage user={loggedInUser} />}
         />
         <Route path="/dashboard/create-job" element={<JobCreationForm />} />{" "}
+        {/**Admin page route */}
+        <Route path="/admin" element={<AdminDashboard />} />
         {/* Define route for job creation form */}
         <Route element={<RequireAuth allowedRoles={["USER", "DS"]} />}>
           <Route path="/applications" element={<ApplicationsPage />} />
