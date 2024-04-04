@@ -28,7 +28,7 @@ const ApplicationDetailsPage = () => {
   useEffect(() => {
     const getApplicationDetails = async () => {
       try {
-        let res = axiosInstance.post(`/form/${jobId}`); // Fetch application details using jobId
+        let res = axiosInstance.post(`/form/getUserFormResponseByJobId/${jobId}`); // Fetch application details using jobId
         await toast.promise(res, {
           loading: "Loading...",
           success: (data) => {

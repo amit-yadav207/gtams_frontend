@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
-import { FaCheckCircle } from "react-icons/fa";
 import "./ApplicationReview.css";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helper/axiosInstance";
@@ -52,12 +51,50 @@ const ApplicationReview = () => {
     );
   };
 
-  const handleRecommendation = async () => {
+  const handleRecommendation = async (id) => {
+    try {
+      let res = axiosInstance.post(`/form/changeFormStatusByFormId`, { id });
 
+      await toast.promise(res, {
+        loading: "Updating response status...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        getAllForms();
+      }
+    } catch (error) {
+      console.error("Error Updating response status:", error);
+      toast.error("Error Updating response status.");
+    }
   };
 
-  const handleRejection = async () => {
-    
+  const handleRejection = async (id) => {
+    try {
+      let res = axiosInstance.post(`/form/rejectFromByFormId`, { id });
+
+      await toast.promise(res, {
+        loading: "Rejecting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        getAllForms();
+      }
+    } catch (error) {
+      console.error("Error Rejecting response", error);
+      toast.error("Error Rejecting response");
+    }
   };
 
   const selectedApplicant =
@@ -132,13 +169,12 @@ const ApplicationReview = () => {
                   <tbody>
                     {forms.map((application, index) => (
                       <tr
-                        key={application.id}
+                        key={application._id}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${
-                          selectedApplicantIndex === index
-                            ? "bg-gray-200 text-blue-700"
-                            : ""
-                        }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${selectedApplicantIndex === index
+                          ? "bg-gray-200 text-blue-700"
+                          : ""
+                          }`}
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
@@ -199,9 +235,8 @@ const ApplicationReview = () => {
                 >
                   Back
                 </button>
-                <span className="">{`${selectedApplicantIndex + 1}/${
-                  forms.length
-                }`}</span>
+                <span className="">{`${selectedApplicantIndex + 1}/${forms.length
+                  }`}</span>
                 <button
                   onClick={handleNextClick}
                   className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
@@ -241,14 +276,14 @@ const ApplicationReview = () => {
               <div className="flex justify-between my-2 ">
                 <button
                   className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border  border-gray-500  rounded-md hover:bg-green-500 hover:text-white"
-                  onClick={handleRecommendation}
+                  onClick={() => handleRecommendation(selectedApplicant._id)}
                 >
                   Recommend
                 </button>
 
                 <button
                   className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border border-gray-500 rounded-md hover:bg-red-500 hover:text-white"
-                  onClick={handleRejection}
+                  onClick={() => handleRejection(selectedApplicant._id)}
                 >
                   Reject
                 </button>
@@ -284,11 +319,10 @@ const ApplicationReview = () => {
                       <tr
                         key={form.formId}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${
-                          selectedApplicantIndex === index
-                            ? "bg-gray-200 text-blue-700"
-                            : ""
-                        }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${selectedApplicantIndex === index
+                          ? "bg-gray-200 text-blue-700"
+                          : ""
+                          }`}
                       >
                         <td className="p-3 ">{index + 1}</td>
                         <td className="p-3 ">{form.applicantName}</td>
