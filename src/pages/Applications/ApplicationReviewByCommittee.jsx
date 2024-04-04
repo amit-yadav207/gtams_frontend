@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
-import { FaCheckCircle } from "react-icons/fa";
 import "./ApplicationReview.css";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helper/axiosInstance";
 
-const ApplicationReview = () => {
+const ApplicationReviewByCommittee = () => {
   const { jobId } = useParams();
 
   const [forms, setForms] = useState([]);
@@ -27,7 +26,7 @@ const ApplicationReview = () => {
       res = await res;
 
       console.log("received from data", res.data);
-      setForms(res.data.forms.filter((form) => form.status === "Pending"));
+      setForms(res.data.forms.filter((form) => form.status !== "Pending"));
     } catch (error) {
       console.error("Error Fetching from.", error);
       toast.error("Error Fetching from.");
@@ -52,7 +51,7 @@ const ApplicationReview = () => {
     );
   };
 
-  const handleRecommendation = async () => {};
+  const handleAccept = async () => {};
 
   const handleRejection = async () => {};
 
@@ -75,7 +74,7 @@ const ApplicationReview = () => {
           </span>
         </h1>
         <h1>
-          Total Applications Received:{" "}
+          Total Recommended Applications:{" "}
           <span className="bg-slate-200 px-2 rounded-md  md:text-sm">
             {forms.length}
           </span>
@@ -251,9 +250,11 @@ const ApplicationReview = () => {
               <div className="flex justify-between my-2 ">
                 <button
                   className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border  border-gray-500  rounded-md hover:bg-green-500 hover:text-white"
-                  onClick={handleRecommendation}
+                  onClick={handleAccept}
+                  disabled
+                  //enable when atlease teacher is chosen
                 >
-                  Recommend
+                  Accept
                 </button>
 
                 <button
@@ -272,8 +273,8 @@ const ApplicationReview = () => {
         </section>
 
         {/* Section 2: Application List */}
-        <section className="w-full md:w-2/5 bg-white md:block hidden px-4 ">
-          <div className="sticky top-2  ">
+        <section className="w-full md:w-2/5 bg-white md:block hidden px-4">
+          <div className="sticky top-2">
             <h2 className="m-2 font-semibold font-sans text-center text-lg md:text-2xl">
               Application List
             </h2>
@@ -310,10 +311,36 @@ const ApplicationReview = () => {
               </div>
             </div>
           </div>
+
+          {/**visible on medium and large screens ..dropdown to select teacher */}
+          {/**got teacher objects having information dept, their name, courseid they teach...now filter based on dept */}
+
+          <div className="w-full relative">
+            <select className="h-12 appearance-none border border-gray-300 rounded-md px-4 py-2 pr-12 focus:outline-none focus:border-blue-500">
+              <option value="">Select a teacher</option>
+              <option value="teacher1">Teacher 1</option>
+              <option value="teacher2">Teacher 2</option>
+              <option value="teacher3">Teacher 3</option>
+              {/* Add more options as needed */}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <svg
+                className="w-4 h-4 fill-current text-gray-500"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9.293 13.707a1 1 0 0 0 1.414-1.414l-3-3a1 1 0 1 0-1.414 1.414l3 3zM8 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
         </section>
       </div>
     </div>
   );
 };
 
-export default ApplicationReview;
+export default ApplicationReviewByCommittee;
