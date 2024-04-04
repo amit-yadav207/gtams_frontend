@@ -158,13 +158,13 @@ const ApplicationReview = () => {
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
-                          {application.applicationId}
+                          {application.formId}
                         </td>
                         <td className="p-0.5 md:p-2">
-                          {application.applicant}
+                          {application.applicantName}
                         </td>
                         <td className="p-0.5 md:p-2">{application.email}</td>
-                        <td className="p-0.5 md:p-2">{application.contact}</td>
+                        <td className="p-0.5 md:p-2">{application.phone}</td>
                       </tr>
                     ))}
                   </tbody>
