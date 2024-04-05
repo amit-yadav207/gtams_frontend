@@ -40,9 +40,7 @@ const UserForm = ({ initialFormData, onSubmit, onCancel, departmentOptions }) =>
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center">
-      <div className="p-4  w-11/12  bg-white md:p-6 rounded-lg lg:w-1/4">
-        <h2 className="text-xl font-semibold mb-4">Create User</h2>
+   
     <form onSubmit={handleSubmit} className="mb-8 ">
       <div className="mb-4">
         <label htmlFor="fullName" className="block text-gray-700 font-semibold">
@@ -136,8 +134,7 @@ const UserForm = ({ initialFormData, onSubmit, onCancel, departmentOptions }) =>
         Cancel
       </button>
     </form>
-    </div>
-    </div>
+   
 
   );
 };

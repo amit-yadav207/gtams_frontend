@@ -118,24 +118,24 @@ const AdminDashboard = () => {
     }
   };
 
-  // Function to handle form submission for creating new user
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // await axios.post("/api/users", formData);
-      // fetchUsers(); // Refresh the user list after creating a new user
-      setUsers([...users, formData]);
-      setFormData({
-        fullName: "",
-        email: "",
-        password: "",
-        role: "user",
-      });
-      setShowCreateForm(false);
-    } catch (error) {
-      console.error("Error creating user:", error);
-    }
-  };
+  // // Function to handle form submission for creating new user
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     // await axios.post("/api/users", formData);
+  //     // fetchUsers(); // Refresh the user list after creating a new user
+  //     setUsers([...users, formData]);
+  //     setFormData({
+  //       fullName: "",
+  //       email: "",
+  //       password: "",
+  //       role: "user",
+  //     });
+  //     setShowCreateForm(false);
+  //   } catch (error) {
+  //     console.error("Error creating user:", error);
+  //   }
+  // };
 
   // Handle edit button click
   const handleEdit = (user) => {
@@ -157,12 +157,12 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleRoleChange = (e) => {
-    setSelectedRole(e.target.value);
-    if (e.target.value === "USER")
-      setFormData({ ...formData, department: "", role: "USER" });
-    else setFormData({ ...formData, role: e.target.value });
-  };
+  // const handleRoleChange = (e) => {
+  //   setSelectedRole(e.target.value);
+  //   if (e.target.value === "USER")
+  //     setFormData({ ...formData, department: "", role: "USER" });
+  //   else setFormData({ ...formData, role: e.target.value });
+  // };
 
   // Filter users based on selected role and search term
   const filteredUsers = users.filter((user) => {
@@ -183,68 +183,115 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen lg:m-5 m-1 p-3">
-      <h1 className="text-xl md:text-2xl font-semibold mb-4">
+      <h1 className="text-xl md:text-3xl font-semibold mb-4">
         User Management
       </h1>
-
-      {/* User Creation Form */}
-      <div className="mb-8">
-        <button
-          onClick={() => setShowCreateForm(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >
-          Create User
-        </button>
-        {/**form for creating user */}
-
-        {showCreateForm && (
-          <UserForm
-            formData={formData}
-            onSubmit={handleSubmit}
-            onCancel={() => {
-              setShowCreateForm(false);
-            }}
-            departmentOptions={departmentOptions}
-          />
-        )}
-      </div>
-
-      {/* Search bar */}
-      <div className="mb-4">
+      <div className="mb-4 md:mb-8 flex justify-between items-center">
         <input
           type="text"
           placeholder="Search users..."
-          className="border border-gray-300 rounded-md px-4 py-2 w-full"
+          className="border border-gray-300 rounded-md px-4 py-2 w-2/3 md:w-3/4 text-sm md:text-xl"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          autoFocus
         />
+        {/* User Creation & Edit Form */}
+        <div >
+          <button
+            onClick={() => setShowCreateForm(true)}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 text-sm md:text-xl"
+          >
+            Create User
+          </button>
+          {/**form for creating user */}
+
+          {showCreateForm && (
+            <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center">
+              <div className="p-4  w-11/12  bg-white md:p-6 rounded-lg lg:w-1/4">
+                <h2 className="text-xl font-semibold mb-4">Create User</h2>
+                <UserForm
+                  formData={formData}
+                  onSubmit={(formData) => {
+                    // Handle submit logic for creating user
+                    setUsers([...users, formData]);
+                    setFormData({
+                      fullName: "",
+                      email: "",
+                      password: "",
+                      role: "user",
+                    });
+                    // Close the create form modal
+                    setShowCreateForm(false);
+                  }}
+                  onCancel={() => {
+                    setShowCreateForm(false);
+                  }}
+                  departmentOptions={departmentOptions}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Edit Form Modal */}
+          {showEditForm && (
+            <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+              <div className="bg-white p-4 rounded-md">
+                <h2 className="text-xl font-semibold mb-4">Edit User</h2>
+                <EditForm
+                  initialFormData={selectedUser}
+                  onSubmit={(formData) => {
+                    // Handle submit logic for editing user
+                    console.log("Edited user data:", formData);
+                    const restUsers = users.filter(
+                      (user) => user != selectedUser
+                    );
+                    setUsers([...restUsers, formData]);
+                    setFormData({
+                      fullName: "",
+                      email: "",
+                      password: "",
+                      role: "user",
+                    });
+                    // Close the edit form modal
+                    setShowEditForm(false);
+                  }}
+                  onCancel={() => setShowEditForm(false)}
+                  departmentOptions={departmentOptions}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Filter dropdown */}
-      <div className="mb-4">
-        <label
-          htmlFor="filterRole"
-          className="block text-gray-700 font-semibold"
-        >
-          Filter by Role:
-        </label>
-        <select
-          id="filterRole"
-          className="border border-gray-300 rounded-md px-4 py-2"
-          value={filterRole}
-          onChange={(e) => setFilterRole(e.target.value)}
-        >
-          <option value="ALL">All</option>
-          <option value="USER">User</option>
-          <option value="INS">Instructor</option>
-          <option value="DS">Department Staff</option>
-          <option value="CM">Committee Member</option>
-        </select>
-      </div>
+      {/* Search bar */}
 
       {/* User List */}
-      <div>
-        <h2 className="text-xl md:text-2xl font-semibold mb-4">User List</h2>
+      <div className="mt-4">
+        {/* Filter dropdown */}
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl md:text-2xl font-semibold mb-4">User List</h2>
+          <div className="mb-4 ">
+            <label
+              htmlFor="filterRole"
+              className="block text-gray-700 font-semibold"
+            >
+              Filter by Role:
+            </label>
+            <select
+              id="filterRole"
+              className="border border-gray-300 rounded-md px-4 py-2"
+              value={filterRole}
+              onChange={(e) => setFilterRole(e.target.value)}
+            >
+              <option value="ALL">All</option>
+              <option value="USER">User</option>
+              <option value="INS">Instructor</option>
+              <option value="DS">Department Staff</option>
+              <option value="CM">Committee Member</option>
+            </select>
+          </div>
+        </div>
         <div className="overflow-x-auto overflow-y-auto  max-h-96">
           <table className="w-full border-collapse border border-gray-300 overflow-auto">
             <thead>
@@ -308,33 +355,6 @@ const AdminDashboard = () => {
           </table>
         </div>
       </div>
-      {/* Edit Form Modal */}
-      {showEditForm && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded-md">
-            <h2 className="text-xl font-semibold mb-4">Edit User</h2>
-            <EditForm
-              initialFormData={selectedUser}
-              onSubmit={(formData) => {
-                // Handle submit logic for editing user
-                console.log("Edited user data:", formData);
-                const restUsers = users.filter((user) => user != selectedUser);
-                setUsers([...restUsers, formData]);
-                setFormData({
-                  fullName: "",
-                  email: "",
-                  password: "",
-                  role: "user",
-                });
-                // Close the edit form modal
-                setShowEditForm(false);
-              }}
-              onCancel={() => setShowEditForm(false)}
-              departmentOptions={departmentOptions}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
