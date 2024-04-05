@@ -292,7 +292,7 @@ const AdminDashboard = () => {
             </select>
           </div>
         </div>
-        <div className="overflow-x-auto overflow-y-auto  max-h-96">
+        <div className="overflow-x-auto overflow-y-auto  max-h-96 scrollBar">
           <table className="w-full border-collapse border border-gray-300 overflow-auto">
             <thead>
               <tr className="bg-gray-200">
@@ -309,7 +309,7 @@ const AdminDashboard = () => {
                   Role
                 </th>
                 <th className="border border-gray-300 px-3 py-2 w-1/20">
-                  Actions
+                  Action
                 </th>
               </tr>
             </thead>
@@ -333,13 +333,13 @@ const AdminDashboard = () => {
                   </td>
                   <td className="border border-gray-300 px-2 py-2 text-center">
                     {/* Edit Button */}
-                    <button
+                   { /*<button
                       onClick={() => handleEdit(user)}
                       className="text-blue-600 hover:text-blue-800"
                       title="Edit"
                     >
                       <FaEdit />
-                    </button>
+              </button>*/}
                     {/* Delete Button */}
                     <button
                       onClick={() => handleDelete(user.id)}

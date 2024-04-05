@@ -31,6 +31,9 @@ import ApplicationReview from "./pages/Applications/ApplicationReview";
 import ApplicationDetailsPage from "./pages/TApages/ApplicationDetailsPage";
 import ApplicationReviewByCommittee from "./pages/Applications/ApplicationReviewByCommittee";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import CourseCreation from "./pages/Admin/CourseCreation";
+import DepartmentCreation from "./pages/Admin/DepartmentCreation";
+import InstructorDashboard from "./pages/InstructorPages/InstructorDashboard";
 
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
@@ -79,6 +82,10 @@ function App() {
         <Route path="/dashboard/create-job" element={<JobCreationForm />} />{" "}
         {/**Admin page route */}
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/create-course" element={<CourseCreation />} />
+        <Route path="/admin/create-department" element={<DepartmentCreation />} />
+        <Route path="/instructor-dashboard" element={<InstructorDashboard />} />
+
         {/* Define route for job creation form */}
         <Route element={<RequireAuth allowedRoles={["USER", "DS"]} />}>
           <Route path="/applications" element={<ApplicationsPage />} />
