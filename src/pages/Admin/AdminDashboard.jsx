@@ -102,6 +102,9 @@ const AdminDashboard = () => {
 
   // Handle delete button click
   const handleDelete = async (id) => {
+
+    const result = window.confirm("Are you sure you want to proceed?");
+    if (result) {
     try {
       let res = axiosInstance.post(`/user/delete`, { id: id } );
 
@@ -122,6 +125,9 @@ const AdminDashboard = () => {
       console.error("Error deleting User.", error);
       toast.error("Error deleting User.");
     }
+  }else{
+    toast.success("cancelled operation")
+  }
   };
 
   // const handleRoleChange = (e) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaTrash } from "react-icons/fa"; // Importing React Icons
-
+import toast from "react-hot-toast";
 const CourseCreation = () => {
   const [courses, setCourses] = useState([]); // State for courses
   const [formData, setFormData] = useState({
@@ -59,8 +59,14 @@ const CourseCreation = () => {
     // Add logic to delete course, e.g., sending delete request to backend
     console.log("Deleting course with ID:", courseId);
     // Update state to remove the deleted course
-    const updatedCourses = courses.filter((course) => course.id !== courseId);
-    setCourses(updatedCourses);
+    const result = window.confirm("Are you sure you want to proceed?");
+    if (result) {
+      const updatedCourses = courses.filter((course) => course.id !== courseId);
+      setCourses(updatedCourses);
+      toast.success(`deleting course with courseId ${courseId}`);
+    } else {
+      toast.success(`Cancelled`);
+    }
   };
 
   // Filter courses based on search term
