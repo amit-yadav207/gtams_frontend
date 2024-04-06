@@ -107,14 +107,14 @@ const InstructorDashboard = () => {
 
       {/* Render TADetails component if selectedTA is not null */}
       {selectedTA && isTADetailsOpen && (
-      <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center">
-        <div className="p-4  w-11/12  bg-white md:p-6 rounded-lg lg:w-4/5">
-         
-          
+      <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex  justify-center">
+        <div className="my-3 p-2  w-11/12  bg-white md:p-6 rounded-lg lg:w-4/5 max-h-full">
+        
             <TADetails
               selectedTA={selectedTA}
               onClose={() => setIsTADetailsOpen(false)}
             />
+        
          
         </div>
       </div> )}

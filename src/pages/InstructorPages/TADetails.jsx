@@ -25,48 +25,52 @@ const TADetails = ({ selectedTA, onClose }) => {
 
   const calculateAverageRating = () => {
     // Filter out tasks with valid ratings
-    const ratedTasks = assignedTasks.filter(task => !isNaN(task.rating));
-  
+    const ratedTasks = assignedTasks.filter((task) => !isNaN(task.rating));
+
     // Calculate the total rating and count of rated tasks
-    const totalRating = ratedTasks.reduce((acc, task) => acc + Number(task.rating), 0);
+    const totalRating = ratedTasks.reduce(
+      (acc, task) => acc + Number(task.rating),
+      0
+    );
     const numberOfRatedTasks = ratedTasks.length;
-  
+
     // Calculate the average rating
-    const averageRating = numberOfRatedTasks > 0 ? totalRating / numberOfRatedTasks : 0;
-  
+    const averageRating =
+      numberOfRatedTasks > 0 ? totalRating / numberOfRatedTasks : 0;
+
     // Return the average rating rounded to 2 decimal places
     return averageRating.toFixed(2);
   };
-  
 
   return (
-    <div className="mt-1 m-2 p-4 overflow-auto">
+    <div className="p-4 overflow-y-auto h-full scrollBar border rounded-lg shadow-sm">
       {/* Details of TA */}
-      <div className="flex justify-between item-center   mb-3">
-        <h2 className="text-2xl font-semibold">TA Details</h2>
-        {/* Close button */}
-        <button onClick={onClose}>
+      <div className="flex justify-end item-center   ">
+        <button onClick={onClose} className="">
           <AiOutlineClose />
         </button>
+        {/* Close button */}
       </div>
-      <div className=" ">
-        <table className="w-full">
+      <h2 className="mb-3 text-2xl font-semibold">TA Details</h2>
+
+      <div className="max-h-72 overflow-auto">
+        <table className="w-full border">
           <tbody>
             <tr>
-              <td className="font-semibold w-1/4">ID:</td>
-              <td className="w-3/4">{selectedTA.id}</td>
+              <td className="font-semibold w-2/5 border">ID:</td>
+              <td className=" border w-3/5">{selectedTA.id}</td>
             </tr>
             <tr>
-              <td className="font-semibold w-1/4">Name:</td>
-              <td className="w-3/4">{selectedTA.name}</td>
+              <td className="font-semibold w-2/5 border">Name:</td>
+              <td className="w-3/5">{selectedTA.name}</td>
             </tr>
             <tr>
-              <td className="font-semibold w-1/4">Course ID:</td>
-              <td className="w-3/4">{selectedTA.courseId}</td>
+              <td className="font-semibold w-2/5 border">Course ID:</td>
+              <td className="w-3/5">{selectedTA.courseId}</td>
             </tr>
             <tr>
-              <td className="font-semibold w-1/4">Course Name:</td>
-              <td className="w-3/4">{selectedTA.courseName}</td>
+              <td className="font-semibold w-2/5 border">Course Name:</td>
+              <td className="w-3/5">{selectedTA.courseName}</td>
             </tr>
           </tbody>
         </table>
@@ -101,9 +105,9 @@ const TADetails = ({ selectedTA, onClose }) => {
 
       {/* Display Assigned Work */}
 
-      <div className="w-full overflow-auto ">
+      <div className="w-full  ">
         <h3 className="font-semibold text-2xl mt-6 mb-4">Assigned Work(s)</h3>
-        <div class="w-full overflow-auto max-h-28 border border-black rounded-sm text-sm md:text-md ">
+        <div class="w-full  border border-black rounded-sm text-sm md:text-md ">
           <table className="border border-collapse w-full  ">
             <thead className="border border-collapse">
               <tr>
