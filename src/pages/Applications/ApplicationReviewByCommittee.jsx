@@ -9,7 +9,9 @@ const ApplicationReviewByCommittee = () => {
   const { jobId } = useParams();
 
   const [forms, setForms] = useState([]);
-
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedInstructor, setSelectedInstructor] = useState(null);
+  const [instructors, setInstructors] = useState([]);
   const getAllForms = async () => {
     try {
       let res = axiosInstance.post(`form/getAllFormResponseByJobId/${jobId}`);
@@ -63,6 +65,13 @@ const ApplicationReviewByCommittee = () => {
     const options = { day: "numeric", month: "short", year: "numeric" };
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
+
+  useEffect(() => {
+    if (selectedCourse) {
+      // Fetch instructors based on selected course
+      // Example: axiosInstance.get(`instructors/${selectedCourse}`).then((response) => setInstructors(response.data));
+    }
+  }, [selectedCourse]);
 
   return (
     <div className="p-2 items-center min-h-full md:m-2 shadow-md rounded-sm">
@@ -221,7 +230,7 @@ const ApplicationReviewByCommittee = () => {
 
               {/**resume section */}
               <div className="flex flex-col justify-center min-h-full mt-4">
-                <h2 className="flex justify-between font-semibold font-sans text-xl text-center">
+                <h2 className="flex justify-between font-semibold font-sans text-xl text-center mb-2">
                   Resume
                   <button
                     className="text-right text-blue-500 text-sm hover:bg-slate-200 rounded-md px-2 hover:underline"
@@ -246,12 +255,73 @@ const ApplicationReviewByCommittee = () => {
                   ></iframe>
                 </div>
               </div>
+
+              {/**visible on Small Screens only  */}
+              <div className="mt-4 md:hidden">
+                <h1 className="text-lg mb-3 font-semibold">
+                  Assign Course and Instructor
+                </h1>
+                <div className="flex mb-4">
+                  <div className="relative mr-3">
+                    <select
+                      value={selectedCourse}
+                      onChange={(e) => setSelectedCourse(e.target.value)}
+                      className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                    >
+                      <option value="">Select Course</option>
+                      <option value="course1">Course1</option>
+                      <option value="course2">Course2</option>
+                      {/* Map over courses and create options */}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <select
+                      value={selectedInstructor}
+                      onChange={(e) => setSelectedInstructor(e.target.value)}
+                      disabled={!selectedCourse}
+                      className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                    >
+                      <option value="">Select Instructor</option>
+                      <option value="ins1">Instructor1</option>
+                      <option value="ins2">Instructor2</option>
+                      {/* Map over instructors and create options */}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* buttons for rejection and recommendation */}
               <div className="flex justify-between my-2 ">
                 <button
                   className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border  border-gray-500  rounded-md hover:bg-green-500 hover:text-white"
                   onClick={handleAccept}
-                  disabled
+                  disabled={!selectedCourse}
                   //enable when atlease teacher is chosen
                 >
                   Accept
@@ -274,7 +344,7 @@ const ApplicationReviewByCommittee = () => {
 
         {/* Section 2: Application List */}
         <section className="w-full md:w-2/5 bg-white md:block hidden px-4">
-          <div className="sticky top-2">
+          <div className="">
             <h2 className="m-2 font-semibold font-sans text-center text-lg md:text-2xl">
               Application List
             </h2>
@@ -315,26 +385,64 @@ const ApplicationReviewByCommittee = () => {
           {/**visible on medium and large screens ..dropdown to select teacher */}
           {/**got teacher objects having information dept, their name, courseid they teach...now filter based on dept */}
 
-          <div className="w-full relative">
-            <select className="h-12 appearance-none border border-gray-300 rounded-md px-4 py-2 pr-12 focus:outline-none focus:border-blue-500">
-              <option value="">Select a teacher</option>
-              <option value="teacher1">Teacher 1</option>
-              <option value="teacher2">Teacher 2</option>
-              <option value="teacher3">Teacher 3</option>
-              {/* Add more options as needed */}
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-              <svg
-                className="w-4 h-4 fill-current text-gray-500"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9.293 13.707a1 1 0 0 0 1.414-1.414l-3-3a1 1 0 1 0-1.414 1.414l3 3zM8 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
-                  clipRule="evenodd"
-                />
-              </svg>
+          {/**here comes two drop downs side by side one is for selecting courses and other for selecting instructors */}
+          {/* Dropdowns for course and instructor */}
+          <div className="mt-16">
+            <h1 className="text-xl mb-4 font-semibold">
+              Assign Course and Instructor
+            </h1>
+            <div className="flex">
+              <div className="relative mr-4">
+                <select
+                  value={selectedCourse}
+                  onChange={(e) => setSelectedCourse(e.target.value)}
+                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                >
+                  <option value="">Select Course</option>
+                  <option value="course1">Course1</option>
+                  <option value="course2">Course2</option>
+                  {/* Map over courses and create options */}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <svg
+                    className="fill-current h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div className="relative">
+                <select
+                  value={selectedInstructor}
+                  onChange={(e) => setSelectedInstructor(e.target.value)}
+                  disabled={!selectedCourse}
+                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                >
+                  <option value="">Select Instructor</option>
+                  <option value="ins1">Instructor1</option>
+                  <option value="ins2">Instructor2</option>
+                  {/* Map over instructors and create options */}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <svg
+                    className="fill-current h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
         </section>
