@@ -3,6 +3,8 @@ import { FaEdit, FaTrash } from "react-icons/fa"; // Importing React Icons
 import axios from "axios";
 import UserForm from "../../components/UserForm";
 import EditForm from "../../components/EditForm";
+import axiosInstance from "../../Helper/axiosInstance";
+import toast from "react-hot-toast";
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -19,124 +21,79 @@ const AdminDashboard = () => {
   const [showEditForm, setShowEditForm] = useState(false); // State to control modal visibility
   const [selectedUser, setSelectedUser] = useState(null); // State to store the selected user data for editing
 
-  const dummyUsers = [
-    { id: 1, fullName: "user1", email: "user1@example.com", role: "USER" },
-    {
-      id: 2,
-      fullName: "inspector1",
-      email: "inspector1@example.com",
-      role: "INS",
-    },
-    {
-      id: 3,
-      fullName: "data_scientist1",
-      email: "data_scientist1@example.com",
-      role: "DS",
-    },
-    {
-      id: 4,
-      fullName: "content_manager1",
-      email: "content_manager1@example.com",
-      role: "CM",
-    },
-    { id: 5, fullName: "user2", email: "user2@example.com", role: "USER" },
-    { id: 6, fullName: "user3", email: "user3@example.com", role: "USER" },
-    { id: 7, fullName: "user4", email: "user4@example.com", role: "USER" },
-    {
-      id: 8,
-      fullName: "inspector2",
-      email: "inspector2@example.com",
-      role: "INS",
-    },
-    {
-      id: 9,
-      fullName: "inspector3",
-      email: "inspector3@example.com",
-      role: "INS",
-    },
-    {
-      id: 10,
-      fullName: "data_scientist2",
-      email: "data_scientist2@example.com",
-      role: "DS",
-    },
-    {
-      id: 11,
-      fullName: "data_scientist3",
-      email: "data_scientist3@example.com",
-      role: "DS",
-    },
-    {
-      id: 12,
-      fullName: "content_manager2",
-      email: "content_manager2@example.com",
-      role: "CM",
-    },
-    {
-      id: 13,
-      fullName: "content_manager3",
-      email: "content_manager3@example.com",
-      role: "CM",
-    },
-    { id: 16, fullName: "user5", email: "user5@example.com", role: "USER" },
-    { id: 17, fullName: "user6", email: "user6@example.com", role: "USER" },
-    {
-      id: 18,
-      fullName: "inspector4",
-      email: "inspector4@example.com",
-      role: "INS",
-    },
-    {
-      id: 19,
-      fullName: "data_scientist4",
-      email: "data_scientist4@example.com",
-      role: "DS",
-    },
-    {
-      id: 20,
-      fullName: "content_manager4",
-      email: "content_manager4@example.com",
-      role: "CM",
-    },
-    // Add more dummy users with different roles as needed
-  ];
+  const [departmentOptions, setDepartment] = useState([]);
 
-  const departmentOptions = [
-    { id: 1, name: "Department 1" },
-    { id: 2, name: "Department 2" },
-    { id: 3, name: "Department 3" },
-    // Add more departments as needed
-  ];
 
   // Function to fetch users from backend
-  const fetchUsers = async () => {
+  const getAllUser = async () => {
     try {
-      const response = await axios.get("/api/users");
-      setUsers(response.data);
+      let res = axiosInstance.post(`/user/getAllUser`);
+
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      // Handle success or error as needed
+      setUsers(res.data.users);
+
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error Fetching users.", error);
+      toast.error("Error Fetching users.");
+    }
+  };
+
+  //fetching all department
+  const getAllDepartment = async () => {
+    try {
+      let res = axiosInstance.post(`/department/getAllDepartment`);
+
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      // Handle success or error as needed
+      setDepartment(res.data.departments);
+
+    } catch (error) {
+      console.error("Error Fetching departments.", error);
+      toast.error("Error Fetching departments.");
     }
   };
 
   // // Function to handle form submission for creating new user
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     // await axios.post("/api/users", formData);
-  //     // fetchUsers(); // Refresh the user list after creating a new user
-  //     setUsers([...users, formData]);
-  //     setFormData({
-  //       fullName: "",
-  //       email: "",
-  //       password: "",
-  //       role: "user",
-  //     });
-  //     setShowCreateForm(false);
-  //   } catch (error) {
-  //     console.error("Error creating user:", error);
-  //   }
-  // };
+  const handleCreateUser = async (formData) => {
+    try {
+      let res = axiosInstance.post(`/user/create`, formData);
 
+      await toast.promise(res, {
+        loading: "Creating...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      // Handle success or error as needed
+      if ((await res).data.success) getAllUser();
+    } catch (error) {
+      console.error("Error creating user", error);
+      toast.error("Error creating user");
+    }
+  };
   // Handle edit button click
   const handleEdit = (user) => {
     setSelectedUser(user);
@@ -144,16 +101,26 @@ const AdminDashboard = () => {
   };
 
   // Handle delete button click
-  const handleDelete = async (userId) => {
+  const handleDelete = async (id) => {
     try {
-      // Send delete request to backend
-      // await axios.delete(`/api/users/${userId}`);
-      // Remove the deleted user from the dummyUsers array
-      const updatedUsers = users.filter((user) => user.id !== userId);
-      // Update the state with the new dummyUsers array
-      setUsers(updatedUsers);
+      let res = axiosInstance.post(`/user/delete`, { id: id } );
+
+      await toast.promise(res, {
+        loading: "Deleting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      // Handle success or error as needed
+      getAllUser();
+
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error("Error deleting User.", error);
+      toast.error("Error deleting User.");
     }
   };
 
@@ -177,9 +144,9 @@ const AdminDashboard = () => {
 
   // Fetch users on component mount
   useEffect(() => {
-    // fetchUsers();
-    setUsers(dummyUsers);
-  }, []);
+    getAllUser();
+    getAllDepartment();
+  }, [setUsers, setDepartment]);
 
   return (
     <div className="min-h-screen lg:m-5 m-1 p-3">
@@ -212,14 +179,8 @@ const AdminDashboard = () => {
                 <UserForm
                   formData={formData}
                   onSubmit={(formData) => {
-                    // Handle submit logic for creating user
-                    setUsers([...users, formData]);
-                    setFormData({
-                      fullName: "",
-                      email: "",
-                      password: "",
-                      role: "user",
-                    });
+                    handleCreateUser(formData);
+
                     // Close the create form modal
                     setShowCreateForm(false);
                   }}
@@ -316,7 +277,7 @@ const AdminDashboard = () => {
             <tbody>
               {filteredUsers.map((user, index) => (
                 <tr
-                  key={user.id}
+                  key={user._id}
                   className="hover:bg-slate-500 hover:text-white"
                 >
                   <td className="border border-gray-300 px-2 py-2 text-center">
@@ -342,7 +303,7 @@ const AdminDashboard = () => {
                     </button>
                     {/* Delete Button */}
                     <button
-                      onClick={() => handleDelete(user.id)}
+                      onClick={() => handleDelete(user._id)}
                       className="text-red-500 hover:text-red-600 ml-2"
                       title="Delete"
                     >

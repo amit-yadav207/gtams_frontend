@@ -40,7 +40,7 @@ const UserForm = ({ initialFormData, onSubmit, onCancel, departmentOptions }) =>
   };
 
   return (
-   
+
     <form onSubmit={handleSubmit} className="mb-8 ">
       <div className="mb-4">
         <label htmlFor="fullName" className="block text-gray-700 font-semibold">
@@ -113,7 +113,7 @@ const UserForm = ({ initialFormData, onSubmit, onCancel, departmentOptions }) =>
           >
             <option value="">Select Department</option>
             {departmentOptions.map((dept) => (
-              <option key={dept.id} value={dept.id}>
+              <option key={dept._id} value={dept._id}>
                 {dept.name}
               </option>
             ))}
@@ -134,7 +134,7 @@ const UserForm = ({ initialFormData, onSubmit, onCancel, departmentOptions }) =>
         Cancel
       </button>
     </form>
-   
+
 
   );
 };
