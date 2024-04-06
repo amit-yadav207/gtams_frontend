@@ -88,7 +88,12 @@ const AdminDashboard = () => {
       });
       res = await res;
       // Handle success or error as needed
-      if ((await res).data.success) getAllUser();
+      if ((await res).data.success) {
+        getAllUser();
+
+        // Close the create form modal
+        setShowCreateForm(false);
+      };
     } catch (error) {
       console.error("Error creating user", error);
       toast.error("Error creating user");
@@ -103,7 +108,7 @@ const AdminDashboard = () => {
   // Handle delete button click
   const handleDelete = async (id) => {
     try {
-      let res = axiosInstance.post(`/user/delete`, { id: id } );
+      let res = axiosInstance.post(`/user/delete`, { id: id });
 
       await toast.promise(res, {
         loading: "Deleting...",
@@ -180,9 +185,6 @@ const AdminDashboard = () => {
                   formData={formData}
                   onSubmit={(formData) => {
                     handleCreateUser(formData);
-
-                    // Close the create form modal
-                    setShowCreateForm(false);
                   }}
                   onCancel={() => {
                     setShowCreateForm(false);
@@ -294,7 +296,7 @@ const AdminDashboard = () => {
                   </td>
                   <td className="border border-gray-300 px-2 py-2 text-center">
                     {/* Edit Button */}
-                   { /*<button
+                    { /*<button
                       onClick={() => handleEdit(user)}
                       className="text-blue-600 hover:text-blue-800"
                       title="Edit"
