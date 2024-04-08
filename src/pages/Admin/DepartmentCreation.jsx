@@ -2,87 +2,136 @@ import React, { useState, useEffect } from "react";
 import { FaSearch, FaTrash } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 import Modal from "react-modal"; // Import React Modal
+import axiosInstance from "../../Helper/axiosInstance";
+import toast from "react-hot-toast";
+
 
 const DepartmentCreation = () => {
   const [departments, setDepartments] = useState([]);
-  const [formData, setFormData] = useState({
-    departmentName: "",
-    departmentId: "",
-    courses: [], // Array of courses for each department
-    // Add other fields as needed for department creation
-  });
+
+  const [formData, setFormData] = useState({ name: "", departmentId: "" });
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDepartmentCourses, setSelectedDepartmentCourses] = useState(
-    []
-  );
+  const [selectedDepartmentCourses, setSelectedDepartmentCourses] = useState([]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Dummy data for demonstration
-  const dummyDepartments = [
-    {
-      id: 1,
-      departmentName: "Department A",
-      departmentId: "D001",
-      courses: [
-        { courseId: "C001", courseName: "Course 1" },
-        { courseId: "C002", courseName: "Course 2" },
-      ],
-    },
-    {
-      id: 2,
-      departmentName: "Department B",
-      departmentId: "D002",
-      courses: [
-        { courseId: "C003", courseName: "Course 3" },
-        { courseId: "C004", courseName: "Course 4" },
-      ],
-    },
-    // Add more dummy departments as needed
-  ];
 
-  // Fetch departments from backend or set dummy data on component mount
-  useEffect(() => {
-    setDepartments(dummyDepartments);
-  }, []);
+  const getAllDepartments = async () => {
+    try {
+      let res = axiosInstance.post(`/department/getAllDepartment`);
 
-  const handleSubmit = (e) => {
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if (res.data.success) {
+        setDepartments(res.data.departments);
+        console.log((await res).data.departments)
+      }
+    } catch (error) {
+      console.error("Error Fetching data", error);
+      toast.error("Error Fetching data");
+    }
+  }
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submitted with data:", formData);
-    const newDepartment = {
-      id: departments.length + 1,
-      ...formData,
-    };
-    setDepartments([...departments, newDepartment]);
-    setFormData({
-      departmentName: "",
-      departmentId: "",
-      courses: [],
-      // Reset other fields as needed
-    });
+    try {
+      let res = axiosInstance.post(`/department/create`, formData);
+      await toast.promise(res, {
+        loading: "Creating...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if (res.data.success) {
+        setFormData({ name: "", departmentId: "", });
+        getAllDepartments();
+      }
+    } catch (error) {
+      console.error("Error creating", error);
+      toast.error("Error creating");
+    }
   };
 
-  const handleDelete = (departmentId) => {
-    console.log("Deleting department with ID:", departmentId);
-    const updatedDepartments = departments.filter(
-      (dept) => dept.id !== departmentId
-    );
-    setDepartments(updatedDepartments);
+  const handleDelete = async (id) => {
+    try {
+      let res = axiosInstance.post(`/department/delete`, id);
+      await toast.promise(res, {
+        loading: "Deleting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if (res.data.success) {
+        getAllDepartments();
+      }
+    } catch (error) {
+      console.error("Error deleting", error);
+      toast.error("Error deleting");
+    }
   };
 
-  const handleSeeCourses = (departmentCourses) => {
-    setSelectedDepartmentCourses(departmentCourses);
+  const handleSeeCourses = async (id) => {
+    console.log('id', id);
+    try {
+      let res = axiosInstance.post(`/department/getCourseListFromDepartmentId`, { id });
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if (res.data.success) {
+        setSelectedDepartmentCourses(res.data.courses);
+        console.log('courses', res.data.courses)
+      }
+    } catch (error) {
+      console.error("Error Fetching data", error);
+      toast.error("Error Fetching data");
+    }
     setIsModalOpen(true);
   };
 
   const filteredDepartments = departments.filter((dept) =>
-    dept.departmentName.toLowerCase().includes(searchTerm.toLowerCase())
+    dept.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
+  // Fetch departments from backend or set dummy data on component mount
+  useEffect(() => {
+    getAllDepartments();
+  }, []);
+
 
   return (
     <div className="min-h-screen lg:m-5 m-1 p-3">
       <h1 className="text-xl md:text-3xl font-semibold mb-4">
         Department Management
       </h1>
+
+
       <div className="mb-8">
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-4">
@@ -90,9 +139,9 @@ const DepartmentCreation = () => {
               type="text"
               placeholder="Department Name"
               className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-2/5 text-sm md:text-xl"
-              value={formData.departmentName}
+              value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, departmentName: e.target.value })
+                setFormData({ ...formData, name: e.target.value })
               }
               required
             />
@@ -115,6 +164,8 @@ const DepartmentCreation = () => {
           </div>
         </form>
       </div>
+
+
       <div className="mb-4 flex items-center">
         <div className="relative w-full">
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" />
@@ -128,7 +179,7 @@ const DepartmentCreation = () => {
           />
         </div>
       </div>
-      <div className="mt-4">
+      {(filteredDepartments.length > 0) ? (<div className="mt-4">
         <h1 className="font-semibold text-xl md:text-2xl mt-8 mb-2">
           Department List
         </h1>
@@ -155,19 +206,19 @@ const DepartmentCreation = () => {
             </thead>
             <tbody>
               {filteredDepartments.map((dept, index) => (
-                <tr key={dept.id} className="text-md md:text-lg ">
+                <tr key={dept._id} className="text-md md:text-lg ">
                   <td className="border border-gray-300 px-2 py-2 text-center">
                     {index + 1}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    {dept.departmentName}
+                    {dept.name}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {dept.departmentId}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     <button
-                      onClick={() => handleSeeCourses(dept.courses)}
+                      onClick={() => handleSeeCourses(dept._id)}
                       className="text-blue-500 hover:text-blue-600"
                     >
                       See
@@ -175,7 +226,7 @@ const DepartmentCreation = () => {
                   </td>
                   <td className="border border-gray-300 px-2 py-2 text-center">
                     <button
-                      onClick={() => handleDelete(dept.id)}
+                      onClick={() => handleDelete(dept._id)}
                       className="text-red-500 hover:text-red-600"
                       title="Delete"
                     >
@@ -187,7 +238,9 @@ const DepartmentCreation = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </div>) : (<div>Nothing to show</div>)}
+
+
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
