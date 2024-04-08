@@ -1,84 +1,145 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaTrash } from "react-icons/fa"; // Importing React Icons
 import toast from "react-hot-toast";
+import axiosInstance from "../../Helper/axiosInstance";
+
 const CourseCreation = () => {
-  const [courses, setCourses] = useState([]); // State for courses
+  const [courses, setCourses] = useState([]);
+
   const [formData, setFormData] = useState({
-    // State for form data
-    courseName: "",
+    name: "",
     courseId: "",
     department: "",
-    // Add other fields as needed for course creation
   });
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
 
-  // Dummy data for demonstration
-  const dummyCourses = [
-    {
-      id: 1,
-      courseName: "Course 1",
-      courseId: "C001",
-      department: "Department A",
-    },
-    {
-      id: 2,
-      courseName: "Course 2",
-      courseId: "C002",
-      department: "Department B",
-    },
-    // Add more dummy courses as needed
-  ];
+  const getAllCourse = async () => {
+    try {
+      let res = axiosInstance.post(`/course/getAllCourses`);
 
-  // Fetch courses from backend or set dummy data on component mount
-  useEffect(() => {
-    setCourses(dummyCourses);
-  }, []);
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if (res.data.success) {
+        setCourses(res.data.courses);
+        console.log('courses', res.data.courses)
+      }
+    } catch (error) {
+      console.error("Error Fetching data", error);
+      toast.error("Error Fetching data");
+    }
+  }
 
-  // Function to handle form submission for creating new course
-  const handleSubmit = (e) => {
+
+  const [depName, setDepName] = useState([]);
+  const getDepartmentName = async () => {
+    try {
+      let res = axiosInstance.post(`/department/getAllDepartmentsName`);
+
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if (res.data.success) {
+        setDepName(res.data.departments);
+        console.log('departments', res.data.departments)
+      }
+    } catch (error) {
+      console.error("Error Fetching data", error);
+      toast.error("Error Fetching data");
+    }
+  }
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to handle course creation, e.g., sending data to backend
-    console.log("Form submitted with data:", formData);
-    // Update state to include the newly created course
-    const newCourse = {
-      id: courses.length + 1, // Generate ID dynamically (for demo only)
-      ...formData,
-    };
-    setCourses([...courses, newCourse]);
-    // Clear form fields after submission
-    setFormData({
-      courseName: "",
-      courseId: "",
-      department: "",
-      // Reset other fields as needed
-    });
+    try {
+      let res = axiosInstance.post(`/course/create`, formData);
+
+      await toast.promise(res, {
+        loading: "Creating...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        // Clear form fields after submission
+        setFormData({
+          name: "",
+          courseId: "",
+          department: "",
+        });
+        getAllCourse();
+      }
+
+    } catch (error) {
+      console.error("Error Creating data", error);
+      toast.error("Error Creating data");
+    }
   };
 
   // Function to handle delete button click
-  const handleDelete = (courseId) => {
-    // Add logic to delete course, e.g., sending delete request to backend
-    console.log("Deleting course with ID:", courseId);
-    // Update state to remove the deleted course
+  const handleDelete = async (id) => {
     const result = window.confirm("Are you sure you want to proceed?");
-    if (result) {
-      const updatedCourses = courses.filter((course) => course.id !== courseId);
-      setCourses(updatedCourses);
-      toast.success(`deleting course with courseId ${courseId}`);
-    } else {
-      toast.success(`Cancelled`);
+
+    if (!result) return;
+    console.log(id)
+    try {
+      let res = axiosInstance.post(`/course/delete`, { id });
+
+      await toast.promise(res, {
+        loading: "Deleting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        getAllCourse();
+      }
+    } catch (error) {
+      console.error("Error deleting data", error);
+      toast.error("Error deleting data");
     }
   };
 
   // Filter courses based on search term
   const filteredCourses = courses.filter((course) =>
-    course.courseName.toLowerCase().includes(searchTerm.toLowerCase())
+    course.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
+  useEffect(() => {
+    getAllCourse();
+    getDepartmentName();
+  }, []);
 
   return (
     <div className="min-h-screen lg:m-5 m-1 p-3">
       <h1 className="text-xl md:text-3xl font-semibold mb-4">
         Course Management
       </h1>
+
       {/* Course Creation Form */}
       <div className="mb-8">
         <form onSubmit={handleSubmit}>
@@ -87,9 +148,9 @@ const CourseCreation = () => {
               type="text"
               placeholder="Course Name"
               className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-2/5 text-sm md:text-xl"
-              value={formData.courseName}
+              value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, courseName: e.target.value })
+                setFormData({ ...formData, name: e.target.value })
               }
               required
             />
@@ -112,9 +173,11 @@ const CourseCreation = () => {
               required
             >
               <option value="">Select Department</option>
-              <option value="Department A">Department A</option>
-              <option value="Department B">Department B</option>
-              {/* Add more options as needed */}
+
+              {depName.map((dep, index) => {
+                return <option key={dep._id} value={dep._id}>{dep.name}</option>
+              })}
+
             </select>
             <button
               type="submit"
@@ -174,23 +237,23 @@ const CourseCreation = () => {
             </thead>
             <tbody>
               {filteredCourses.map((course, index) => (
-                <tr key={course.id} className="text-md md:text-lg">
+                <tr key={course._id} className="text-md md:text-lg">
                   <td className="border border-gray-300 px-2 py-2 text-center">
                     {index + 1}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    {course.courseName}
+                    {course.name}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {course.courseId}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    {course.department}
+                    {course.department.name}
                   </td>
                   <td className="border border-gray-300 px-2 py-2 text-center">
                     {/* Delete Button */}
                     <button
-                      onClick={() => handleDelete(course.id)}
+                      onClick={() => handleDelete(course._id)}
                       className="text-red-500 hover:text-red-600"
                       title="Delete"
                     >
