@@ -69,7 +69,7 @@ const DepartmentCreation = () => {
 
   const handleDelete = async (id) => {
     try {
-      let res = axiosInstance.post(`/department/delete`, id);
+      let res = axiosInstance.post(`/department/delete`, {id});
       await toast.promise(res, {
         loading: "Deleting...",
         success: (data) => {
@@ -274,7 +274,7 @@ const DepartmentCreation = () => {
                   {index + 1}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {course.courseName}
+                  {course.name}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   {course.courseId}
