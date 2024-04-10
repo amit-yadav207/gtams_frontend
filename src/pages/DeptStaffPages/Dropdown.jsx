@@ -1,7 +1,7 @@
 import React from "react";
 
 const Dropdown = ({ options, value, handleChange, name }) => {
-    console.log(value)
+    // console.log(value)
   return (
     <select
       id={name}
