@@ -23,8 +23,8 @@ function Navbar() {
     { to: "/contact", text: "Contact", role: "ALL" },
     { to: "/job", text: "Jobs", role: "ALL" },
     { to: "/applications", text: "My Applications", role: "USER" },
-    { to: "/dashboardAdmin", text: "Dashboard", role: "ADMIN" },
-    { to: "/dashboardTACM", text: "Dashboard", role: "TACM" },
+    { to: "/admin", text: "Dashboard", role: "ADMIN" },
+    { to: "/tacm-dashboard", text: "Dashboard", role: "TACM" },
     { to: "/dashboardDS", text: "Dashboard", role: "DS" },
     { to: "/dashboardINS", text: "Dashboard", role: "INS" },
   ];

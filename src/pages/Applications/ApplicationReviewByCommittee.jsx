@@ -28,7 +28,11 @@ const ApplicationReviewByCommittee = () => {
       res = await res;
 
       console.log("received from data", res.data);
-      setForms(res.data.forms.filter((form) => form.status !== "Pending"));
+      setForms(
+        res.data.forms.filter(
+          (form) => form.status !== "Pending" && form.status !== "Rejected"
+        )
+      );
     } catch (error) {
       console.error("Error Fetching from.", error);
       toast.error("Error Fetching from.");

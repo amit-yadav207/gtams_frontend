@@ -54,6 +54,13 @@ const HomePage = () => {
           >
             INS dashbaord
           </Link>
+
+          <Link
+            to="/dashboardDS/application-review-by-committee/:jobId"
+            className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+          >
+            Rview by commitee
+          </Link>
           </div>
         </section>
 

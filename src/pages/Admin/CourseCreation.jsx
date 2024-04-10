@@ -148,7 +148,7 @@ const CourseCreation = () => {
               type="text"
               placeholder="Course Name"
               className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-2/5 text-sm md:text-xl"
-              value={formData.name}
+              value={formData?.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
@@ -242,13 +242,13 @@ const CourseCreation = () => {
                     {index + 1}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    {course.name}
+                    {course?.name}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {course.courseId}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    {course.department.name}
+                    {course.department?.name}
                   </td>
                   <td className="border border-gray-300 px-2 py-2 text-center">
                     {/* Delete Button */}

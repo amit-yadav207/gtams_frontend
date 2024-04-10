@@ -34,6 +34,7 @@ import AdminDashboard from "./pages/Admin/AdminDashboard";
 import CourseCreation from "./pages/Admin/CourseCreation";
 import DepartmentCreation from "./pages/Admin/DepartmentCreation";
 import InstructorDashboard from "./pages/InstructorPages/InstructorDashboard";
+import DashboardTACM from "./pages/TACommitteePages/DashboardTACM";
 
 function App() {
   const loggedInUser = useSelector((state) => state?.auth?.data);
@@ -68,10 +69,7 @@ function App() {
           path="dashboardDS/application-review/:jobId"
           element={<ApplicationReview />}
         />
-        <Route
-          path="dashboardDS/application-review-by-committee/:jobId"
-          element={<ApplicationReviewByCommittee />}
-        />
+        
         <Route path="/dashboardDS/edit-job/:jobId" element={<EditJobPage />} />
         <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
@@ -83,9 +81,16 @@ function App() {
         {/**Admin page route */}
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/create-course" element={<CourseCreation />} />
-        <Route path="/admin/create-department" element={<DepartmentCreation />} />
+        <Route
+          path="/admin/create-department"
+          element={<DepartmentCreation />}
+        />
         <Route path="/instructor-dashboard" element={<InstructorDashboard />} />
-
+        <Route path="/tacm-dashboard" element={<DashboardTACM />} />
+        <Route
+          path="/tacm-dashboard/application-review-by-committee/:jobId"
+          element={<ApplicationReviewByCommittee />}
+        />
         {/* Define route for job creation form */}
         <Route element={<RequireAuth allowedRoles={["USER", "DS"]} />}>
           <Route path="/applications" element={<ApplicationsPage />} />

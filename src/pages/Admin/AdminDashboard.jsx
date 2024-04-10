@@ -23,7 +23,6 @@ const AdminDashboard = () => {
 
   const [departmentOptions, setDepartment] = useState([]);
 
-
   // Function to fetch users from backend
   const getAllUser = async () => {
     try {
@@ -41,7 +40,6 @@ const AdminDashboard = () => {
       res = await res;
       // Handle success or error as needed
       setUsers(res.data.users);
-
     } catch (error) {
       console.error("Error Fetching users.", error);
       toast.error("Error Fetching users.");
@@ -65,7 +63,6 @@ const AdminDashboard = () => {
       res = await res;
       // Handle success or error as needed
       setDepartment(res.data.departments);
-
     } catch (error) {
       console.error("Error Fetching departments.", error);
       toast.error("Error Fetching departments.");
@@ -93,7 +90,7 @@ const AdminDashboard = () => {
 
         // Close the create form modal
         setShowCreateForm(false);
-      };
+      }
     } catch (error) {
       console.error("Error creating user", error);
       toast.error("Error creating user");
@@ -107,32 +104,30 @@ const AdminDashboard = () => {
 
   // Handle delete button click
   const handleDelete = async (id) => {
-
     const result = window.confirm("Are you sure you want to proceed?");
     if (result) {
-    try {
-      let res = axiosInstance.post(`/user/delete`, { id: id });
+      try {
+        let res = axiosInstance.post(`/user/delete`, { id: id });
 
-      await toast.promise(res, {
-        loading: "Deleting...",
-        success: (data) => {
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.response?.data.message;
-        },
-      });
-      res = await res;
-      // Handle success or error as needed
-      getAllUser();
-
-    } catch (error) {
-      console.error("Error deleting User.", error);
-      toast.error("Error deleting User.");
+        await toast.promise(res, {
+          loading: "Deleting...",
+          success: (data) => {
+            return data?.data?.message;
+          },
+          error: (data) => {
+            return data?.response?.data.message;
+          },
+        });
+        res = await res;
+        // Handle success or error as needed
+        getAllUser();
+      } catch (error) {
+        console.error("Error deleting User.", error);
+        toast.error("Error deleting User.");
+      }
+    } else {
+      toast.success("cancelled operation");
     }
-  }else{
-    toast.success("cancelled operation")
-  }
   };
 
   // const handleRoleChange = (e) => {
@@ -174,7 +169,7 @@ const AdminDashboard = () => {
           autoFocus
         />
         {/* User Creation & Edit Form */}
-        <div >
+        <div>
           <button
             onClick={() => setShowCreateForm(true)}
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 text-sm md:text-xl"
@@ -187,6 +182,7 @@ const AdminDashboard = () => {
             <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center">
               <div className="p-4  w-11/12  bg-white md:p-6 rounded-lg lg:w-1/4">
                 <h2 className="text-xl font-semibold mb-4">Create User</h2>
+                {/***form component for creating user  */}
                 <UserForm
                   formData={formData}
                   onSubmit={(formData) => {
@@ -257,7 +253,7 @@ const AdminDashboard = () => {
               <option value="USER">User</option>
               <option value="INS">Instructor</option>
               <option value="DS">Department Staff</option>
-              <option value="CM">Committee Member</option>
+              <option value="TACM">Committee Member</option>
             </select>
           </div>
         </div>
@@ -283,43 +279,46 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user, index) => (
-                <tr
-                  key={user._id}
-                  className="hover:bg-slate-500 hover:text-white"
-                >
-                  <td className="border border-gray-300 px-2 py-2 text-center">
-                    {index + 1}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {user.fullName}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {user.email}
-                  </td>
-                  <td className="border border-gray-300 px-2 py-2">
-                    {user.role}
-                  </td>
-                  <td className="border border-gray-300 px-2 py-2 text-center">
-                    {/* Edit Button */}
-                    { /*<button
+              {filteredUsers.map(
+                (user, index) =>
+                  user.role != "ADMIN" && (
+                    <tr
+                      key={user._id}
+                      className="hover:bg-slate-500 hover:text-white"
+                    >
+                      <td className="border border-gray-300 px-2 py-2 text-center">
+                        {index + 1}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.fullName}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.email}
+                      </td>
+                      <td className="border border-gray-300 px-2 py-2">
+                        {user.role}
+                      </td>
+                      <td className="border border-gray-300 px-2 py-2 text-center">
+                        {/* Edit Button */}
+                        {/*<button
                       onClick={() => handleEdit(user)}
                       className="text-blue-600 hover:text-blue-800"
                       title="Edit"
                     >
                       <FaEdit />
               </button>*/}
-                    {/* Delete Button */}
-                    <button
-                      onClick={() => handleDelete(user._id)}
-                      className="text-red-500 hover:text-red-600 ml-2"
-                      title="Delete"
-                    >
-                      <FaTrash />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                        {/* Delete Button */}
+                        <button
+                          onClick={() => handleDelete(user._id)}
+                          className="text-red-500 hover:text-red-600 ml-2"
+                          title="Delete"
+                        >
+                          <FaTrash />
+                        </button>
+                      </td>
+                    </tr>
+                  )
+              )}
             </tbody>
           </table>
         </div>

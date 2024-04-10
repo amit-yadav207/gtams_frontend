@@ -95,7 +95,7 @@ const UserForm = ({ initialFormData, onSubmit, onCancel, departmentOptions }) =>
           <option value="USER">TA</option>
           <option value="INS">Instructor</option>
           <option value="DS">Department Staff</option>
-          <option value="CM">Committee Member</option>
+          <option value="TACM">Committee Member</option>
         </select>
       </div>
 
