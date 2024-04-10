@@ -92,6 +92,10 @@ function ProfilePage() {
                 <td className="p-2 align-top">{user?.phone}</td>
               </tr>
               <tr>
+                <td className="p-2 font-semibold align-top">Role</td>
+                <td className="p-2 align-top">{user?.role}</td>
+              </tr>
+              <tr>
                 <td className="p-2 font-semibold align-top">Address</td>
                 <td className="p-2 align-top">{user?.address}</td>
               </tr>
