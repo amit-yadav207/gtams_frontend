@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helper/axiosInstance";
@@ -9,7 +9,7 @@ const JobCreationForm = () => {
   const [formData, setFormData] = useState({
     title: "",
     courseId: "",
-    instructor: "",
+    instructor: "NA",
     requiredSkills: "",
     department: "",
     jobId: "",
@@ -26,32 +26,9 @@ const JobCreationForm = () => {
     });
   };
 
-  const [courseOptions, setCourseOptions] = useState([
-    { value: "", label: "Select Course ID" },
-    { value: "CS101", label: "CS101" },
-    { value: "ENG201", label: "ENG201" },
-    { value: "MATH301", label: "MATH301" },
-    { value: "PHY101", label: "PHY101" },
-    { value: "CH201", label: "CH201" },
-    { value: "CE301", label: "CE01" },
-  ]);
+  const [courseOptions, setCourseOptions] = useState([]);
 
-  const [instructorOptions, setInstructorOptions] = useState([
-    { value: "", label: "Select Instructor" },
-    { value: "John Doe", label: "John Doe" },
-    { value: "Jane Smith", label: "Jane Smith" },
-    { value: "Alex Johnson", label: "Alex Johnson" },
-  ]);
-
-  const [departmentOptions, setDepartmentOptions] = useState([
-    { value: "", label: "Select Department" },
-    { value: "CS", label: "Computer Science" },
-    { value: "ENG", label: "English" },
-    { value: "MATH", label: "Mathematics" },
-    { value: "PHYSICS", label: "Physics" },
-    { value: "CHEM", label: "Chemistry" },
-    { value: "CIVIL", label: "Civil" },
-  ]);
+  const [departmentOptions, setDepartmentOptions] = useState([]);
 
   const createJob = async () => {
     try {
@@ -68,6 +45,9 @@ const JobCreationForm = () => {
       });
 
       res = await res;
+      if (res.data.success) {
+        navigate("/dashboardDS");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -75,22 +55,87 @@ const JobCreationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('form data', formData);
     try {
       await createJob();
       setFormData({
         title: "",
         courseId: "",
-        instructor: "",
+        instructor: "NA",
         requiredSkills: "",
         department: "",
         jobId: "",
         isApplicationOpen: true,
       });
-      navigate("/dashboardDS");
     } catch (error) {
       console.error(error);
     }
   };
+
+  const getDepartmentList = async () => {
+    try {
+      let res = axiosInstance.post(`/department/getAllDepartmentsName`);
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if (res.data.success) {
+        let temp = res.data.departments.map(department => ({
+          id: department._id,
+          value: department.departmentId,
+          label: department.name
+        }));
+        temp.unshift({ value: "", label: "Select Department ID" })
+        setDepartmentOptions(temp);
+        console.log('Departments ', departmentOptions);
+      }
+    } catch (error) {
+      console.error("Error Fetching data", error);
+      toast.error("Error Fetching data");
+    }
+  }
+
+  const getCourseList = async () => {
+    try {
+      let res = axiosInstance.post(`/course/getAllCourseName`);
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if (res.data.success) {
+        let temp = res.data.courses.map(course => ({
+          id: course._id,
+          value: course.courseId,
+          label: course.name
+        }));
+        temp.unshift({ value: "", label: "Select Course ID" })
+        setCourseOptions(temp);
+        console.log('course ', temp);
+      }
+    } catch (error) {
+      console.error("Error Fetching data", error);
+      toast.error("Error Fetching data");
+    }
+  }
+
+
+  useEffect(() => {
+    getDepartmentList();
+    getCourseList();
+  }, [setCourseOptions, setDepartmentOptions]);
+
 
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center items-center">
@@ -133,7 +178,7 @@ const JobCreationForm = () => {
           </div>
 
           {/* Instructor */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label
               htmlFor="instructor"
               className="block text-gray-700 font-semibold mb-2"
@@ -146,7 +191,7 @@ const JobCreationForm = () => {
               handleChange={handleChange}
               name="instructor"
             />
-          </div>
+          </div> */}
 
           {/* Required Skills */}
           <div className="mb-4">

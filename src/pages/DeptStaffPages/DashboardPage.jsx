@@ -15,6 +15,7 @@ const DashboardPage = () => {
       if (res.data?.success) {
         toast.success("Application Fetched.");
         setJobs(res.data.jobs);
+        console.log('jobs',res.data.jobs)
       } else {
         toast.error("Error in fetch.");
       }
@@ -47,6 +48,9 @@ const DashboardPage = () => {
       });
       res = await res;
       // Handle success or error as needed
+      if ((await res).data.success) {
+        getAllJobs();
+      }
     } catch (error) {
       console.error("Error deleting job:", error);
       toast.error("Error deleting job.");
