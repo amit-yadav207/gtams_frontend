@@ -9,10 +9,11 @@ const ApplicationReviewByCommittee = () => {
   const { jobId } = useParams();
 
   const [forms, setForms] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedInstructor, setSelectedInstructor] = useState(null);
   const [instructors, setInstructors] = useState([]);
-  const getAllForms = async () => {
+
+
+  const getForm = async () => {
     try {
       let res = axiosInstance.post(`form/getAllFormResponseByJobId/${jobId}`);
 
@@ -29,9 +30,7 @@ const ApplicationReviewByCommittee = () => {
 
       console.log("received from data", res.data);
       setForms(
-        res.data.forms.filter(
-          (form) => form.status !== "Pending" && form.status !== "Rejected"
-        )
+        res.data.forms.filter(form => form.status === "Forwarded")
       );
     } catch (error) {
       console.error("Error Fetching from.", error);
@@ -39,9 +38,33 @@ const ApplicationReviewByCommittee = () => {
     }
   };
 
-  useEffect(() => {
-    getAllForms();
-  }, [setForms]);
+
+  const getInstructorList = async () => {
+    try {
+      let res = axiosInstance.post(`user/getInstructorList`);
+
+      await toast.promise(res, {
+        loading: "Loading...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+
+      console.log("received INS data", res.data);
+      if ((await res).data.success) {
+        setInstructors((await res).data.instructors);
+      }
+    } catch (error) {
+      console.error("Error Fetching from.", error);
+      toast.error("Error Fetching from.");
+    }
+  };
+
+
 
   const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(0);
 
@@ -49,20 +72,66 @@ const ApplicationReviewByCommittee = () => {
     setSelectedApplicantIndex((prevIndex) =>
       prevIndex === null || prevIndex === forms.length - 1 ? 0 : prevIndex + 1
     );
+    selectedInstructor(null);
   };
 
   const handleBackClick = () => {
     setSelectedApplicantIndex((prevIndex) =>
       prevIndex === null || prevIndex === 0 ? forms.length - 1 : prevIndex - 1
     );
+    selectedInstructor(null);
+
   };
 
-  const handleAccept = async () => {};
+  const handleAccept = async (id) => {
+    try {
+      let res = axiosInstance.post(`/form/accept`, { id, instructor: selectedInstructor });
 
-  const handleRejection = async () => {};
+      await toast.promise(res, {
+        loading: "Accepting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        getForm();
+        selectedInstructor(null);
+      }
+    } catch (error) {
+      console.error("Error Accepting response", error);
+      toast.error("Error Accepting response");
+    }
+  };
 
-  const selectedApplicant =
-    selectedApplicantIndex !== null ? forms[selectedApplicantIndex] : null;
+  const handleRejection = async (id) => {
+    try {
+      let res = axiosInstance.post(`/form/rejectFromByFormId`, { id });
+
+      await toast.promise(res, {
+        loading: "Rejecting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        getForm();
+        selectedInstructor(null);
+      }
+    } catch (error) {
+      console.error("Error Rejecting response", error);
+      toast.error("Error Rejecting response");
+    }
+  };
+
+  const selectedApplicant = (selectedApplicantIndex !== null) ? forms[selectedApplicantIndex] : null;
 
   //date format
   const formatDate = (dateString) => {
@@ -70,12 +139,11 @@ const ApplicationReviewByCommittee = () => {
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
+
   useEffect(() => {
-    if (selectedCourse) {
-      // Fetch instructors based on selected course
-      // Example: axiosInstance.get(`instructors/${selectedCourse}`).then((response) => setInstructors(response.data));
-    }
-  }, [selectedCourse]);
+    getForm();
+    getInstructorList();
+  }, [setForms]);
 
   return (
     <div className="p-2 items-center min-h-full md:m-2 shadow-md rounded-sm">
@@ -148,11 +216,10 @@ const ApplicationReviewByCommittee = () => {
                       <tr
                         key={application.id}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${
-                          selectedApplicantIndex === index
-                            ? "bg-gray-200 text-blue-700"
-                            : ""
-                        }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${selectedApplicantIndex === index
+                          ? "bg-gray-200 text-blue-700"
+                          : ""
+                          }`}
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
@@ -221,9 +288,7 @@ const ApplicationReviewByCommittee = () => {
                 >
                   Back
                 </button>
-                <span className="">{`${selectedApplicantIndex + 1}/${
-                  forms.length
-                }`}</span>
+                <span className="">{`${selectedApplicantIndex + 1}/${forms.length}`}</span>
                 <button
                   onClick={handleNextClick}
                   className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
@@ -263,45 +328,18 @@ const ApplicationReviewByCommittee = () => {
               {/**visible on Small Screens only  */}
               <div className="mt-4 md:hidden">
                 <h1 className="text-lg mb-3 font-semibold">
-                  Assign Course and Instructor
+                  Assign Instructor
                 </h1>
                 <div className="flex mb-4">
-                  <div className="relative mr-3">
-                    <select
-                      value={selectedCourse}
-                      onChange={(e) => setSelectedCourse(e.target.value)}
-                      className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                    >
-                      <option value="">Select Course</option>
-                      <option value="course1">Course1</option>
-                      <option value="course2">Course2</option>
-                      {/* Map over courses and create options */}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                      <svg
-                        className="fill-current h-4 w-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                  </div>
                   <div className="relative">
                     <select
                       value={selectedInstructor}
                       onChange={(e) => setSelectedInstructor(e.target.value)}
-                      disabled={!selectedCourse}
+                      disabled={false}
                       className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                     >
                       <option value="">Select Instructor</option>
-                      <option value="ins1">Instructor1</option>
-                      <option value="ins2">Instructor2</option>
-                      {/* Map over instructors and create options */}
+                      {instructors.map(ins => <option key={ins._id} value={ins._id}>{ins.fullName}({ins.department})</option>)}
                     </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                       <svg
@@ -324,16 +362,15 @@ const ApplicationReviewByCommittee = () => {
               <div className="flex justify-between my-2 ">
                 <button
                   className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border  border-gray-500  rounded-md hover:bg-green-500 hover:text-white"
-                  onClick={handleAccept}
-                  disabled={!selectedCourse}
-                  //enable when atlease teacher is chosen
+                  onClick={() => handleAccept(selectedApplicant._id)}
+                  disabled={!selectedInstructor}
                 >
                   Accept
                 </button>
 
                 <button
                   className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border border-gray-500 rounded-md hover:bg-red-500 hover:text-white"
-                  onClick={handleRejection}
+                  onClick={() => handleRejection(selectedApplicant._id)}
                 >
                   Reject
                 </button>
@@ -369,11 +406,10 @@ const ApplicationReviewByCommittee = () => {
                       <tr
                         key={form.formId}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`text-center  cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold  ${
-                          selectedApplicantIndex === index
-                            ? "bg-gray-200 text-blue-700"
-                            : ""
-                        }`}
+                        className={`text-center  cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold  ${selectedApplicantIndex === index
+                          ? "bg-gray-200 text-blue-700"
+                          : ""
+                          }`}
                       >
                         <td className="p-3 text-center  w-1/5">{index + 1}</td>
                         <td className="p-3 w-2/5">{form.applicantName}</td>
@@ -393,45 +429,18 @@ const ApplicationReviewByCommittee = () => {
           {/* Dropdowns for course and instructor */}
           <div className="mt-16">
             <h1 className="text-xl mb-4 font-semibold">
-              Assign Course and Instructor
+              Assign Instructor
             </h1>
             <div className="flex">
-              <div className="relative mr-4">
-                <select
-                  value={selectedCourse}
-                  onChange={(e) => setSelectedCourse(e.target.value)}
-                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                >
-                  <option value="">Select Course</option>
-                  <option value="course1">Course1</option>
-                  <option value="course2">Course2</option>
-                  {/* Map over courses and create options */}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg
-                    className="fill-current h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </div>
               <div className="relative">
                 <select
                   value={selectedInstructor}
                   onChange={(e) => setSelectedInstructor(e.target.value)}
-                  disabled={!selectedCourse}
+                  disabled={false}
                   className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                 >
                   <option value="">Select Instructor</option>
-                  <option value="ins1">Instructor1</option>
-                  <option value="ins2">Instructor2</option>
-                  {/* Map over instructors and create options */}
+                  {instructors.map(ins => <option key={ins._id} value={ins._id}>{ins.fullName} ({ins.department})</option>)}
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <svg

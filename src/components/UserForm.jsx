@@ -113,7 +113,7 @@ const UserForm = ({ initialFormData, onSubmit, onCancel, departmentOptions }) =>
           >
             <option value="">Select Department</option>
             {departmentOptions.map((dept) => (
-              <option key={dept._id} value={dept._id}>
+              <option key={dept._id} value={dept.departmentId}>
                 {dept.name}
               </option>
             ))}
