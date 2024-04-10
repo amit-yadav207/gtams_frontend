@@ -24,9 +24,11 @@ function Navbar() {
     { to: "/job", text: "Jobs", role: "ALL" },
     { to: "/applications", text: "My Applications", role: "USER" },
     { to: "/admin", text: "Dashboard", role: "ADMIN" },
+    { to: "/create-course", text: "Course", role: "ADMIN" },
+    { to: "/create-department", text: "Department", role: "ADMIN" },
     { to: "/tacm-dashboard", text: "Dashboard", role: "TACM" },
     { to: "/dashboardDS", text: "Dashboard", role: "DS" },
-    { to: "/dashboardINS", text: "Dashboard", role: "INS" },
+    { to: "/instructor-dashboard", text: "Dashboard", role: "INS" },
   ];
 
   const handleLogin = () => {

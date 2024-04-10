@@ -80,9 +80,9 @@ function App() {
         <Route path="/dashboard/create-job" element={<JobCreationForm />} />{" "}
         {/**Admin page route */}
         <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/create-course" element={<CourseCreation />} />
+        <Route path="/create-course" element={<CourseCreation />} />
         <Route
-          path="/admin/create-department"
+          path="/create-department"
           element={<DepartmentCreation />}
         />
         <Route path="/instructor-dashboard" element={<InstructorDashboard />} />

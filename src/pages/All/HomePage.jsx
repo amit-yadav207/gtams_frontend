@@ -29,38 +29,6 @@ const HomePage = () => {
             >
               Get Started
             </Link>
-
-            <Link
-              to="/admin"
-              className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-            >
-              Admin
-            </Link>
-            <Link
-              to="/admin/create-course"
-              className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-            >
-              Course Create
-            </Link>
-            <Link
-            to="/admin/create-department"
-            className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-          >
-            Department Create
-          </Link>
-          <Link
-            to="/instructor-dashboard"
-            className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-          >
-            INS dashbaord
-          </Link>
-
-          <Link
-            to="/dashboardDS/application-review-by-committee/:jobId"
-            className="mt-4 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-          >
-            Rview by commitee
-          </Link>
           </div>
         </section>
 
