@@ -41,104 +41,116 @@ function App() {
 
   return (
     <Router>
-      {/* Displaying Navbar component */}
-      <Navbar />
+      
+        {/* Displaying Navbar component */}
+        <Navbar />
 
-      {/* Toaster component for displaying notifications */}
-      <div>
-        <Toaster position="top-center" reverseOrder={false} />
-      </div>
+        {/* Toaster component for displaying notifications */}
+        <div>
+          <Toaster position="top-center" reverseOrder={false} />
+        </div>
 
-      {/* Defining routes */}
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/verify/:verificationToken" element={<VerifyAccount />} />
-        <Route
-          path="/email-notification/:emailPrefix"
-          element={<EmailNotificationPage />}
-        />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/forget-password" element={<ForgetPassword />} />
-        <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
-        <Route path="/set-password" element={<SetPassword />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/denied" element={<Denied />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/job" element={<JobPage />} />
-        <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
-
-        {/* Routes for authenticated users */}
-        <Route
-          element={<RequireAuth allowedRoles={["USER", "DS", "TACM", "ADMIN", "INS"]} />}
-        >
-          {/* Common authenticated user routes */}
-          <Route path="/profile" element={<ProfilePage />} />
+        {/* Defining routes */}
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
           <Route
-            path="/update-profile"
-            element={<UpdateProfilePage user={loggedInUser} />}
-          />
-        </Route>
-
-        {/* Routes for authenticated users with specific roles */}
-        <Route element={<RequireAuth allowedRoles={["USER"]} />}>
-          <Route path="/job/job-apply/:jobId" element={<JobApplyPage />} />
-        </Route>
-
-        {/* Routes for Department Staff (DS) */}
-        <Route element={<RequireAuth allowedRoles={["DS"]} />}>
-          <Route path="/dashboardDS" element={<DashboardPage />} />
-          <Route path="/dashboard/create-job" element={<JobCreationForm />} />
-          <Route
-            path="/dashboardDS/application-review/:jobId"
-            element={<ApplicationReview />}
+            path="/verify/:verificationToken"
+            element={<VerifyAccount />}
           />
           <Route
-            path="/dashboardDS/edit-job/:jobId"
-            element={<EditJobPage />}
+            path="/email-notification/:emailPrefix"
+            element={<EmailNotificationPage />}
           />
-        </Route>
-
-        {/* Routes for Admin */}
-        <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/create-course" element={<CourseCreation />} />
-          <Route path="/create-department" element={<DepartmentCreation />} />
-        </Route>
-
-        {/* Routes for Instructor */}
-        <Route element={<RequireAuth allowedRoles={["INS"]} />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
           <Route
-            path="/instructor-dashboard"
-            element={<InstructorDashboard />}
+            path="/reset-password/:resetToken"
+            element={<ResetPassword />}
           />
-        </Route>
+          <Route path="/set-password" element={<SetPassword />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/denied" element={<Denied />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/job" element={<JobPage />} />
+          <Route path="/job_details/:jobId" element={<JobDetailsPage />} />
 
-        {/* Routes for TA Committee Member (TACM) */}
-        <Route element={<RequireAuth allowedRoles={["TACM"]} />}>
-          <Route path="/tacm-dashboard" element={<DashboardTACM />} />
+          {/* Routes for authenticated users */}
           <Route
-            path="/tacm-dashboard/application-review-by-committee/:jobId"
-            element={<ApplicationReviewByCommittee />}
-          />
-        </Route>
+            element={
+              <RequireAuth
+                allowedRoles={["USER", "DS", "TACM", "ADMIN", "INS"]}
+              />
+            }
+          >
+            {/* Common authenticated user routes */}
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route
+              path="/update-profile"
+              element={<UpdateProfilePage user={loggedInUser} />}
+            />
+          </Route>
 
-        {/* Routes for User/TAs */}
-        <Route element={<RequireAuth allowedRoles={["USER"]} />}>
-          <Route path="/applications" element={<ApplicationsPage />} />
-          <Route
-            path="/applications/:jobId"
-            element={<ApplicationDetailsPage />}
-          />
-        </Route>
+          {/* Routes for authenticated users with specific roles */}
+          <Route element={<RequireAuth allowedRoles={["USER"]} />}>
+            <Route path="/job/job-apply/:jobId" element={<JobApplyPage />} />
+          </Route>
 
-        {/* Route for non-authenticated users */}
-        <Route element={<NotRequireAuth />} />
-      </Routes>
+          {/* Routes for Department Staff (DS) */}
+          <Route element={<RequireAuth allowedRoles={["DS"]} />}>
+            <Route path="/dashboardDS" element={<DashboardPage />} />
+            <Route path="/dashboard/create-job" element={<JobCreationForm />} />
+            <Route
+              path="/dashboardDS/application-review/:jobId"
+              element={<ApplicationReview />}
+            />
+            <Route
+              path="/dashboardDS/edit-job/:jobId"
+              element={<EditJobPage />}
+            />
+          </Route>
 
-      {/* Displaying Footer component */}
-      <Footer />
+          {/* Routes for Admin */}
+          <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/create-course" element={<CourseCreation />} />
+            <Route path="/create-department" element={<DepartmentCreation />} />
+          </Route>
+
+          {/* Routes for Instructor */}
+          <Route element={<RequireAuth allowedRoles={["INS"]} />}>
+            <Route
+              path="/instructor-dashboard"
+              element={<InstructorDashboard />}
+            />
+          </Route>
+
+          {/* Routes for TA Committee Member (TACM) */}
+          <Route element={<RequireAuth allowedRoles={["TACM"]} />}>
+            <Route path="/tacm-dashboard" element={<DashboardTACM />} />
+            <Route
+              path="/tacm-dashboard/application-review-by-committee/:jobId"
+              element={<ApplicationReviewByCommittee />}
+            />
+          </Route>
+
+          {/* Routes for User/TAs */}
+          <Route element={<RequireAuth allowedRoles={["USER"]} />}>
+            <Route path="/applications" element={<ApplicationsPage />} />
+            <Route
+              path="/applications/:jobId"
+              element={<ApplicationDetailsPage />}
+            />
+          </Route>
+
+          {/* Route for non-authenticated users */}
+          <Route element={<NotRequireAuth />} />
+        </Routes>
+
+        {/* Displaying Footer component */}
+        <Footer />
+      
     </Router>
   );
 }
