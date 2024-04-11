@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TADetails from "./TADetails"; // Assuming the TADetails component is in a separate file
+import axiosInstance from "../../Helper/axiosInstance";
+import toast from "react-hot-toast";
+
 
 const InstructorDashboard = () => {
   const [selectedCourse, setSelectedCourse] = useState("");
@@ -14,7 +17,7 @@ const InstructorDashboard = () => {
   ];
 
   const fetchTAs = (courseId) => {
-    if (courseId !== "$$$") {
+    if (courseId) {
       const filteredTAs = dummyTAs.filter((ta) => ta.courseId === courseId);
       setTAs(filteredTAs);
     } else {
@@ -33,6 +36,32 @@ const InstructorDashboard = () => {
     setIsTADetailsOpen(true); // Open TADetails component
   };
 
+  const getAllCourseAndTaList = async () => {
+    try {
+      let res = axiosInstance.post(`/evaluation/getAllCourseAndTaList`);
+
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        console.log('list fetched.',(await res).data);
+      }
+    } catch (error) {
+      console.error("Error Fetching data", error);
+      toast.error("Error Fetching data");
+    }
+  };
+  useEffect(() => {
+    fetchTAs();
+    getAllCourseAndTaList();
+  }, [setTAs]);
   return (
     <div className="min-h-screen lg:m-5 m-1 p-3">
       <h1 className="text-xl md:text-3xl font-semibold mb-4">
@@ -107,17 +136,17 @@ const InstructorDashboard = () => {
 
       {/* Render TADetails component if selectedTA is not null */}
       {selectedTA && isTADetailsOpen && (
-      <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex  justify-center">
-        <div className="my-3 p-2  w-11/12  bg-white md:p-6 rounded-lg lg:w-4/5 max-h-full">
-        
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex  justify-center">
+          <div className="my-3 p-2  w-11/12  bg-white md:p-6 rounded-lg lg:w-4/5 max-h-full">
+
             <TADetails
               selectedTA={selectedTA}
               onClose={() => setIsTADetailsOpen(false)}
             />
-        
-         
-        </div>
-      </div> )}
+
+
+          </div>
+        </div>)}
     </div>
   );
 };

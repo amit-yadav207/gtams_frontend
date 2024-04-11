@@ -72,14 +72,14 @@ const ApplicationReviewByCommittee = () => {
     setSelectedApplicantIndex((prevIndex) =>
       prevIndex === null || prevIndex === forms.length - 1 ? 0 : prevIndex + 1
     );
-    selectedInstructor(null);
+    setSelectedInstructor(null);
   };
 
   const handleBackClick = () => {
     setSelectedApplicantIndex((prevIndex) =>
       prevIndex === null || prevIndex === 0 ? forms.length - 1 : prevIndex - 1
     );
-    selectedInstructor(null);
+    setSelectedInstructor(null);
 
   };
 
@@ -99,7 +99,7 @@ const ApplicationReviewByCommittee = () => {
       res = await res;
       if ((await res).data.success) {
         getForm();
-        selectedInstructor(null);
+        setSelectedInstructor(null);
       }
     } catch (error) {
       console.error("Error Accepting response", error);
@@ -123,7 +123,7 @@ const ApplicationReviewByCommittee = () => {
       res = await res;
       if ((await res).data.success) {
         getForm();
-        selectedInstructor(null);
+        setSelectedInstructor(null);
       }
     } catch (error) {
       console.error("Error Rejecting response", error);
