@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import axiosInstance from "../../Helper/axiosInstance";
+import toast from "react-hot-toast";
+
 
 const TADetails = ({ selectedTA, onClose }) => {
   const [assignedTask, setAssignedTask] = useState("");
-  const [rating, setRating] = useState("");
+  const [rating, setRating] = useState(0);
   const [remarks, setRemarks] = useState("");
+
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [previousWork, setPreviousWork] = useState([]);
+
   const [showPreviousSummary, setShowPreviousSummary] = useState(false);
 
   const assignWork = (e) => {
@@ -15,11 +20,12 @@ const TADetails = ({ selectedTA, onClose }) => {
       task: assignedTask,
       rating: rating,
       remarks: remarks,
-      assignedDate: new Date(),
+      assignedDate: new Date().toLocaleDateString('en-GB').replace(/\//g, '-')
     };
-    setAssignedTasks([...assignedTasks, newTask]);
+    console.log('new task is: ', newTask)
+    // setAssignedTasks([...assignedTasks, newTask]);
     setAssignedTask("");
-    setRating("");
+    setRating(0);
     setRemarks("");
   };
 
@@ -28,6 +34,82 @@ const TADetails = ({ selectedTA, onClose }) => {
     const today = new Date().toLocaleDateString();
     return tasks.filter((task) => new Date(task.assignedDate).toLocaleDateString() !== today);
   };
+
+
+  const getSummary = async () => {
+    try {
+      let res = axiosInstance.post(`/evaluation/getSummary`, {
+        taId: selectedTA.ta._id,
+        courseId: selectedTA.course._id,
+      });
+
+      await toast.promise(res, {
+        loading: "Fetching...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        console.log('summary fetched.', (await res).data);
+        let today = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
+        setPreviousWork((await res).data.summary.filter(obj => obj.date != today));
+        setAssignedTasks((await res).data.summary.filter(obj => obj.date == today));
+
+        //resetting the values
+        setAssignedTask('');
+        setRating(0);
+        setRemarks('');
+      }
+    } catch (error) {
+      console.error("Error Fetching data", error);
+      toast.error("Error Fetching data");
+    }
+  }
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let formData = {
+        task: assignedTask,
+        rating,
+        remark: remarks,
+        date: new Date().toLocaleDateString('en-GB').replace(/\//g, '-'),
+      }
+      let res = axiosInstance.post(`/evaluation/addNewEvaluation`, {
+        formData,
+        taId: selectedTA.ta._id,
+        courseId: selectedTA.course._id,
+      });
+
+      await toast.promise(res, {
+        loading: "Adding...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        console.log('summary added.', (await res).data);
+        getSummary();
+      }
+    } catch (error) {
+      console.error("Error Fetching data", error);
+      toast.error("Error Fetching data");
+    }
+  }
+
+  useEffect(() => {
+    console.log('selectedTA', selectedTA)
+    getSummary();
+  }, [selectedTA])
 
   return (
     <div className="p-4 overflow-y-auto h-full scrollbar border rounded-lg shadow-sm">
@@ -42,20 +124,16 @@ const TADetails = ({ selectedTA, onClose }) => {
         <table className="w-full">
           <tbody>
             <tr>
-              <td className="font-semibold w-2/5">ID:</td>
-              <td className="w-3/5">{selectedTA.id}</td>
-            </tr>
-            <tr>
               <td className="font-semibold w-2/5">Name:</td>
-              <td className="w-3/5">{selectedTA.name}</td>
+              <td className="w-3/5">{selectedTA.ta.fullName}</td>
             </tr>
             <tr>
               <td className="font-semibold w-2/5">Course ID:</td>
-              <td className="w-3/5">{selectedTA.courseId}</td>
+              <td className="w-3/5">{selectedTA.course.courseId}</td>
             </tr>
             <tr>
               <td className="font-semibold w-2/5">Course Name:</td>
-              <td className="w-3/5">{selectedTA.courseName}</td>
+              <td className="w-3/5">{selectedTA.course.name}</td>
             </tr>
           </tbody>
         </table>
@@ -73,6 +151,7 @@ const TADetails = ({ selectedTA, onClose }) => {
               onChange={(e) => setAssignedTask(e.target.value)}
               placeholder="Enter task..."
               className="w-1/2 px-2 py-1 border rounded-md border-gray-700"
+              required
             />
           </div>
 
@@ -85,15 +164,16 @@ const TADetails = ({ selectedTA, onClose }) => {
               onChange={(e) => setRating(e.target.value)}
               placeholder="Enter rating..."
               className="w-1/2 px-2 py-1 border rounded-md border-gray-700"
-              min="0"
+              min='0'
               max="10"
+              required
             />
           </div>
 
           <div className="mb-3 flex justify-start space-x-16">
             <label htmlFor="remarks" className="font-semibold">Remarks:</label>
             <textarea
-              id="remarks"
+              id="remark"
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
               placeholder="Enter remarks..."
@@ -105,6 +185,7 @@ const TADetails = ({ selectedTA, onClose }) => {
             <button
               type="submit"
               className="ml-3 px-4 py-1 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+              onClick={handleSubmit}
             >
               Submit
             </button>
@@ -140,7 +221,7 @@ const TADetails = ({ selectedTA, onClose }) => {
                   <td className="border py-2 w-1/10 px-2">{index + 1}</td>
                   <td className="border py-2 w-4/6 px-2">{task.task}</td>
                   <td className="border py-2 w-1/20 text-center">{task.rating}</td>
-                  <td className="border py-2 w-2/6 px-2">{task.remarks}</td>
+                  <td className="border py-2 w-2/6 px-2">{task.remark}</td>
                 </tr>
               ))}
             </tbody>
@@ -186,7 +267,7 @@ const TADetails = ({ selectedTA, onClose }) => {
                     <td className="border py-2 w-1/10 px-2">{index + 1}</td>
                     <td className="border py-2 w-4/6 px-2">{task.task}</td>
                     <td className="border py-2 w-1/20 text-center">{task.rating}</td>
-                    <td className="border py-2 w-2/6 px-2">{task.remarks}</td>
+                    <td className="border py-2 w-2/6 px-2">{task.remark}</td>
                   </tr>
                 ))}
               </tbody>

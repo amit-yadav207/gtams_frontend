@@ -25,59 +25,87 @@ const ApplicationDetailsPage = () => {
   const [application, setApplication] = useState(null);
   const [jobTitle, setJobTitle] = useState("");
 
-  useEffect(() => {
-    const getApplicationDetails = async () => {
-      try {
-        let res = axiosInstance.post(
-          `/form/getUserFormResponseByJobId/${jobId}`
-        ); // Fetch application details using jobId
-        await toast.promise(res, {
-          loading: "Loading...",
-          success: (data) => {
-            return data?.data?.message;
-          },
-          error: (data) => {
-            return data?.data?.message;
-          },
-        });
 
-        res = await res;
-        console.log("data", res.data);
+  const getApplicationDetails = async () => {
+    console.log('hi hi hui')
+    try {
+      let res = axiosInstance.post(
+        `/form/getUserFormResponseByJobId/${jobId}`
+      ); 
+      await toast.promise(res, {
+        loading: "Loading...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.data?.message;
+        },
+      });
 
-        setApplication(res.data.form);
-        setJobTitle((await res).data.jobTitle);
-      } catch (error) {
-        toast.error("Failed to fetch application details");
-      }
-    };
+      res = await res;
+      console.log("form response", res.data);
 
-    getApplicationDetails();
-  }, [jobId]);
+      setApplication(res.data.form);
+      setJobTitle((await res).data.jobTitle);
+    } catch (error) {
+      toast.error("Failed to fetch application details");
+    }
+  };
+
 
   // Function to handle accepting the offer
-  const handleAccept = async () => {
+  const handleAccept = async (id) => {
     try {
-      // Your logic for accepting the offer
-      // await axiosInstance.post(`/acceptOffer/${jobId}`);
-      toast.success("Offer accepted successfully");
-      // You might want to refresh the application data or navigate to a different page after accepting the offer
+      let res = axiosInstance.post(`/form/accept-ta`, { id });
+
+      await toast.promise(res, {
+        loading: "Accepting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        getApplicationDetails();
+      }
     } catch (error) {
-      toast.error("Failed to accept offer");
+      console.error("Error Accepting", error);
+      toast.error("Error Accepting");
     }
   };
+
 
   // Function to handle rejecting the offer
-  const handleReject = async () => {
+  const handleReject = async (id) => {
     try {
-      // Your logic for rejecting the offer
-      // await axiosInstance.post(`/rejectOffer/${jobId}`);
-      toast.success("Offer rejected successfully");
-      // You might want to refresh the application data or navigate to a different page after rejecting the offer
+      let res = axiosInstance.post(`/form/rejectFromByFormId`, { id });
+
+      await toast.promise(res, {
+        loading: "Rejecting...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.response?.data.message;
+        },
+      });
+      res = await res;
+      if ((await res).data.success) {
+        getApplicationDetails();
+      }
     } catch (error) {
-      toast.error("Failed to reject offer");
+      console.error("Error Rejecting", error);
+      toast.error("Error Rejecting");
     }
   };
 
+
+  useEffect(() => {
+    getApplicationDetails();
+  }, []);
   if (!application) {
     return <div>Loading...</div>;
   }
@@ -161,13 +189,12 @@ const ApplicationDetailsPage = () => {
             <p className="lg:text-2xl text-lg font-semibold">Status</p>
           </div>
           <p
-            className={`text-lg sm:text-base ${
-              application.status === "Pending"
-                ? "font-bold"
-                : application.status === "Accepted"
+            className={`text-lg sm:text-base ${application.status === "Pending"
+              ? "font-bold"
+              : application.status === "Accepted"
                 ? "font-semibold  bg-green-400 text-white inline-block p-1 rounded-lg"
                 : ""
-            }`}
+              }`}
           >
             {application.status}
           </p>
@@ -179,7 +206,7 @@ const ApplicationDetailsPage = () => {
           {/* Add your applied date here */}
         </div>
         {/* Accept and Reject Buttons */}
-        {application.status == "Accepted" && (
+        {application.status == "Offer Pending" && (
           <div className="md:mb-4 mb-2  shadow-md rounded-lg p-4 md:p-6">
             <div className="flex items-center mb-3">
               <FaCheckCircle className="mr-2" size={20} />
@@ -192,13 +219,13 @@ const ApplicationDetailsPage = () => {
             <div className="flex justify-start mt-4  gap-4">
               <button
                 className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-                onClick={handleAccept}
+                onClick={() => handleAccept(application._id)}
               >
                 Accept
               </button>
               <button
                 className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-                onClick={handleReject}
+                onClick={() => handleReject(application._id)}
               >
                 Reject
               </button>
