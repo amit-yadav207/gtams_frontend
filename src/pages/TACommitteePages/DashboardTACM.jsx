@@ -71,7 +71,7 @@ const DashboardTACM = () => {
                 <th className="px-4 py-2">Job ID</th>
                 <th className="px-4 py-2">Course ID</th>
                 <th className="px-4 py-2">Departments</th>
-                <th className="px-4 py-2">Instructor</th>
+        {/* <th className="px-4 py-2">Instructor</th>*/}
                 <th className="px-4 py-2">Requirements</th>
                 <th className="px-4 py-2">Open</th>
                 <th className="px-4 py-2">Action</th>
@@ -95,9 +95,9 @@ const DashboardTACM = () => {
                   <td className="text-sm border px-4 py-2 truncate w-40 max-w-40">
                     {job.department}
                   </td>
-                  <td className="text-sm border px-4 py-2 truncate w-40 max-w-40">
+                  {/*<td className="text-sm border px-4 py-2 truncate w-40 max-w-40">
                     {job.instructor}
-                  </td>
+              </td>*/}
                   <td className="text-sm border px-4 py-2 truncate w-40 max-w-80">
                     {job.requiredSkills}
                   </td>

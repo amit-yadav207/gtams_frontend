@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../Redux/authSlice";
+import { FaUser } from 'react-icons/fa';
+import { TbLogin2,TbLogout2 } from "react-icons/tb";
 
 function Navbar() {
   // State for toggling navbar
@@ -151,18 +153,18 @@ function Navbar() {
               />
             </div>
             <button
-              className="bg-red-500 hover:bg-red-600 text-white text-sm font-medium py-2 px-3 rounded-md hidden lg:inline-block"
+              className="border hover:bg-red-600 hover:border-none text-white text-sm font-medium py-2 px-3 rounded-md hidden lg:inline-block"
               onClick={handleLogout}
             >
-              Logout
+            <span className="flex justify-center items-center gap-1">Logout <TbLogout2 size={20}/></span>  
             </button>
           </div>
         ) : (
           <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-3 rounded-md hidden lg:inline-block"
+            className="border hover:bg-green-600 hover:border-none text-white font-medium py-2 px-2 rounded-md hidden lg:inline-block"
             onClick={handleLogin}
           >
-            Login
+        <span className="flex justify-center items-center gap-1">Login <TbLogin2 size={20}/></span>  
           </button>
         )}
       </div>

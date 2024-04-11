@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../../Helper/axiosInstance";
 import toast from "react-hot-toast";
+
 import Dropdown from "./Dropdown";
+
 const EditJobPage = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
@@ -128,10 +130,10 @@ const EditJobPage = () => {
   }
 
   return (
-    <div className="p-4 lg:m-4">
-      <h1 className="text-3xl font-bold mb-4">Edit Job</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+    <div className="p-4 lg:m-4 bg-white shadow-md rounded-lg">
+      <h1 className="text-3xl font-bold mb-4 text-gray-800">Edit Job</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
           <label
             htmlFor="title"
             className="block text-gray-700 font-semibold mb-2"
@@ -145,10 +147,10 @@ const EditJobPage = () => {
             value={formData.title}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
           />
         </div>
-        <div className="mb-4">
+        <div>
           <label
             htmlFor="courseId"
             className="block text-gray-700 font-semibold mb-2"
@@ -160,23 +162,10 @@ const EditJobPage = () => {
             value={formData.courseId}
             handleChange={handleChange}
             name="courseId"
+            className="w-full"
           />
         </div>
-        <div className="mb-4">
-          <label
-            htmlFor="instructor"
-            className="block text-gray-700 font-semibold mb-2"
-          >
-            Instructor:
-          </label>
-          <Dropdown
-            options={instructorOptions}
-            value={formData.instructor}
-            handleChange={handleChange}
-            name="instructor"
-          />
-        </div>
-        <div className="mb-4">
+        <div>
           <label
             htmlFor="requiredSkills"
             className="block text-gray-700 font-semibold mb-2"
@@ -190,10 +179,10 @@ const EditJobPage = () => {
             onChange={handleChange}
             required
             rows="3"
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
           />
         </div>
-        <div className="mb-4">
+        <div>
           <label
             htmlFor="department"
             className="block text-gray-700 font-semibold mb-2"
@@ -205,9 +194,10 @@ const EditJobPage = () => {
             value={formData.department}
             handleChange={handleChange}
             name="department"
+            className="w-full"
           />
         </div>
-        <div className="mb-4">
+        <div>
           <label
             htmlFor="jobId"
             className="block text-gray-700 font-semibold mb-2"
@@ -221,27 +211,34 @@ const EditJobPage = () => {
             value={formData.jobId}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
           />
         </div>
-        <div className="mb-4">
-          <label className=" text-gray-700 font-semibold mb-2 flex justify-start items-center">
-            <input
-              type="checkbox"
-              name="isApplicationOpen"
-              checked={formData.isApplicationOpen}
-              onChange={handleChange}
-              className="mr-3 h-4 w-5"
-            />
-            <span>Is Application Open</span>
-          </label>
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            name="isApplicationOpen"
+            checked={formData.isApplicationOpen}
+            onChange={handleChange}
+            className="mr-3 h-4 w-4 text-blue-600 rounded"
+          />
+          <label className="text-gray-700 font-semibold">Is Application Open</label>
         </div>
+        <div className="flex justify-between">
         <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded font-semibold hover:bg-blue-700 transition duration-300"
-        >
-          Update
-        </button>
+            type="button"
+            className="bg-gray-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-700 transition duration-300"
+            onClick={()=>{navigate(-1)}}
+          >
+            Back
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+          >
+            Update
+          </button>
+        </div>
       </form>
     </div>
   );
