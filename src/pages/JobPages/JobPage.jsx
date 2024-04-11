@@ -57,8 +57,8 @@ const JobPage = () => {
     navigate("/job_details/" + jobId);
   };
 
-  return (
-    (jobs.length>0)?(<div className="container mx-auto px-4 p-4">
+  return jobs.length > 0 ? (
+    <div className="container mx-auto px-4 p-4">
       <h1 className="text-3xl font-bold mb-4">Job Listings</h1>
 
       <div className="relative mb-4">
@@ -74,7 +74,6 @@ const JobPage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
-
         {filteredJobs.map((job) => (
           <div
             key={job._id}
@@ -86,9 +85,9 @@ const JobPage = () => {
             <p className="mb-2 overflow-hidden truncate text-ellipsis">
               <strong>Course ID:</strong> {job.courseId}
             </p>
-            <p className="mb-2 overflow-hidden truncate text-ellipsis">
+            {/*<p className="mb-2 overflow-hidden truncate text-ellipsis">
               <strong>Instructor:</strong> {job.instructor}
-            </p>
+        </p>*/}
             <p className="mb-2 overflow-hidden truncate text-ellipsis">
               <strong>Requirements:</strong>{" "}
               {job.requiredSkills.length > 50
@@ -96,7 +95,7 @@ const JobPage = () => {
                 : job.requiredSkills}
             </p>
             <p className="mb-2 overflow-hidden truncate text-ellipsis">
-              <strong>Departments:</strong> {job.department}
+              <strong>Department:</strong> {job.department}
             </p>
 
             <button
@@ -108,9 +107,11 @@ const JobPage = () => {
           </div>
         ))}
       </div>
-    </div>) : (<div className="border rounded-md hover:shadow-md text-sm overflow-x-auto mt-10 min-h-screen">
-        No Jobs to show
-    </div>)
+    </div>
+  ) : (
+    <div className="border rounded-md hover:shadow-md text-sm overflow-x-auto mt-10 min-h-screen">
+      No Jobs to show
+    </div>
   );
 };
 

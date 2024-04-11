@@ -72,10 +72,10 @@ function ProfilePage() {
 
           <table className="text-gray-800 ">
             <colgroup>
-              <col style={{ width: "15%" }} /> {/* Set width of first column */}
-              <col style={{ width: "60%" }} />{" "}
-              {/* Set width of second column */}
+              <col style={{ width: "15%" }} />
+              <col style={{ width: "60%" }} />
             </colgroup>
+
             <tbody className="">
               <tr>
                 <td className="p-2 font-semibold align-top ">Name</td>

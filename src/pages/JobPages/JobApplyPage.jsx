@@ -159,7 +159,7 @@ function JobApplyPage() {
 
       console.log(res.data);
       if (res.data.success) {
-        navigate(-1);
+        navigate('/applications');
       } else {
         console.log("Error applying");
       }

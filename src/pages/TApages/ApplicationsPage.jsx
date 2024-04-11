@@ -4,36 +4,18 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axiosInstance from "../../Helper/axiosInstance";
 import toast from "react-hot-toast";
 
-function formatDate(mongoTimestamp) {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+const formatDate = (mongoTimestamp) => {
+  const options = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true, // Use 12-hour format
+  };
+  return new Date(mongoTimestamp).toLocaleDateString("en-US", options);
+};
 
-  const date = new Date(mongoTimestamp);
-
-  const day = date.getDate().toString().padStart(2, "0");
-  const monthIndex = date.getMonth();
-  const year = date.getFullYear().toString();
-
-  const monthName = months[monthIndex];
-
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const seconds = date.getSeconds().toString().padStart(2, "0");
-
-  return `${hours}:${minutes} ,${day} ${monthName} ${year} `;
-}
 
 const handleAccept = (jobId) => {
   console.log("Accepted Offer for jobid", jobId);

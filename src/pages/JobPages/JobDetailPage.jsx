@@ -68,15 +68,15 @@ const JobDetailPage = () => {
               </td>
               <td className="mb-2 text-pretty">{job.courseId}</td>
             </tr>
-            <tr className="mb-4">
+            {/*<tr className="mb-4">
               <td className="font-semibold mb-2 px-3 text-pretty align-top">
                 Instructor
               </td>
               <td className="mb-2 text-pretty">{job.instructor}</td>
-            </tr>
+  </tr>*/}
             <tr className="mb-4">
               <td className="font-semibold mb-2 px-3 text-pretty align-top">
-                Departments
+                Department
               </td>
               <td className="mb-2 text-pretty">{job.department}</td>
             </tr>

@@ -66,7 +66,7 @@ const LoginPage = () => {
           </div>
           <div className="mb-4">
             <label
-              htmlFor="password"
+              htmlFor="current-password"
               className="block text-gray-700 font-semibold mb-2"
             >
               Password
