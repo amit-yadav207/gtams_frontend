@@ -28,7 +28,9 @@ const ApplicationDetailsPage = () => {
   useEffect(() => {
     const getApplicationDetails = async () => {
       try {
-        let res = axiosInstance.post(`/form/getUserFormResponseByJobId/${jobId}`); // Fetch application details using jobId
+        let res = axiosInstance.post(
+          `/form/getUserFormResponseByJobId/${jobId}`
+        ); // Fetch application details using jobId
         await toast.promise(res, {
           loading: "Loading...",
           success: (data) => {
@@ -51,6 +53,30 @@ const ApplicationDetailsPage = () => {
 
     getApplicationDetails();
   }, [jobId]);
+
+  // Function to handle accepting the offer
+  const handleAccept = async () => {
+    try {
+      // Your logic for accepting the offer
+      // await axiosInstance.post(`/acceptOffer/${jobId}`);
+      toast.success("Offer accepted successfully");
+      // You might want to refresh the application data or navigate to a different page after accepting the offer
+    } catch (error) {
+      toast.error("Failed to accept offer");
+    }
+  };
+
+  // Function to handle rejecting the offer
+  const handleReject = async () => {
+    try {
+      // Your logic for rejecting the offer
+      // await axiosInstance.post(`/rejectOffer/${jobId}`);
+      toast.success("Offer rejected successfully");
+      // You might want to refresh the application data or navigate to a different page after rejecting the offer
+    } catch (error) {
+      toast.error("Failed to reject offer");
+    }
+  };
 
   if (!application) {
     return <div>Loading...</div>;
@@ -172,7 +198,11 @@ const ApplicationDetailsPage = () => {
               <tr className="md:mb-2 mb-1">
                 <td className="font-semibold">File Name:</td>
                 <td>
-                  <a href={application.resume.cloudinaryUrl} target="_blank" className="hover:underline text-blue-500">
+                  <a
+                    href={application.resume.cloudinaryUrl}
+                    target="_blank"
+                    className="hover:underline text-blue-500"
+                  >
                     {application.resume.fileName}
                   </a>
                 </td>
@@ -205,6 +235,24 @@ const ApplicationDetailsPage = () => {
           <p className="p-2">{formatDate(application.appliedDate)}</p>
           {/* Add your applied date here */}
         </div>
+
+        {/* Accept and Reject Buttons */}
+        {application.status == "Offer Pending" && (
+          <div className="flex justify-between mt-4 md:px-6">
+            <button
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+              onClick={handleAccept}
+            >
+              Accept
+            </button>
+            <button
+              className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+              onClick={handleReject}
+            >
+              Reject
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

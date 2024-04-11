@@ -8,11 +8,9 @@ import { getUserData } from "../../Redux/authSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-
 function ProfilePage() {
   const [user, setUser] = useState({});
   const navigate = useNavigate();
-
 
   const dispatch = useDispatch();
 
@@ -37,7 +35,7 @@ function ProfilePage() {
     res = await res;
     // console.log('data 2 hai', res.payload.user);
     setUser(res.payload.user);
-  }
+  };
 
   useEffect(() => {
     getUser();
@@ -45,7 +43,7 @@ function ProfilePage() {
 
   return (
     <div
-      className="container sm:p-1 h-full  lg:min-h-screen "
+      className=" sm:p-1 h-full w-full lg:min-h-screen "
       style={{ minHeight: "85vh" }}
     >
       <div className=" sm:m-1 lg:m-4 ">
@@ -93,7 +91,13 @@ function ProfilePage() {
               </tr>
               <tr>
                 <td className="p-2 font-semibold align-top">Role</td>
-                <td className="p-2 align-top">{user?.role}</td>
+                <td className="p-2 align-top">
+                  {user?.role === "USER" && "TA/User"}
+                  {user?.role === "INS" && "Instructor"}
+                  {user?.role === "ADMIN" && "Admin"}
+                  {user?.role === "TACM" && "TA Committee member"}
+                  {user?.role === "DS" && "Dept Staff"}
+                </td>
               </tr>
               <tr>
                 <td className="p-2 font-semibold align-top">Address</td>

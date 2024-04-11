@@ -35,6 +35,14 @@ function formatDate(mongoTimestamp) {
   return `${hours}:${minutes} ,${day} ${monthName} ${year} `;
 }
 
+const handleAccept = (jobId) => {
+  console.log("Accepted Offer for jobid", jobId);
+};
+
+const handleReject = (jobId) => {
+  console.log("Rejected Offer for jobid", jobId);
+};
+
 const ApplicationsPage = () => {
   const userData = useSelector((state) => state?.auth?.data);
   const navigate = useNavigate(); // Initialize useNavigate hook
@@ -86,7 +94,7 @@ const ApplicationsPage = () => {
   };
 
   return (
-    <div className="m-8 sm:m-2">
+    <div className="md:m-8 m-2">
       <h1 className="text-3xl font-bold px-5 py-3  text-gray-800">
         Hello, {userData.fullName.toUpperCase()}!{" "}
       </h1>
@@ -154,16 +162,49 @@ const ApplicationsPage = () => {
                       </h3>
                       <h3>
                         Status:{" "}
-                        <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
+                        <span
+                          className={`rounded-lg text-sm px-2 py-0.5 font-mono font-semibold ${
+                            job.status === "Pending"
+                              ? "bg-slate-100 text-gray-700"
+                              : job.status === "Offer Pending"
+                              ? "bg-green-600 text-white"
+                              : job.status === "Forwarded"
+                              ? "bg-yellow-400 text-white"
+                              : ""
+                          }`}
+                        >
                           {job.status}
                         </span>
                       </h3>
-                      <button
-                        className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
-                        onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
-                      >
-                        View application
-                      </button>
+                      {job.status != "Offer Pending" ? (
+                        <button
+                          className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
+                          onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
+                        >
+                          View application
+                        </button>
+                      ) : (
+                        <div className="flex justify-evenly">
+                          <button
+                            className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
+                            onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
+                          >
+                            View application
+                          </button>
+                          <button
+                            className="border border-green-400 mt-10 text-green-600 font-bold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
+                            onClick={() => handleAccept(job.jobId)} // Call handleViewApplication with jobId
+                          >
+                            Accept
+                          </button>
+                          <button
+                            className="border border-red-400 mt-10 text-red-600 font-bold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
+                            onClick={() => handleReject(job.jobId)} // Call handleViewApplication with jobId
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
                     </div>
                   );
                 })
@@ -173,7 +214,6 @@ const ApplicationsPage = () => {
             </div>
           </div>
         )}
-
         {activeTab === "archived" && (
           <div>
             <div className="grid lg:grid-cols-3 md:grid-cols-2">
@@ -194,7 +234,17 @@ const ApplicationsPage = () => {
                       </h3>
                       <h3>
                         Status:{" "}
-                        <span className="bg-slate-100  rounded-lg text-sm px-2 py-0.5 text-gray-700 font-mono font-semibold">
+                        <span
+                          className={`rounded-lg text-sm px-2 py-0.5 font-mono font-semibold ${
+                            job.status === "Pending"
+                              ? "bg-slate-100 text-gray-700"
+                              : job.status === "Offer Pending"
+                              ? "bg-green-600 text-white"
+                              : job.status === "Forwarded"
+                              ? "bg-yellow-400 text-white"
+                              : ""
+                          }`}
+                        >
                           {job.status}
                         </span>
                       </h3>
