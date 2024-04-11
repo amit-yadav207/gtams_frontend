@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa"; // Importing React Icons
-import axios from "axios";
 import UserForm from "../../components/UserForm";
 import EditForm from "../../components/EditForm";
 import axiosInstance from "../../Helper/axiosInstance";
@@ -107,7 +106,7 @@ const AdminDashboard = () => {
     const result = window.confirm("Are you sure you want to proceed?");
     if (result) {
       try {
-        let res = axiosInstance.post(`/user/delete`, { id: id });
+        let res = axiosInstance.post(`/user/delete`, { id });
 
         await toast.promise(res, {
           loading: "Deleting...",
