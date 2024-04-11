@@ -34,6 +34,7 @@ import CourseCreation from "./pages/Admin/CourseCreation";
 import DepartmentCreation from "./pages/Admin/DepartmentCreation";
 import InstructorDashboard from "./pages/InstructorPages/InstructorDashboard";
 import DashboardTACM from "./pages/TACommitteePages/DashboardTACM";
+import ApplicationInvite from "./pages/Applications/ApplicationInvite";
 
 function App() {
   // Fetching logged-in user data from Redux store
@@ -104,6 +105,10 @@ function App() {
             <Route
               path="/dashboardDS/application-review/:jobId"
               element={<ApplicationReview />}
+            />
+            <Route
+              path="/dashboardDS/application-invite/:jobId"
+              element={<ApplicationInvite />}
             />
             <Route
               path="/dashboardDS/edit-job/:jobId"

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { FaSearch, FaTrashAlt, FaPencilAlt, FaEye } from "react-icons/fa";
+import { TbMailPlus } from "react-icons/tb";
 import axiosInstance from "../../Helper/axiosInstance";
 
 const DashboardPage = () => {
@@ -15,7 +16,7 @@ const DashboardPage = () => {
       if (res.data?.success) {
         toast.success("Application Fetched.");
         setJobs(res.data.jobs);
-        console.log('jobs',res.data.jobs)
+        console.log("jobs", res.data.jobs);
       } else {
         toast.error("Error in fetch.");
       }
@@ -64,9 +65,14 @@ const DashboardPage = () => {
   };
 
   const handleViewJob = (jobId) => {
-    navigate(`/dashboardDS/application-review/${jobId}`)
+    navigate(`/dashboardDS/application-review/${jobId}`);
 
     // Handle view job functionality
+  };
+
+  const handleInvite = (jobId) => {
+    navigate(`/dashboardDS/application-invite/${jobId}`)
+    // Handle Invite job functionality
   };
 
   const filteredJobs = jobs.filter(
@@ -115,7 +121,7 @@ const DashboardPage = () => {
                 <th className="px-4 py-2">Job ID</th>
                 <th className="px-4 py-2">Course ID</th>
                 <th className="px-4 py-2">Departments</th>
-               {/* <th className="px-4 py-2">Instructor</th>*/}
+                {/* <th className="px-4 py-2">Instructor</th>*/}
                 <th className="px-4 py-2">Requirements</th>
                 <th className="px-4 py-2">Open</th>
                 <th className="px-4 py-2">Action</th>
@@ -139,7 +145,7 @@ const DashboardPage = () => {
                   <td className="text-sm border px-4 py-2 truncate w-40 max-w-40">
                     {job.department}
                   </td>
-                 { /*<td className="text-sm border px-4 py-2 truncate w-40 max-w-40">
+                  {/*<td className="text-sm border px-4 py-2 truncate w-40 max-w-40">
                     {job.instructor}
               </td>*/}
                   <td className="text-sm border px-4 py-2 truncate w-40 max-w-80">
@@ -170,6 +176,13 @@ const DashboardPage = () => {
                         title="View Applications"
                       >
                         <FaEye size={10} />
+                      </button>
+                      <button
+                        className="text-blue-600 m-1 p-1 rounded hover:bg-blue-600 hover:text-white "
+                        onClick={() => handleInvite(job.jobId)}
+                        title="Invite"
+                      >
+                        <TbMailPlus size={13} />
                       </button>
                     </div>
                   </td>
