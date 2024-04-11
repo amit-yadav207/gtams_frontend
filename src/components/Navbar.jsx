@@ -53,21 +53,21 @@ function Navbar() {
       </div>
 
       {/* Hamburger menu for mobile */}
-      <span>
+      <div className=" flex justify-between items-center gap-2">
         {isLoggedIn && (
           <div
-            className="lg:hidden inline-block"
+            className="lg:hidden block  w-full h-full cursor-pointer"
             onClick={() => navigate('/profile')}
           >
             <img
-              className="h-8 w-8 rounded-full hover:border-white-900"
+              className="h-10 w-10 rounded-full  "
               src="https://avatar.iran.liara.run/public/boy"
               alt="User"
             />
           </div>
         )}
 
-        <div className="lg:hidden inline-block ml-2">
+        <div className="lg:hidden block  ">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center px-3 py-3 rounded text-white-500 hover:text-white-900"
@@ -88,7 +88,7 @@ function Navbar() {
             </svg>
           </button>
         </div>
-      </span>
+      </div>
 
       {/* Navigation links */}
       <div
@@ -142,12 +142,12 @@ function Navbar() {
         {isLoggedIn ? (
           <div className="flex justify-between items-center space-x-4">
             <div
-              className="hidden lg:inline-block"
+              className="hidden lg:inline-block cursor-pointer"
               onClick={() => navigate('/profile')}
             >
               {/* Replace the src with the actual path to the user's profile picture */}
               <img
-                className="h-8 w-8 rounded-full"
+                className="h-10 w-10 rounded-full"
                 src="https://avatar.iran.liara.run/public/boy"
                 alt="User"
               />
