@@ -237,8 +237,8 @@ const ApplicationDetailsPage = () => {
         </div>
 
         {/* Accept and Reject Buttons */}
-        {application.status == "Offer Pending" && (
-          <div className="flex justify-between mt-4 md:px-6">
+        {application.status == "Accepted" && (
+          <div className="flex justify-start mt-4  gap-4">
             <button
               className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
               onClick={handleAccept}
