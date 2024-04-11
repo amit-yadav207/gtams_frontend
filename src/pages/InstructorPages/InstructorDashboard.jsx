@@ -7,28 +7,22 @@ import toast from "react-hot-toast";
 const InstructorDashboard = () => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [tas, setTAs] = useState([]);
+  const [filteredTAs, setFilteredTAs] = useState([]);
   const [selectedTA, setSelectedTA] = useState(null); // Initialize selectedTA as null
   const [isTADetailsOpen, setIsTADetailsOpen] = useState(false); // Track if TADetails is open
 
-  const dummyTAs = [
-    { id: 1, name: "TA 1", courseId: "C001", courseName: "Course 1" },
-    { id: 2, name: "TA 2", courseId: "C001", courseName: "Course 1" },
-    { id: 3, name: "TA 3", courseId: "C002", courseName: "Course 2" },
-  ];
+  const [courses, setCourses] = useState([]);
 
-  const fetchTAs = (courseId) => {
-    if (courseId) {
-      const filteredTAs = dummyTAs.filter((ta) => ta.courseId === courseId);
-      setTAs(filteredTAs);
+  const fetchTAs = () => {
+    if (selectedCourse === "") {
+      setFilteredTAs(tas);
     } else {
-      setTAs(dummyTAs);
+      setFilteredTAs(tas.filter(ta => ta?.course?.courseId === selectedCourse));
     }
   };
 
   const handleCourseChange = (e) => {
-    const courseId = e.target.value;
-    setSelectedCourse(courseId);
-    fetchTAs(courseId);
+    setSelectedCourse(e.target.value);
   };
 
   const viewTADetails = (ta) => {
@@ -51,7 +45,10 @@ const InstructorDashboard = () => {
       });
       res = await res;
       if ((await res).data.success) {
-        console.log('list fetched.',(await res).data);
+        setTAs((await res).data.under)
+        setFilteredTAs((await res).data.under)
+        setCourses((await res).data.under.map(obj => obj.course));
+        console.log('list fetched.', (await res).data.under);
       }
     } catch (error) {
       console.error("Error Fetching data", error);
@@ -59,9 +56,10 @@ const InstructorDashboard = () => {
     }
   };
   useEffect(() => {
-    fetchTAs();
     getAllCourseAndTaList();
-  }, [setTAs]);
+    fetchTAs();
+  }, [setTAs, setSelectedCourse]);
+
   return (
     <div className="min-h-screen lg:m-5 m-1 p-3">
       <h1 className="text-xl md:text-3xl font-semibold mb-4">
@@ -76,10 +74,10 @@ const InstructorDashboard = () => {
           value={selectedCourse}
           onChange={handleCourseChange}
         >
-          <option value="$$$">Select Course</option>
-          <option value="C001">Course 1</option>
-          <option value="C002">Course 2</option>
-          {/* Add more courses as needed */}
+          <option value="">Select Course</option>
+          {courses.map((course, index) => (
+            < option key={course._id} value={course.courseId} > {course.name}</option>
+          ))}
         </select>
       </div>
 
@@ -106,21 +104,21 @@ const InstructorDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {tas.map((ta) => (
-                <tr key={ta.id}>
-                  <td className="border border-gray-300 px-4 py-2">{ta.id}</td>
+              {(filteredTAs.length > 0) ? filteredTAs.map((obj, index) => (
+                <tr key={obj._id}>
+                  <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
                   <td className="border border-gray-300 px-4 py-2">
-                    {ta.name}
+                    {obj.ta?.fullName}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    {ta.courseId}
+                    {obj.course?.courseId}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    {ta.courseName}
+                    {obj.course?.name}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     <button
-                      onClick={() => viewTADetails(ta)}
+                      onClick={() => viewTADetails(obj)}
                       className="font-semibold text-blue-600 p-2 rounded-md hover:underline text-center"
                     >
                       <span className="hidden md:block">View Details</span>
@@ -128,26 +126,28 @@ const InstructorDashboard = () => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              )) : <div>No Teaching assistant to show.</div>}
             </tbody>
           </table>
         </div>
       </div>
 
       {/* Render TADetails component if selectedTA is not null */}
-      {selectedTA && isTADetailsOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex  justify-center">
-          <div className="my-3 p-2  w-11/12  bg-white md:p-6 rounded-lg lg:w-4/5 max-h-full">
+      {
+        selectedTA && isTADetailsOpen && (
+          <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex  justify-center">
+            <div className="my-3 p-2  w-11/12  bg-white md:p-6 rounded-lg lg:w-4/5 max-h-full">
 
-            <TADetails
-              selectedTA={selectedTA}
-              onClose={() => setIsTADetailsOpen(false)}
-            />
+              <TADetails
+                selectedTA={selectedTA}
+                onClose={() => setIsTADetailsOpen(false)}
+              />
 
 
-          </div>
-        </div>)}
-    </div>
+            </div>
+          </div>)
+      }
+    </div >
   );
 };
 

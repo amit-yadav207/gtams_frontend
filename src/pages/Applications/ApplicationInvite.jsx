@@ -27,9 +27,9 @@ const ApplicationInvite = () => {
 
       console.log(
         "received from data",
-        res.data.forms.filter((form) => form.status === "Accepted")
+        res.data.forms.filter((form) => form.status === "Assigned to Instructor")
       );
-      setForms(res.data.forms.filter((form) => form.status === "Accepted"));
+      setForms(res.data.forms.filter((form) => form.status === "Assigned to Instructor"));
     } catch (error) {
       console.error("Error Fetching from.", error);
       toast.error("Error Fetching from.");
@@ -56,10 +56,10 @@ const ApplicationInvite = () => {
 
   const handleInvite = async (id) => {
     try {
-      let res = axiosInstance.post(`/form/changeFormStatusByFormId`, { id });
+      let res = axiosInstance.post(`/form/accept-ds`, { id, jobId });
 
       await toast.promise(res, {
-        loading: "Updating response status...",
+        loading: "Updating status...",
         success: (data) => {
           return data?.data?.message;
         },
@@ -72,8 +72,8 @@ const ApplicationInvite = () => {
         getAllForms();
       }
     } catch (error) {
-      console.error("Error Updating response status:", error);
-      toast.error("Error Updating response status.");
+      console.error("Error Updating status:", error);
+      toast.error("Error Updating status.");
     }
   };
 
@@ -157,11 +157,10 @@ const ApplicationInvite = () => {
                       <tr
                         key={application._id}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${
-                          selectedApplicantIndex === index
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${selectedApplicantIndex === index
                             ? "bg-gray-200 text-blue-700"
                             : ""
-                        }`}
+                          }`}
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
@@ -230,9 +229,8 @@ const ApplicationInvite = () => {
                 >
                   Back
                 </button>
-                <span className="">{`${selectedApplicantIndex + 1}/${
-                  forms.length
-                }`}</span>
+                <span className="">{`${selectedApplicantIndex + 1}/${forms.length
+                  }`}</span>
                 <button
                   onClick={handleNextClick}
                   className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
@@ -308,11 +306,10 @@ const ApplicationInvite = () => {
                       <tr
                         key={form.formId}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${
-                          selectedApplicantIndex === index
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${selectedApplicantIndex === index
                             ? "bg-gray-200 text-blue-700"
                             : ""
-                        }`}
+                          }`}
                       >
                         <td className="p-3 text-center  w-1/5">{index + 1}</td>
                         <td className="p-3 w-2/5">{form.applicantName}</td>

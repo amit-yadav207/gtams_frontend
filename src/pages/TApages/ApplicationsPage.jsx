@@ -37,22 +37,27 @@ const ApplicationsPage = () => {
   };
 
   const getAllJobs = async () => {
-    let res = axiosInstance.post("/application/getAllJobsByUserId");
+    try {
+      let res = axiosInstance.post("/application/getAllJobsByUserId");
 
-    await toast.promise(res, {
-      loading: "Loading...",
-      success: (data) => {
-        // console.log('data applicationpage', data.data);
-        return data?.data?.message;
-      },
-      error: (data) => {
-        return data?.data?.message;
-      },
-    });
+      await toast.promise(res, {
+        loading: "Loading...",
+        success: (data) => {
+          // console.log('data applicationpage', data.data);
+          return data?.data?.message;
+        },
+        error: (data) => {
+          return data?.data?.message;
+        },
+      });
 
-    res = await res;
-    setJobs(res?.data?.applications);
-    console.log("data received", res?.data?.applications);
+      res = await res;
+      setJobs(res?.data?.applications);
+      console.log("data received", res?.data?.applications);
+    } catch (err) {
+      console.log(err);
+    }
+   
   };
 
   useEffect(() => {
@@ -232,7 +237,7 @@ const ApplicationsPage = () => {
                           {job.status}
                         </span>
                       </h3>
-                      {job.status != "Accepted" ? (
+                      {job.status !== "Offer Pending" ? (
                         <button
                           className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
                           onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
