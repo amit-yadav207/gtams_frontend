@@ -12,9 +12,17 @@ import {
 
 //date format
 const formatDate = (dateString) => {
-  const options = { day: "numeric", month: "short", year: "numeric" };
+  const options = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true, // Use 12-hour format
+  };
   return new Date(dateString).toLocaleDateString("en-US", options);
 };
+
 // Function to convert bytes to kilobytes
 const bytesToKB = (bytes) => {
   return (bytes / 1024).toFixed(2); // Convert bytes to KB and round to 2 decimal places
@@ -205,6 +213,7 @@ const ApplicationDetailsPage = () => {
           <p className="p-2">{formatDate(application.appliedDate)}</p>
           {/* Add your applied date here */}
         </div>
+
         {/* Accept and Reject Buttons */}
         {application.status == "Offer Pending" && (
           <div className="md:mb-4 mb-2  shadow-md rounded-lg p-4 md:p-6">
@@ -243,23 +252,29 @@ const ApplicationDetailsPage = () => {
           </div>
 
           {application.previousExperience.length > 0 ? (
-            <table className="w-full md:text-lg text-base">
-              <tbody>
-                <tr className="mb-2 sm:mb-1">
-                  <td className="font-semibold">Course Name</td>
-                  <td className="font-semibold">From</td>
-                  <td className="font-semibold">To</td>
-                </tr>
-
-                {application.previousExperience.map((exp, index) => (
-                  <tr key={index} className="mb-1 sm:mb-0">
-                    <td>{exp.course}</td>
-                    <td>{formatDate(exp.fromDate)}</td>
-                    <td>{formatDate(exp.toDate)}</td>
+            <div className="border">
+              <table className="w-full md:text-lg text-base border-collapse border rounded-lg">
+                <thead>
+                  <tr className="bg-gray-500 text-white ">
+                    <th className="font-semibold p-1 border">Course Name</th>
+                    <th className="font-semibold p-1 border">From Date</th>
+                    <th className="font-semibold p-1 border">To Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {application.previousExperience.map((exp, index) => (
+                    <tr
+                      key={index}
+                      className="mb-1 sm:mb-0 text-center text-md"
+                    >
+                      <td className="p-1 border">{exp.course}</td>
+                      <td className="p-1 border">{formatDate(exp.fromDate)}</td>
+                      <td className="p-1 border">{formatDate(exp.toDate)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <p className="font-semibold">No previous experience.</p>
           )}
