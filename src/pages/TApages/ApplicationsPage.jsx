@@ -62,8 +62,7 @@ const ApplicationsPage = () => {
 
     res = await res;
     setJobs(res?.data?.applications);
-    // console.log('data recived', res?.data?.applications);
-    console.log("jobs", jobs);
+    console.log('data received', res?.data?.applications);
   };
 
   useEffect(() => {
