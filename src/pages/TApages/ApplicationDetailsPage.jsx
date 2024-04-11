@@ -154,6 +154,58 @@ const ApplicationDetailsPage = () => {
           </table>
         </div>
 
+        {/* Status and Applied Date */}
+        <div className="md:mb-4 mb-2  shadow-md rounded-lg p-4 md:p-6">
+          <div className="flex items-center mb-3">
+            <FaCheckCircle className="mr-2" size={20} />
+            <p className="lg:text-2xl text-lg font-semibold">Status</p>
+          </div>
+          <p
+            className={`text-lg sm:text-base ${
+              application.status === "Pending"
+                ? "font-bold"
+                : application.status === "Accepted"
+                ? "font-semibold  bg-green-400 text-white inline-block p-1 rounded-lg"
+                : ""
+            }`}
+          >
+            {application.status}
+          </p>
+          <div className="flex items-center mt-3">
+            <FaCalendarAlt className="mr-2" size={20} />
+            <p className="lg:text-2xl text-lg font-semibold">Applied Date</p>
+          </div>
+          <p className="p-2">{formatDate(application.appliedDate)}</p>
+          {/* Add your applied date here */}
+        </div>
+        {/* Accept and Reject Buttons */}
+        {application.status == "Accepted" && (
+          <div className="md:mb-4 mb-2  shadow-md rounded-lg p-4 md:p-6">
+            <div className="flex items-center mb-3">
+              <FaCheckCircle className="mr-2" size={20} />
+              <p className="lg:text-2xl text-lg font-semibold">Confirmation</p>
+            </div>
+            <p className={`text-lg sm:text-base text-gray-600 `}>
+              You have been selected. Please confirm your acceptance for the
+              above job.
+            </p>
+            <div className="flex justify-start mt-4  gap-4">
+              <button
+                className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+                onClick={handleAccept}
+              >
+                Accept
+              </button>
+              <button
+                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+                onClick={handleReject}
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Previous Experience */}
         <div className="md:mb-2 mb-1 shadow-md rounded-lg p-4 md:p-6">
           <div className="flex items-center mb-3">
@@ -214,45 +266,6 @@ const ApplicationDetailsPage = () => {
             </tbody>
           </table>
         </div>
-
-        {/* Status and Applied Date */}
-        <div className="md:mb-4 mb-2  shadow-md rounded-lg p-4 md:p-6">
-          <div className="flex items-center mb-3">
-            <FaCheckCircle className="mr-2" size={20} />
-            <p className="lg:text-2xl text-lg font-semibold">Status</p>
-          </div>
-          <p
-            className={`text-lg sm:text-base ${
-              application.status === "Pending" ? "font-bold" : ""
-            }`}
-          >
-            {application.status}
-          </p>
-          <div className="flex items-center mt-3">
-            <FaCalendarAlt className="mr-2" size={20} />
-            <p className="lg:text-2xl text-lg font-semibold">Applied Date</p>
-          </div>
-          <p className="p-2">{formatDate(application.appliedDate)}</p>
-          {/* Add your applied date here */}
-        </div>
-
-        {/* Accept and Reject Buttons */}
-        {application.status == "Accepted" && (
-          <div className="flex justify-start mt-4  gap-4">
-            <button
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-              onClick={handleAccept}
-            >
-              Accept
-            </button>
-            <button
-              className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-              onClick={handleReject}
-            >
-              Reject
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
