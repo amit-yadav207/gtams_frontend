@@ -29,14 +29,13 @@ const CourseCreation = () => {
       res = await res;
       if (res.data.success) {
         setCourses(res.data.courses);
-        console.log('courses', res.data.courses)
+        console.log("courses", res.data.courses);
       }
     } catch (error) {
       console.error("Error Fetching data", error);
       toast.error("Error Fetching data");
     }
-  }
-
+  };
 
   const [depName, setDepName] = useState([]);
   const getDepartmentName = async () => {
@@ -55,14 +54,13 @@ const CourseCreation = () => {
       res = await res;
       if (res.data.success) {
         setDepName(res.data.departments);
-        console.log('departments', res.data.departments)
+        console.log("departments", res.data.departments);
       }
     } catch (error) {
       console.error("Error Fetching data", error);
       toast.error("Error Fetching data");
     }
-  }
-
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -88,7 +86,6 @@ const CourseCreation = () => {
         });
         getAllCourse();
       }
-
     } catch (error) {
       console.error("Error Creating data", error);
       toast.error("Error Creating data");
@@ -100,7 +97,7 @@ const CourseCreation = () => {
     const result = window.confirm("Are you sure you want to proceed?");
 
     if (!result) return;
-    console.log(id)
+    console.log(id);
     try {
       let res = axiosInstance.post(`/course/delete`, { id });
 
@@ -128,96 +125,101 @@ const CourseCreation = () => {
     course.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
   useEffect(() => {
     getAllCourse();
     getDepartmentName();
   }, []);
 
   return (
-    <div className="min-h-screen lg:m-5 m-1 p-3">
-      <h1 className="text-xl md:text-3xl font-semibold mb-4">
-        Course Management
-      </h1>
+    <div className="min-h-screen p-3 md:p-8 bg-slate-50">
+      <div className="bg-white p-5 rounded-lg shadow-md">
+        <h1 className=" text-xl md:text-3xl md:text-medium font-semibold  mb-4 ">
+          Course Management
+        </h1>
 
-      {/* Course Creation Form */}
-      <div className="mb-8">
-        <form onSubmit={handleSubmit}>
-          <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-4">
-            <input
-              type="text"
-              placeholder="Course Name"
-              className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-2/5 text-sm md:text-xl"
-              value={formData?.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              required
-            />
-            <input
-              type="text"
-              placeholder="Course ID"
-              className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-1/5 text-sm md:text-xl"
-              value={formData.courseId}
-              onChange={(e) =>
-                setFormData({ ...formData, courseId: e.target.value })
-              }
-              required
-            />
-            <select
-              className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-2/5 text-sm md:text-xl"
-              value={formData.department}
-              onChange={(e) =>
-                setFormData({ ...formData, department: e.target.value })
-              }
-              required
-            >
-              <option value="">Select Department</option>
+        {/* Course Creation Form */}
+        <div className="mb-8">
+          <form onSubmit={handleSubmit}>
+            <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-4">
+              <input
+                type="text"
+                placeholder="Course Name"
+                className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-2/5 text-sm md:text-xl"
+                value={formData?.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                required
+              />
+              <input
+                type="text"
+                placeholder="Course ID"
+                className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-1/5 text-sm md:text-xl"
+                value={formData.courseId}
+                onChange={(e) =>
+                  setFormData({ ...formData, courseId: e.target.value })
+                }
+                required
+              />
+              <select
+                className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-2/5 text-sm md:text-xl shadow-sm"
+                value={formData.department}
+                onChange={(e) =>
+                  setFormData({ ...formData, department: e.target.value })
+                }
+                required
+              >
+                <option value="">Select Department</option>
 
-              {depName.map((dep, index) => {
-                return <option key={dep._id} value={dep._id}>{dep.name}</option>
-              })}
+                {depName.map((dep, index) => {
+                  return (
+                    <option key={dep._id} value={dep._id}>
+                      {dep.name}
+                    </option>
+                  );
+                })}
+              </select>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white p-2 md:px-3 md:py-2 rounded-md hover:bg-blue-600 text-sm md:text-xl md:w-1/5 shadow-sm"
+              >
+                Create Course
+              </button>
+            </div>
+          </form>
+        </div>
 
-            </select>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white p-2 md:px-3 md:py-2 rounded-md hover:bg-blue-600 text-sm md:text-xl md:w-1/5"
-            >
-              Create Course
-            </button>
-          </div>
-        </form>
-      </div>
+        {/* Search input */}
 
-      {/* Search input */}
-      <div className="mb-4 flex items-center">
-        {" "}
-        {/* Adding flex container to align items center */}
-        <div className="relative w-full">
+        <div className="mb-4 flex items-center">
           {" "}
-          {/* Adding relative positioning */}
-          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" />{" "}
-          {/* Adding search icon */}
-          <input
-            type="text"
-            placeholder="Search courses..."
-            className="border border-gray-300 rounded-md pl-10 px-4 py-2 w-full md:w-3/5 text-sm md:text-xl"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            autoFocus
-          />
+          {/* Adding flex container to align items center */}
+          <div className="relative w-full">
+            {" "}
+            {/* Adding relative positioning */}
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" />{" "}
+            {/* Adding search icon */}
+            <input
+              type="text"
+              placeholder="Search courses..."
+              className="border border-gray-300 rounded-md pl-10 px-4 py-2 w-full md:w-3/5 text-sm md:text-xl"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              autoFocus
+            />
+          </div>
         </div>
       </div>
 
       {/* Course List */}
-      <div className="mt-4">
-        <h1 className="font-semibold text-xl md:text-2xl mt-8 mb-2">
+      <div className="max-h-screen min-h-96 p-5 rounded-lg shadow-lg bg-white mt-6 ">
+        <h2 className="font-semibold text-xl md:text-2xl mt-3 mb-2">
           Course List
-        </h1>
-        <div className="overflow-x-auto overflow-y-auto max-h-96 scrollBar">
-          <table className="w-full border-collapse border border-gray-300 overflow-auto">
-            <thead>
-              <tr className="bg-gray-200">
+        </h2>
+        <div className=" rounded-md hover:shadow-md text-md overflow-x-auto  ">
+          <table className="w-full table-auto border-collapse border-gray-300">
+            <thead className="text-sm lg:text-lg">
+              <tr className="bg-gray-600 text-white">
                 <th className="border border-gray-300 px-2 py-2 w-1/20">
                   Sr.No.
                 </th>

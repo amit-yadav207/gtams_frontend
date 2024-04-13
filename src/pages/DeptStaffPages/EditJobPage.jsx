@@ -106,7 +106,7 @@ const EditJobPage = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSaveClick = async (e) => {
     e.preventDefault();
     try {
       await updateJob();
@@ -130,15 +130,16 @@ const EditJobPage = () => {
   }
 
   return (
-    <div className="p-4 lg:m-4 bg-white shadow-md rounded-lg">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800">Edit Job</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen p-3 md:p-8 bg-slate-50">
+    <div className="bg-white p-8 rounded-lg shadow-md">
+    <h1 className=" text-xl md:text-3xl md:text-medium font-semibold  mb-4 ">Edit Job</h1>
+      <form onSubmit={handleSaveClick} className="space-y-4">
         <div>
           <label
             htmlFor="title"
             className="block text-gray-700 font-semibold mb-2"
           >
-            Title:
+            Title
           </label>
           <input
             type="text"
@@ -155,7 +156,7 @@ const EditJobPage = () => {
             htmlFor="courseId"
             className="block text-gray-700 font-semibold mb-2"
           >
-            Course ID:
+            Course ID
           </label>
           <Dropdown
             options={courseOptions}
@@ -170,7 +171,7 @@ const EditJobPage = () => {
             htmlFor="requiredSkills"
             className="block text-gray-700 font-semibold mb-2"
           >
-            Required Skills:
+            Required Skills
           </label>
           <textarea
             id="requiredSkills"
@@ -187,7 +188,7 @@ const EditJobPage = () => {
             htmlFor="department"
             className="block text-gray-700 font-semibold mb-2"
           >
-            Department:
+            Department
           </label>
           <Dropdown
             options={departmentOptions}
@@ -202,7 +203,7 @@ const EditJobPage = () => {
             htmlFor="jobId"
             className="block text-gray-700 font-semibold mb-2"
           >
-            Job ID:
+            Job ID
           </label>
           <input
             type="text"
@@ -222,25 +223,20 @@ const EditJobPage = () => {
             onChange={handleChange}
             className="mr-3 h-4 w-4 text-blue-600 rounded"
           />
-          <label className="text-gray-700 font-semibold">Is Application Open</label>
+          <label className="text-gray-700 font-semibold">Is Application Open ?</label>
         </div>
-        <div className="flex justify-between">
-        <button
-            type="button"
-            className="bg-gray-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-700 transition duration-300"
-            onClick={()=>{navigate(-1)}}
-          >
-            Back
+        <div className="flex justify-end">
+          <button onClick={() => navigate(-1)} className=" border-gray-500 bg-white-500 text-red-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3 shadow-md bg-white">
+            Cancel
           </button>
-          <button
-            type="submit"
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
-          >
-            Update
+          <button onClick={handleSaveClick} className=" border-gray-500 bg-white-500 text-green-500 hover:bg-green-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3 shadow-md bg-white ">
+            Save
           </button>
         </div>
       </form>
     </div>
+    </div>
+
   );
 };
 

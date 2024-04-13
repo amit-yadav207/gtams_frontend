@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa"; // Importing React Icons
-import UserForm from "../../components/UserForm";
-import EditForm from "../../components/EditForm";
+import { FaTrash } from "react-icons/fa"; // Importing React Icons
+import { IoMdAddCircle } from "react-icons/io";
+
+import SearchInput from "../DeptStaffPages/SearchInput";
 import axiosInstance from "../../Helper/axiosInstance";
 import toast from "react-hot-toast";
 
@@ -16,8 +17,7 @@ const AdminDashboard = () => {
   const [filterRole, setFilterRole] = useState("ALL"); // Default filter role
   const [selectedRole, setSelectedRole] = useState("USER"); // Default filter role
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
-  const [showCreateForm, setShowCreateForm] = useState(false); // State to control modal visibility
-  const [showEditForm, setShowEditForm] = useState(false); // State to control modal visibility
+  const [showCreateForm, setShowCreateForm] = useState(false); // State to control form
   const [selectedUser, setSelectedUser] = useState(null); // State to store the selected user data for editing
 
   const [departmentOptions, setDepartment] = useState([]);
@@ -95,11 +95,6 @@ const AdminDashboard = () => {
       toast.error("Error creating user");
     }
   };
-  // Handle edit button click
-  const handleEdit = (user) => {
-    setSelectedUser(user);
-    setShowEditForm(true);
-  };
 
   // Handle delete button click
   const handleDelete = async (id) => {
@@ -129,13 +124,6 @@ const AdminDashboard = () => {
     }
   };
 
-  // const handleRoleChange = (e) => {
-  //   setSelectedRole(e.target.value);
-  //   if (e.target.value === "USER")
-  //     setFormData({ ...formData, department: "", role: "USER" });
-  //   else setFormData({ ...formData, role: e.target.value });
-  // };
-
   // Filter users based on selected role and search term
   const filteredUsers = users.filter((user) => {
     if (filterRole !== "ALL" && user.role !== filterRole) return false;
@@ -154,84 +142,52 @@ const AdminDashboard = () => {
   }, [setUsers, setDepartment]);
 
   return (
-    <div className="min-h-screen lg:m-5 m-1 p-3">
-      <h1 className="text-xl md:text-3xl font-semibold mb-4">
-        User Management
-      </h1>
-      <div className="mb-4 md:mb-8 flex justify-between items-center">
-        <input
-          type="text"
-          placeholder="Search users..."
-          className="border border-gray-300 rounded-md px-4 py-2 w-2/3 md:w-3/4 text-sm md:text-xl"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          autoFocus
-        />
-        {/* User Creation & Edit Form */}
-        <div>
-          <button
-            onClick={() => setShowCreateForm(true)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 text-sm md:text-xl"
-          >
-            Create User
-          </button>
-          {/**form for creating user */}
-
-          {showCreateForm && (
-            <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center">
-              <div className="p-4  w-11/12  bg-white md:p-6 rounded-lg lg:w-1/4">
-                <h2 className="text-xl font-semibold mb-4">Create User</h2>
-                {/***form component for creating user  */}
-                <UserForm
-                  formData={formData}
-                  onSubmit={(formData) => {
-                    handleCreateUser(formData);
-                  }}
-                  onCancel={() => {
-                    setShowCreateForm(false);
-                  }}
-                  departmentOptions={departmentOptions}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Edit Form Modal */}
-          {showEditForm && (
-            <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-              <div className="bg-white p-4 rounded-md">
-                <h2 className="text-xl font-semibold mb-4">Edit User</h2>
-                <EditForm
-                  initialFormData={selectedUser}
-                  onSubmit={(formData) => {
-                    // Handle submit logic for editing user
-                    console.log("Edited user data:", formData);
-                    const restUsers = users.filter(
-                      (user) => user != selectedUser
-                    );
-                    setUsers([...restUsers, formData]);
-                    setFormData({
-                      fullName: "",
-                      email: "",
-                      password: "",
-                      role: "user",
-                    });
-                    // Close the edit form modal
-                    setShowEditForm(false);
-                  }}
-                  onCancel={() => setShowEditForm(false)}
-                  departmentOptions={departmentOptions}
-                />
-              </div>
-            </div>
-          )}
+    <div className="min-h-screen p-3 md:p-8 bg-slate-50">
+      <div className="bg-white p-5 rounded-lg shadow-md">
+        <h1 className=" text-xl md:text-3xl md:text-medium font-semibold  mb-4 ">
+          User Management
+        </h1>
+        <div className="w-full flex justify-between items-center mb-4">
+          <SearchInput
+            searchQuery={searchTerm}
+            setSearchQuery={setSearchTerm}
+            placeholder="Search by ID, Instructor, Title, Course ID, Department..."
+          />
+          <div className="w-1/3 md:w-1/4 text-right ">
+            <button
+              className="bg-green-600 hover:bg-green-700 text-white px-4 md:py-2 py-1 rounded shadow-md"
+              onClick={handleCreateUser}
+            >
+              <IoMdAddCircle className="md:hidden" size={30} />
+              <span className="md:block hidden">Create User</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Search bar */}
+      {/**form for creating user */}
+
+      {showCreateForm && (
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center">
+          <div className="p-4  w-11/12  bg-white md:p-6 rounded-lg lg:w-1/4">
+            <h2 className="text-xl font-semibold mb-4">Create User</h2>
+            {/***form component for creating user  */}
+            <UserForm
+              formData={formData}
+              onSubmit={(formData) => {
+                handleCreateUser(formData);
+              }}
+              onCancel={() => {
+                setShowCreateForm(false);
+              }}
+              departmentOptions={departmentOptions}
+            />
+          </div>
+        </div>
+      )}
 
       {/* User List */}
-      <div className="mt-4">
+      <div className="max-h-screen min-h-96 p-5 rounded-lg shadow-lg bg-white mt-6 ">
         {/* Filter dropdown */}
         <div className="flex justify-between items-center">
           <h2 className="text-xl md:text-2xl font-semibold mb-4">User List</h2>
@@ -244,7 +200,7 @@ const AdminDashboard = () => {
             </label>
             <select
               id="filterRole"
-              className="border border-gray-300 rounded-md px-4 py-2"
+              className="border border-gray-300 rounded-md px-4 py-2 shadow-sm"
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
             >
@@ -256,10 +212,10 @@ const AdminDashboard = () => {
             </select>
           </div>
         </div>
-        <div className="overflow-x-auto overflow-y-auto  max-h-96 scrollBar">
-          <table className="w-full border-collapse border border-gray-300 overflow-auto">
-            <thead>
-              <tr className="bg-gray-200">
+        <div className=" rounded-md hover:shadow-md text-sm overflow-x-auto  ">
+          <table className="w-full table-auto border-collapse border-gray-300">
+            <thead className="text-sm lg:text-lg">
+              <tr className="bg-gray-600 text-white">
                 <th className="border border-gray-300 px-2 py-2 w-1/20">
                   Sr.No.
                 </th>
@@ -281,10 +237,7 @@ const AdminDashboard = () => {
               {filteredUsers.map(
                 (user, index) =>
                   user.role != "ADMIN" && (
-                    <tr
-                      key={user._id}
-                      className="hover:bg-slate-500 hover:text-white"
-                    >
+                    <tr key={user._id}>
                       <td className="border border-gray-300 px-2 py-2 text-center">
                         {index + 1}
                       </td>
@@ -294,18 +247,10 @@ const AdminDashboard = () => {
                       <td className="border border-gray-300 px-4 py-2">
                         {user.email}
                       </td>
-                      <td className="border border-gray-300 px-2 py-2">
+                      <td className="border border-gray-300 px-2 py-2 text-center">
                         {user.role}
                       </td>
                       <td className="border border-gray-300 px-2 py-2 text-center">
-                        {/* Edit Button */}
-                        {/*<button
-                      onClick={() => handleEdit(user)}
-                      className="text-blue-600 hover:text-blue-800"
-                      title="Edit"
-                    >
-                      <FaEdit />
-              </button>*/}
                         {/* Delete Button */}
                         <button
                           onClick={() => handleDelete(user._id)}

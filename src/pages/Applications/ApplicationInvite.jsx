@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams ,useNavigate} from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
 import "./ApplicationReview.css";
 import toast from "react-hot-toast";
@@ -9,7 +9,7 @@ const ApplicationInvite = () => {
   const { jobId } = useParams();
 
   const [forms, setForms] = useState([]);
-
+  const navigate = useNavigate();
   const getAllForms = async () => {
     try {
       let res = axiosInstance.post(`form/getAllFormResponseByJobId/${jobId}`);
@@ -25,11 +25,17 @@ const ApplicationInvite = () => {
       });
       res = await res;
 
-      console.log(
-        "received from data",
-        res.data.forms.filter((form) => form.status === "Assigned to Instructor")
+      // console.log(
+      //   "received from data",
+      //   res.data.forms.filter(
+      //     (form) => form.status === "Assigned to Instructor"
+      //   )
+      // );
+      setForms(
+        res.data.forms.filter(
+          (form) => form.status === "Assigned to Instructor"
+        )
       );
-      setForms(res.data.forms.filter((form) => form.status === "Assigned to Instructor"));
     } catch (error) {
       console.error("Error Fetching from.", error);
       toast.error("Error Fetching from.");
@@ -87,7 +93,7 @@ const ApplicationInvite = () => {
   };
 
   return (
-    <div className="p-2 items-center min-h-full md:m-2 shadow-md rounded-sm">
+    <div className="p-2 items-center min-h-screen md:m-2 shadow-md rounded-sm">
       <div className="flex justify-between font-semibold md:p-1 text-xs md:text-lg">
         <h1>
           Applications For Job id:{" "}
@@ -96,13 +102,13 @@ const ApplicationInvite = () => {
           </span>
         </h1>
         <h1>
-          Total Applications Received:{" "}
+          Total Remaining Invitees:{" "}
           <span className="bg-slate-200 px-2 rounded-md  md:text-sm">
             {forms.length}
           </span>
         </h1>
       </div>
-      <div className="m-1 flex flex-col md:flex-row space-y-2 md:space-y-0 justify-center border rounded-md">
+      <div className="m-1 flex flex-col md:flex-row space-y-2 md:space-y-0 justify-center border rounded-md min-h-screen">
         {/* Section 1: Applicant Details */}
         <section className="w-full md:w-3/5">
           <h2 className="mt-2 font-semibold font-sans text-lg md:text-2xl text-center">
@@ -157,10 +163,11 @@ const ApplicationInvite = () => {
                       <tr
                         key={application._id}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${selectedApplicantIndex === index
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${
+                          selectedApplicantIndex === index
                             ? "bg-gray-200 text-blue-700"
                             : ""
-                          }`}
+                        }`}
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
@@ -229,8 +236,9 @@ const ApplicationInvite = () => {
                 >
                   Back
                 </button>
-                <span className="">{`${selectedApplicantIndex + 1}/${forms.length
-                  }`}</span>
+                <span className="">{`${selectedApplicantIndex + 1}/${
+                  forms.length
+                }`}</span>
                 <button
                   onClick={handleNextClick}
                   className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
@@ -269,11 +277,14 @@ const ApplicationInvite = () => {
               {/* buttons for rejection and recommendation */}
               <div className="flex justify-start my-2 ">
                 <button
-                  className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border  border-gray-500  rounded-md hover:bg-green-500 hover:text-white"
-                  onClick={() => handleInvite(selectedApplicant._id)}
+                className=" text-sm md:text-lg px-4 md:px-7 py-1 border  bg-green-500  rounded-md hover:bg-green-600 text-white border-none shadow-md cursor-pointer"
+                onClick={() => handleInvite(selectedApplicant._id)}
                 >
                   Invite
                 </button>
+
+
+                
               </div>
             </div>
           ) : (
@@ -284,8 +295,8 @@ const ApplicationInvite = () => {
         </section>
 
         {/* Section 2: Application List */}
-        <section className="w-full md:w-2/5 bg-white md:block hidden px-4 ">
-          <div className="sticky top-2  ">
+        <section className="w-full md:w-2/5 bg-white md:block hidden px-4   relative min-h-screen">
+          <div className=" min-h-screen">
             <h2 className="m-2 font-semibold font-sans text-center text-lg md:text-2xl">
               Application List
             </h2>
@@ -306,10 +317,11 @@ const ApplicationInvite = () => {
                       <tr
                         key={form.formId}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${selectedApplicantIndex === index
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${
+                          selectedApplicantIndex === index
                             ? "bg-gray-200 text-blue-700"
                             : ""
-                          }`}
+                        }`}
                       >
                         <td className="p-3 text-center  w-1/5">{index + 1}</td>
                         <td className="p-3 w-2/5">{form.applicantName}</td>
@@ -320,6 +332,15 @@ const ApplicationInvite = () => {
                 </table>
               </div>
             </div>
+          </div>
+          {/* buttons for BACK */}
+          <div className=" absolute bottom-2 right-4">
+            <button
+              className=" text-sm md:text-lg px-4 md:px-7 py-1 border  bg-slate-600  rounded-md hover:bg-slate-700 text-white border-none shadow-md cursor-pointer"
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </button>
           </div>
         </section>
       </div>

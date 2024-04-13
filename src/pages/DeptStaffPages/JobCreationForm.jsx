@@ -138,8 +138,8 @@ const JobCreationForm = () => {
 
 
   return (
-    <div className="bg-gray-100 min-h-screen flex justify-center items-center">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md m-3">
+    <div className="bg-slate-50 min-h-screen flex justify-center items-center">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md m-3">
         <h1 className="text-2xl font-bold mb-4 text-center">Create New Job</h1>
         <form onSubmit={handleSubmit}>
           {/* Title */}
@@ -148,7 +148,7 @@ const JobCreationForm = () => {
               htmlFor="title"
               className="block text-gray-700 font-semibold mb-2"
             >
-              Title:
+              Title
             </label>
             <input
               type="text"
@@ -167,7 +167,7 @@ const JobCreationForm = () => {
               htmlFor="courseId"
               className="block text-gray-700 font-semibold mb-2"
             >
-              Course ID:
+              Course ID
             </label>
             <Dropdown
               options={courseOptions}
@@ -177,21 +177,6 @@ const JobCreationForm = () => {
             />
           </div>
 
-          {/* Instructor */}
-          {/* <div className="mb-4">
-            <label
-              htmlFor="instructor"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Instructor:
-            </label>
-            <Dropdown
-              options={instructorOptions}
-              value={formData.instructor}
-              handleChange={handleChange}
-              name="instructor"
-            />
-          </div> */}
 
           {/* Required Skills */}
           <div className="mb-4">
@@ -199,7 +184,7 @@ const JobCreationForm = () => {
               htmlFor="requiredSkills"
               className="block text-gray-700 font-semibold mb-2"
             >
-              Required Skills:
+              Required Skills
             </label>
             <textarea
               id="requiredSkills"
@@ -218,7 +203,7 @@ const JobCreationForm = () => {
               htmlFor="department"
               className="block text-gray-700 font-semibold mb-2"
             >
-              Department:
+              Department
             </label>
             <Dropdown
               options={departmentOptions}
@@ -234,7 +219,7 @@ const JobCreationForm = () => {
               htmlFor="jobId"
               className="block text-gray-700 font-semibold mb-2"
             >
-              Job ID:
+              Job ID
             </label>
             <input
               type="text"
@@ -257,14 +242,14 @@ const JobCreationForm = () => {
                 onChange={handleChange}
                 className="mr-3 h-4 w-5"
               />
-              <span>Is Application Open</span>
+              <span>Is Application Open ?</span>
             </label>
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded font-semibold hover:bg-blue-700 transition duration-300"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded font-semibold hover:bg-blue-700 transition duration-300 shadow-sm"
           >
             Submit
           </button>

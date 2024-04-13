@@ -44,7 +44,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="flex items-center justify-between flex-wrap p-4 bg-gray-800 text-white">
+    <nav className="flex items-center justify-between flex-wrap p-4 bg-gray-800 text-white shadow-lg">
       {/* Logo */}
       <div className="flex items-center flex-shrink-0 text-white mr-3 lg:mr-10">
         <NavLink to="/">

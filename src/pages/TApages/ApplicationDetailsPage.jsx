@@ -33,13 +33,10 @@ const ApplicationDetailsPage = () => {
   const [application, setApplication] = useState(null);
   const [jobTitle, setJobTitle] = useState("");
 
-
   const getApplicationDetails = async () => {
-    console.log('hi hi hui')
+    console.log("hi hi hui");
     try {
-      let res = axiosInstance.post(
-        `/form/getUserFormResponseByJobId/${jobId}`
-      ); 
+      let res = axiosInstance.post(`/form/getUserFormResponseByJobId/${jobId}`);
       await toast.promise(res, {
         loading: "Loading...",
         success: (data) => {
@@ -59,7 +56,6 @@ const ApplicationDetailsPage = () => {
       toast.error("Failed to fetch application details");
     }
   };
-
 
   // Function to handle accepting the offer
   const handleAccept = async (id) => {
@@ -85,7 +81,6 @@ const ApplicationDetailsPage = () => {
     }
   };
 
-
   // Function to handle rejecting the offer
   const handleReject = async (id) => {
     try {
@@ -109,7 +104,6 @@ const ApplicationDetailsPage = () => {
       toast.error("Error Rejecting");
     }
   };
-
 
   useEffect(() => {
     getApplicationDetails();
@@ -192,20 +186,27 @@ const ApplicationDetailsPage = () => {
 
         {/* Status and Applied Date */}
         <div className="md:mb-4 mb-2  shadow-md rounded-lg p-4 md:p-6">
-          <div className="flex items-center mb-3">
+          <div className="flex items-center md:mb-3">
             <FaCheckCircle className="mr-2" size={20} />
             <p className="lg:text-2xl text-lg font-semibold">Status</p>
           </div>
+
           <p
-            className={`text-lg sm:text-base ${application.status === "Pending"
-              ? "font-bold"
-              : application.status === "Accepted"
-                ? "font-semibold  bg-green-400 text-white inline-block p-1 rounded-lg"
-                : ""
-              }`}
+            className={`text-sm sm:text-base font-mono inline-block px-2 rounded-full ${
+              application.status === "Offer Pending"
+                ? "bg-orange-400 text-white"
+                : application.status === "Offer Accepted"
+                ? "bg-green-600 text-white"
+                : application.status === "Forwarded"
+                ? "bg-yellow-400 text-white"
+                : application.status === "Offer Rejected"
+                ? "bg-gray-400 text-white"
+                : "bg-slate-100 text-gray-700" // This empty string is for cases where job.status doesn't match any condition
+            }`}
           >
             {application.status}
           </p>
+
           <div className="flex items-center mt-3">
             <FaCalendarAlt className="mr-2" size={20} />
             <p className="lg:text-2xl text-lg font-semibold">Applied Date</p>
@@ -252,10 +253,10 @@ const ApplicationDetailsPage = () => {
           </div>
 
           {application.previousExperience.length > 0 ? (
-            <div className="border">
+            <div className="rounded-t-lg  overflow-x-auto">
               <table className="w-full md:text-lg text-base border-collapse border rounded-lg">
                 <thead>
-                  <tr className="bg-gray-500 text-white ">
+                  <tr className="bg-gray-600 text-white rounded-lg">
                     <th className="font-semibold p-1 border">Course Name</th>
                     <th className="font-semibold p-1 border">From Date</th>
                     <th className="font-semibold p-1 border">To Date</th>

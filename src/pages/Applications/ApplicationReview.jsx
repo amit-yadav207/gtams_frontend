@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+
 import "./ApplicationReview.css";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helper/axiosInstance";
@@ -9,6 +11,8 @@ const ApplicationReview = () => {
   const { jobId } = useParams();
 
   const [forms, setForms] = useState([]);
+
+  const navigate = useNavigate();
 
   const getAllForms = async () => {
     try {
@@ -107,7 +111,7 @@ const ApplicationReview = () => {
   };
 
   return (
-    <div className="p-2 items-center min-h-full md:m-2 shadow-md rounded-sm">
+    <div className="p-2 items-center min-h-screen md:m-2 shadow-md rounded-sm ">
       <div className="flex justify-between font-semibold md:p-1 text-xs md:text-lg">
         <h1>
           Applications For Job id:{" "}
@@ -177,10 +181,11 @@ const ApplicationReview = () => {
                       <tr
                         key={application._id}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${selectedApplicantIndex === index
-                          ? "bg-gray-200 text-blue-700"
-                          : ""
-                          }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${
+                          selectedApplicantIndex === index
+                            ? "bg-gray-200 text-blue-700"
+                            : ""
+                        }`}
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
@@ -242,20 +247,22 @@ const ApplicationReview = () => {
               )}
 
               {/**back and next button on small screens */}
-              <div className=" md:hidden flex justify-between  items-center my-4">
+              <div className=" md:hidden flex justify-center  items-center my-4 gap-4">
                 <button
                   onClick={handleBackClick}
                   className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
                 >
-                  Back
+                  <GrFormPrevious />
                 </button>
-                <span className="">{`${selectedApplicantIndex + 1}/${forms.length
-                  }`}</span>
+                {/**show current index of selected application */}
+                <span className="">{`${selectedApplicantIndex + 1}/${
+                  forms.length
+                }`}</span>
                 <button
                   onClick={handleNextClick}
-                  className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
+                  className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 py-2 px-4 rounded-md"
                 >
-                  Next
+                  <GrFormNext />
                 </button>
               </div>
 
@@ -287,20 +294,30 @@ const ApplicationReview = () => {
                 </div>
               </div>
               {/* buttons for rejection and recommendation */}
-              <div className="flex justify-between my-2 ">
+              <div className="flex justify-between md:mb-2 my-3 md:my-3 md:justify-end">
+                {/**this back button will be visible on Small Screen */}
                 <button
-                  className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border  border-gray-500  rounded-md hover:bg-green-500 hover:text-white"
-                  onClick={() => handleRecommendation(selectedApplicant._id)}
+                  className=" md:hidden text-sm md:text-lg px-4 md:px-7 py-1 border  bg-slate-600  rounded-md hover:bg-slate-700 text-white border-none shadow-md cursor-pointer"
+                  onClick={() => navigate(-1)}
                 >
-                  Recommend
+                  Back
                 </button>
 
-                <button
-                  className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border border-gray-500 rounded-md hover:bg-red-500 hover:text-white"
-                  onClick={() => handleRejection(selectedApplicant._id)}
-                >
-                  Reject
-                </button>
+                <div className="flex justify-start  gap-4 ">
+                  <button
+                    className=" text-sm md:text-lg px-4 md:px-7 py-1 border  bg-green-500  rounded-md hover:bg-green-600 text-white border-none shadow-md cursor-pointer"
+                    onClick={() => handleRecommendation(selectedApplicant._id)}
+                  >
+                    Recommend
+                  </button>
+
+                  <button
+                    className=" text-sm md:text-lg px-4 md:px-7 py-1 border bg-red-500 rounded-md hover:bg-red-600 text-white border-none shadow-md cursor-pointer"
+                    onClick={() => handleRejection(selectedApplicant._id)}
+                  >
+                    Reject
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
@@ -311,8 +328,9 @@ const ApplicationReview = () => {
         </section>
 
         {/* Section 2: Application List */}
-        <section className="w-full md:w-2/5 bg-white md:block hidden px-4 ">
-          <div className="sticky top-2  ">
+        <section className="w-full md:w-2/5 bg-white md:block hidden px-4   relative min-h-screen">
+          <div className=" min-h-screen">
+            {/**sticky top-2  */}
             <h2 className="m-2 font-semibold font-sans text-center text-lg md:text-2xl">
               Application List
             </h2>
@@ -333,10 +351,11 @@ const ApplicationReview = () => {
                       <tr
                         key={form.formId}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${selectedApplicantIndex === index
-                          ? "bg-gray-200 text-blue-700"
-                          : ""
-                          }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold text-center ${
+                          selectedApplicantIndex === index
+                            ? "bg-gray-200 text-blue-700"
+                            : ""
+                        }`}
                       >
                         <td className="p-3 text-center  w-1/5">{index + 1}</td>
                         <td className="p-3 w-2/5">{form.applicantName}</td>
@@ -347,6 +366,15 @@ const ApplicationReview = () => {
                 </table>
               </div>
             </div>
+          </div>
+          {/* buttons for BACK */}
+          <div className=" absolute bottom-2 right-4">
+            <button
+              className=" text-sm md:text-lg px-4 md:px-7 py-1 border  bg-slate-600  rounded-md hover:bg-slate-700 text-white border-none shadow-md cursor-pointer"
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </button>
           </div>
         </section>
       </div>

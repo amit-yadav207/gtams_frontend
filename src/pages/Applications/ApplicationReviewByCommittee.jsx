@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import "./ApplicationReview.css";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helper/axiosInstance";
@@ -12,7 +13,7 @@ const ApplicationReviewByCommittee = () => {
   const [selectedInstructor, setSelectedInstructor] = useState(null);
   const [instructors, setInstructors] = useState([]);
 
-
+  const navigate = useNavigate();
   const getForm = async () => {
     try {
       let res = axiosInstance.post(`form/getAllFormResponseByJobId/${jobId}`);
@@ -29,15 +30,12 @@ const ApplicationReviewByCommittee = () => {
       res = await res;
 
       console.log("received from data", res.data);
-      setForms(
-        res.data.forms.filter(form => form.status === "Forwarded")
-      );
+      setForms(res.data.forms.filter((form) => form.status === "Forwarded"));
     } catch (error) {
       console.error("Error Fetching from.", error);
       toast.error("Error Fetching from.");
     }
   };
-
 
   const getInstructorList = async () => {
     try {
@@ -64,8 +62,6 @@ const ApplicationReviewByCommittee = () => {
     }
   };
 
-
-
   const [selectedApplicantIndex, setSelectedApplicantIndex] = useState(0);
 
   const handleNextClick = () => {
@@ -80,12 +76,14 @@ const ApplicationReviewByCommittee = () => {
       prevIndex === null || prevIndex === 0 ? forms.length - 1 : prevIndex - 1
     );
     setSelectedInstructor(null);
-
   };
 
   const handleAccept = async (id) => {
     try {
-      let res = axiosInstance.post(`/form/accept`, { id, instructor: selectedInstructor });
+      let res = axiosInstance.post(`/form/accept`, {
+        id,
+        instructor: selectedInstructor,
+      });
 
       await toast.promise(res, {
         loading: "Accepting...",
@@ -131,7 +129,8 @@ const ApplicationReviewByCommittee = () => {
     }
   };
 
-  const selectedApplicant = (selectedApplicantIndex !== null) ? forms[selectedApplicantIndex] : null;
+  const selectedApplicant =
+    selectedApplicantIndex !== null ? forms[selectedApplicantIndex] : null;
 
   //date format
   const formatDate = (dateString) => {
@@ -139,29 +138,30 @@ const ApplicationReviewByCommittee = () => {
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
-
   useEffect(() => {
     getForm();
     getInstructorList();
   }, [setForms]);
 
   return (
-    <div className="p-2 items-center min-h-full md:m-2 shadow-md rounded-sm">
+    <div className="p-2 items-center min-h-screen md:m-2 shadow-md rounded-sm border mt-4 ">
       <div className="flex justify-between font-semibold md:p-1 text-xs md:text-lg">
         <h1>
           Applications For Job id:{" "}
-          <span className="bg-slate-200 px-2 rounded-md md:text-sm">
+          <span className="bg-slate-200 px-2 rounded-md md:text-sm ">
             {jobId}
           </span>
         </h1>
         <h1>
           Total Recommended Applications:{" "}
-          <span className="bg-slate-200 px-2 rounded-md  md:text-sm">
+          <span className="bg-slate-200 px-2 rounded-md  md:text-sm ">
             {forms.length}
           </span>
         </h1>
       </div>
-      <div className="m-1 flex flex-col md:flex-row space-y-2 md:space-y-0 justify-center border rounded-md">
+
+      {/**main content to display begins here */}
+      <div className="m-1 flex flex-col md:flex-row space-y-2 md:space-y-0 justify-center border rounded-md min-h-screen">
         {/* Section 1: Applicant Details */}
         <section className="w-full md:w-3/5">
           <h2 className="mt-2 font-semibold font-sans text-lg md:text-2xl text-center">
@@ -214,12 +214,13 @@ const ApplicationReviewByCommittee = () => {
                   <tbody>
                     {forms.map((application, index) => (
                       <tr
-                        key={application.id}
+                        key={index+1}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${selectedApplicantIndex === index
-                          ? "bg-gray-200 text-blue-700"
-                          : ""
-                          }`}
+                        className={`cursor-pointer hover:bg-gray-200 hover:text-blue-700  text-center ${
+                          selectedApplicantIndex === index
+                            ? "bg-gray-200 text-blue-700"
+                            : ""
+                        }`}
                       >
                         <td className="p-0.5 md:p-2">{index + 1}</td>
                         <td className="p-0.5 md:p-2">
@@ -281,24 +282,27 @@ const ApplicationReviewByCommittee = () => {
               )}
 
               {/**back and next button on small screens */}
-              <div className=" md:hidden flex justify-between  items-center my-4">
+              <div className=" md:hidden flex justify-center  items-center my-4 gap-4">
                 <button
                   onClick={handleBackClick}
                   className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
                 >
-                  Back
+                  <GrFormPrevious />
                 </button>
-                <span className="">{`${selectedApplicantIndex + 1}/${forms.length}`}</span>
+                {/**show current index of selected application */}
+                <span className="">{`${selectedApplicantIndex + 1}/${
+                  forms.length
+                }`}</span>
                 <button
                   onClick={handleNextClick}
-                  className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 font-semibold py-2 px-4 rounded-md"
+                  className="bg-gray-200 text-gray-700 hover:text-white hover:bg-gray-500 py-2 px-4 rounded-md"
                 >
-                  Next
+                  <GrFormNext />
                 </button>
               </div>
 
               {/**resume section */}
-              <div className="flex flex-col justify-center min-h-full mt-4">
+              <div className="flex flex-col justify-center  mt-4">
                 <h2 className="flex justify-between font-semibold font-sans text-xl text-center mb-2">
                   Resume
                   <button
@@ -320,60 +324,76 @@ const ApplicationReviewByCommittee = () => {
                   <iframe
                     title="Resume"
                     src={selectedApplicant.resume.cloudinaryUrl}
-                    className="w-full h-96 cursor-move"
+                    className="w-full h-52 md:h-96 cursor-move"
                   ></iframe>
                 </div>
               </div>
 
               {/**visible on Small Screens only  */}
-              <div className="mt-4 md:hidden">
-                <h1 className="text-lg mb-3 font-semibold">
-                  Assign Instructor
-                </h1>
-                <div className="flex mb-4">
-                  <div className="relative">
-                    <select
-                      value={selectedInstructor}
-                      onChange={(e) => setSelectedInstructor(e.target.value)}
-                      disabled={false}
-                      className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                    >
-                      <option value="">Select Instructor</option>
-                      {instructors.map(ins => <option key={ins._id} value={ins._id}>{ins.fullName}({ins.department})</option>)}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                      <svg
-                        className="fill-current h-4 w-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
+              {selectedApplicant && (
+                <div className="mt-4 md:hidden">
+                  <h1 className="text-lg mb-3 font-semibold">
+                    Assign Instructor
+                  </h1>
+                  <div className="flex mb-4">
+                    <div className="relative">
+                      <select
+                        value={selectedInstructor}
+                        onChange={(e) => setSelectedInstructor(e.target.value)}
+                        disabled={false}
+                        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                       >
-                        <path
-                          fill-rule="evenodd"
-                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
+                        <option value="">Select Instructor</option>
+                        {instructors.map((ins) => (
+                          <option key={ins._id} value={ins._id}>
+                            {ins.fullName}({ins.department})
+                          </option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg
+                          className="fill-current h-4 w-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                          fillRule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* buttons for rejection and recommendation */}
-              <div className="flex justify-between my-2 ">
+              <div className="flex justify-between md:mb-2 my-3 md:my-3 md:justify-end">
+                {/**this back button will be visible on Small Screen */}
                 <button
-                  className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border  border-gray-500  rounded-md hover:bg-green-500 hover:text-white"
-                  onClick={() => handleAccept(selectedApplicant._id)}
-                  disabled={!selectedInstructor}
+                  className=" md:hidden text-sm md:text-lg px-4 md:px-7 py-1 border  bg-slate-600  rounded-md hover:bg-slate-700 text-white border-none shadow-md cursor-pointer"
+                  onClick={() => navigate(-1)}
                 >
-                  Accept
+                  Back
                 </button>
 
-                <button
-                  className="font-semibold text-sm md:text-lg px-4 md:px-7 py-1 border border-gray-500 rounded-md hover:bg-red-500 hover:text-white"
-                  onClick={() => handleRejection(selectedApplicant._id)}
-                >
-                  Reject
-                </button>
+                <div className="flex justify-start  gap-4 ">
+                  <button
+                    className=" text-sm md:text-lg px-4 md:px-7 py-1 border  bg-green-500  rounded-md hover:bg-green-600 text-white border-none shadow-md cursor-pointer"
+                    onClick={() => handleAccept(selectedApplicant._id)}
+                    disabled={!selectedApplicant || !selectedInstructor}
+                  >
+                    Select
+                  </button>
+
+                  <button
+                    className=" text-sm md:text-lg px-4 md:px-7 py-1 border bg-red-500 rounded-md hover:bg-red-600 text-white border-none shadow-md cursor-pointer"
+                    onClick={() => handleRejection(selectedApplicant._id)}
+                  >
+                    Reject
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
@@ -384,7 +404,7 @@ const ApplicationReviewByCommittee = () => {
         </section>
 
         {/* Section 2: Application List */}
-        <section className="w-full md:w-2/5 bg-white md:block hidden px-4">
+        <section className="w-full md:w-2/5 bg-white md:block hidden px-4   relative">
           <div className="">
             <h2 className="m-2 font-semibold font-sans text-center text-lg md:text-2xl">
               Application List
@@ -406,10 +426,11 @@ const ApplicationReviewByCommittee = () => {
                       <tr
                         key={form.formId}
                         onClick={() => setSelectedApplicantIndex(index)}
-                        className={`text-center  cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold  ${selectedApplicantIndex === index
-                          ? "bg-gray-200 text-blue-700"
-                          : ""
-                          }`}
+                        className={`text-center  cursor-pointer hover:bg-gray-200 hover:text-blue-700 font-semibold  ${
+                          selectedApplicantIndex === index
+                            ? "bg-gray-200 text-blue-700"
+                            : ""
+                        }`}
                       >
                         <td className="p-3 text-center  w-1/5">{index + 1}</td>
                         <td className="p-3 w-2/5">{form.applicantName}</td>
@@ -427,36 +448,49 @@ const ApplicationReviewByCommittee = () => {
 
           {/**here comes two drop downs side by side one is for selecting courses and other for selecting instructors */}
           {/* Dropdowns for course and instructor */}
-          <div className="mt-16">
-            <h1 className="text-xl mb-4 font-semibold">
-              Assign Instructor
-            </h1>
-            <div className="flex">
-              <div className="relative">
-                <select
-                  value={selectedInstructor}
-                  onChange={(e) => setSelectedInstructor(e.target.value)}
-                  disabled={false}
-                  className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                >
-                  <option value="">Select Instructor</option>
-                  {instructors.map(ins => <option key={ins._id} value={ins._id}>{ins.fullName} ({ins.department})</option>)}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg
-                    className="fill-current h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
+          {selectedApplicant && (
+            <div className="mt-16">
+              <h1 className="text-xl mb-2 font-semibold">Assign Instructor</h1>
+              <div className="flex">
+                <div className="relative">
+                  <select
+                    value={selectedInstructor}
+                    onChange={(e) => setSelectedInstructor(e.target.value)}
+                    disabled={false}
+                    className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                   >
-                    <path
-                      fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
+                    <option value="">Select Instructor</option>
+                    {instructors.map((ins) => (
+                      <option key={ins._id} value={ins._id}>
+                        {ins.fullName} ({ins.department}) 
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg
+                      className="fill-current h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
+          )}
+          {/* buttons for BACK */}
+          <div className=" absolute bottom-2 right-4">
+            <button
+              className=" text-sm md:text-lg px-4 md:px-7 py-1 border  bg-slate-600  rounded-md hover:bg-slate-700 text-white border-none shadow-md cursor-pointer"
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </button>
           </div>
         </section>
       </div>

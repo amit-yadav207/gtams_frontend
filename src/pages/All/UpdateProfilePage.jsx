@@ -51,23 +51,23 @@ function UpdateProfilePage() {
   }, []);
 
   return (
-    <div className="w-full sm:p-1 h-full lg:min-h-screen" style={{ minHeight: "85vh" }}>
-      <div className="sm:m-1 lg:m-4">
-        <div className="flex flex-col p-4 border border-pink-400 rounded-md m-3 items-center">
+    <div className="sm:p-1 h-full w-full lg:min-h-screen bg-slate-50" style={{ minHeight: "85vh" }}>
+      <div className="sm:m-1 lg:m-4 ">
+        <div className="flex flex-col p-4  border-gray-500  rounded-xl m-3 items-center shadow-md mt-6 bg-white">
           <img
             src="https://avatar.iran.liara.run/public/boy"
             alt="image of user"
-            className="w-32 h-32 mb-0.5 hover:border-2 rounded-full border-red-200"
+            className="w-32 h-32 mb-0.5 hover:border-2 rounded-full border-gray-400"
           />
           <div className="w-half text-gray-700 rounded-md lg:text-md text-center font-bold font-sans">
             {user.fullName}
           </div>
         </div>
 
-        <div className="block border border-red-400 rounded-md p-5 m-3">
+        <div className="block  border-gray-400 rounded-xl p-5 m-3 shadow-md bg-white ">
           <div className="flex items-center">
-            <CgProfile className="h-12 w-12 mr-4 text-orange-600" />
-            <span className="text-2xl font-sans"> Contact Details</span>
+            <CgProfile className="h-12 w-12 mr-4 text-gray-800" />
+            <span className="text-2xl font-sans font-semibold"> Contact Details</span>
           </div>
 
           <table className="text-gray-800">
@@ -80,7 +80,7 @@ function UpdateProfilePage() {
                   <input
                     type="text"
                     placeholder="Enter your Name"
-                    className="p-1 px-2 w-5/6 border border-red-500 rounded-md"
+                    className="p-1 px-2 w-5/6 border border-gray-500 rounded-md"
                     value={user.fullName}
                     name="fullName"
                     onChange={handleInputChange}
@@ -93,7 +93,7 @@ function UpdateProfilePage() {
                   <input
                     type="text"
                     placeholder="Enter your email"
-                    className="p-1 px-2 w-5/6 border border-red-500 rounded-md"
+                    className="p-1 px-2 w-5/6 border border-gray-500 rounded-md cursor-not-allowed"
                     value={user.email}
                     disabled
                   />
@@ -105,7 +105,7 @@ function UpdateProfilePage() {
                   <input
                     type="text"
                     placeholder="Enter your contact"
-                    className="p-1 px-2 w-5/6 border border-red-500 rounded-md"
+                    className="p-1 px-2 w-5/6 border border-gray-500 rounded-md"
                     value={user.phone}
                     onChange={handleInputChange}
                     name="phone"
@@ -119,7 +119,7 @@ function UpdateProfilePage() {
                   <input
                     type="text"
                     placeholder="Permanent Address"
-                    className="p-1 px-2 w-5/6 border border-red-500 rounded-md"
+                    className="p-1 px-2 w-5/6 border border-gray-500 rounded-md"
                     value={user?.address}
                     onChange={handleInputChange}
                     name="address"
@@ -131,10 +131,10 @@ function UpdateProfilePage() {
         </div>
 
         <div className="flex justify-end">
-          <button onClick={() => navigate(-1)} className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
+          <button onClick={() => navigate(-1)} className=" border-gray-500 bg-white-500 text-red-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3 shadow-md bg-white">
             Cancel
           </button>
-          <button onClick={handleSaveClick} className="border border-red-500 bg-white-500 text-gray-500 hover:bg-red-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3">
+          <button onClick={handleSaveClick} className=" border-gray-500 bg-white-500 text-green-500 hover:bg-green-500 hover:text-white font-semibold py-2 px-8 rounded-md m-3 shadow-md bg-white ">
             Save
           </button>
         </div>

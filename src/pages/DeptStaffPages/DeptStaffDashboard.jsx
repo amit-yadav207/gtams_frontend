@@ -2,9 +2,10 @@
 // import { useNavigate } from "react-router-dom";
 // import { toast } from "react-hot-toast";
 // import { FaSearch, FaTrashAlt, FaPencilAlt, FaEye } from "react-icons/fa";
+// import { TbMailPlus } from "react-icons/tb";
 // import axiosInstance from "../../Helper/axiosInstance";
 
-// const DashboardTACM = () => {
+// const DashboardPage = () => {
 //   const navigate = useNavigate();
 //   const [searchQuery, setSearchQuery] = useState("");
 //   const [jobs, setJobs] = useState([]);
@@ -15,6 +16,7 @@
 //       if (res.data?.success) {
 //         toast.success("Application Fetched.");
 //         setJobs(res.data.jobs);
+//         console.log("jobs", res.data.jobs);
 //       } else {
 //         toast.error("Error in fetch.");
 //       }
@@ -28,10 +30,49 @@
 //     getAllJobs();
 //   }, []);
 
+//   const handleCreateJob = () => {
+//     navigate("/dashboard/create-job");
+//   };
+
+//   const handleDeleteJob = async (jobId) => {
+//     try {
+//       let res = axiosInstance.delete(`/application/delete/${jobId}`);
+
+//       await toast.promise(res, {
+//         loading: "Deleting...",
+//         success: (data) => {
+//           return data?.data?.message;
+//         },
+//         error: (data) => {
+//           return data?.response?.data.message;
+//         },
+//       });
+//       res = await res;
+//       // Handle success or error as needed
+//       if ((await res).data.success) {
+//         getAllJobs();
+//       }
+//     } catch (error) {
+//       console.error("Error deleting job:", error);
+//       toast.error("Error deleting job.");
+//     }
+//   };
+
+//   const handleEditJob = (jobId) => {
+//     // Handle edit job functionality
+
+//     navigate(`/dashboardDS/edit-job/${jobId}`);
+//   };
+
 //   const handleViewJob = (jobId) => {
-//     navigate(`/tacm-dashboard/application-review-by-committee/${jobId}`);
+//     navigate(`/dashboardDS/application-review/${jobId}`);
 
 //     // Handle view job functionality
+//   };
+
+//   const handleInvite = (jobId) => {
+//     navigate(`/dashboardDS/application-invite/${jobId}`)
+//     // Handle Invite job functionality
 //   };
 
 //   const filteredJobs = jobs.filter(
@@ -44,8 +85,8 @@
 //   );
 
 //   return (
-//     <div className="p-4  items-center min-h-screen lg:m-5 m-1 border border-red-600">
-//       <h1 className="text-3xl sm:text-medium font-bold mb-2 ">TACM Dashboard</h1>
+//     <div className="p-4  items-center min-h-screen lg:m-5 m-1 ">
+//       <h1 className="text-3xl sm:text-medium font-bold mb-2 ">Dashboard</h1>
 //       <div className="w-full flex justify-between items-center mb-4 border-green-500">
 //         <div className="w-full md:w-4/5 border-green-500 relative">
 //           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -60,6 +101,15 @@
 //             autoFocus
 //           />
 //         </div>
+
+//         <div className="w-full md:w-1/5 text-right">
+//           <button
+//             className="bg-green-700 text-white px-4 py-2 rounded"
+//             onClick={handleCreateJob}
+//           >
+//             + Add Job
+//           </button>
+//         </div>
 //       </div>
 //       <div className="border rounded-md hover:shadow-md text-sm overflow-x-auto mt-10">
 //         {filteredJobs.length > 0 ? (
@@ -71,7 +121,7 @@
 //                 <th className="px-4 py-2">Job ID</th>
 //                 <th className="px-4 py-2">Course ID</th>
 //                 <th className="px-4 py-2">Departments</th>
-//         {/* <th className="px-4 py-2">Instructor</th>*/}
+//                 {/* <th className="px-4 py-2">Instructor</th>*/}
 //                 <th className="px-4 py-2">Requirements</th>
 //                 <th className="px-4 py-2">Open</th>
 //                 <th className="px-4 py-2">Action</th>
@@ -107,11 +157,32 @@
 //                   <td className="border px-2 text-sm  text-center py-2 w-40 max-w-48">
 //                     <div className="flex justify-evenly max-w-50 items-center">
 //                       <button
-//                         className="text-blue-600 m-1 p-1 rounded hover:underline hover:text-blue-600 font-semibold "
+//                         className="text-red-600 m-1 p-1 rounded hover:bg-red-600 hover:text-white "
+//                         onClick={() => handleDeleteJob(job._id)}
+//                         title="Delete"
+//                       >
+//                         <FaTrashAlt size={10} />
+//                       </button>
+//                       <button
+//                         className="text-black m-1 p-1 rounded hover:bg-gray-500 hover:text-white "
+//                         onClick={() => handleEditJob(job.jobId)}
+//                         title="Edit"
+//                       >
+//                         <FaPencilAlt size={10} />
+//                       </button>
+//                       <button
+//                         className="text-blue-600 m-1 p-1 rounded hover:bg-blue-600 hover:text-white "
 //                         onClick={() => handleViewJob(job.jobId)}
 //                         title="View Applications"
 //                       >
-//                         See
+//                         <FaEye size={10} />
+//                       </button>
+//                       <button
+//                         className="text-blue-600 m-1 p-1 rounded hover:bg-blue-600 hover:text-white "
+//                         onClick={() => handleInvite(job.jobId)}
+//                         title="Invite"
+//                       >
+//                         <TbMailPlus size={13} />
 //                       </button>
 //                     </div>
 //                   </td>
@@ -127,17 +198,17 @@
 //   );
 // };
 
-// export default DashboardTACM;
+// export default DashboardPage;
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { FaSearch } from "react-icons/fa";
+import { IoMdAddCircle } from "react-icons/io";
+import axiosInstance from "../../Helper/axiosInstance";
 import SearchInput from "./SearchInput";
 import JobTable from "./JobTable";
-import axiosInstance from "../../Helper/axiosInstance";
 
-const DashboardTACM = () => {
+const DeptStaffDashboard = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [jobs, setJobs] = useState([]);
@@ -161,9 +232,40 @@ const DashboardTACM = () => {
     getAllJobs();
   }, []);
 
+  const handleCreateJob = () => {
+    navigate("/dashboard/create-job");
+  };
+
+  const handleDeleteJob = async (jobId) => {
+    try {
+      let res = axiosInstance.delete(`/application/delete/${jobId}`);
+
+      await toast.promise(res, {
+        loading: "Deleting...",
+        success: (data) => data?.data?.message,
+        error: (data) => data?.response?.data.message,
+      });
+
+      res = await res;
+      if (res.data.success) {
+        getAllJobs();
+      }
+    } catch (error) {
+      console.error("Error deleting job:", error);
+      toast.error("Error deleting job.");
+    }
+  };
+
+  const handleEditJob = (jobId) => {
+    navigate(`/dashboardDS/edit-job/${jobId}`);
+  };
+
   const handleViewJob = (jobId) => {
-    navigate(`/tacm-dashboard/application-review-by-committee/${jobId}`);
-    // Handle view job functionality
+    navigate(`/dashboardDS/application-review/${jobId}`);
+  };
+
+  const handleInvite = (jobId) => {
+    navigate(`/dashboardDS/application-invite/${jobId}`);
   };
 
   const filteredJobs = jobs.filter(
@@ -179,18 +281,36 @@ const DashboardTACM = () => {
     <div className="min-h-screen p-3 md:p-8 bg-slate-50">
       <div className="bg-white p-5 rounded-lg shadow-md">
         <h1 className=" text-xl md:text-3xl md:text-medium font-semibold  mb-4 ">
-          TACM Dashboard
+          Department Staff Dashboard
         </h1>
         <div className="w-full flex justify-between items-center mb-4">
           <SearchInput
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           />
+          <div className="w-1/3 md:w-1/4 text-right ">
+            <button
+              className="bg-green-600 hover:bg-green-700 text-white px-4 md:py-2 py-1 rounded shadow-md"
+              onClick={handleCreateJob}
+            >
+             
+              <IoMdAddCircle className="md:hidden" size={30}/>
+              <span className="md:block hidden">
+                + Add Job
+              </span>
+            </button>
+          </div>
         </div>
       </div>
-      <JobTable filteredJobs={filteredJobs} handleViewJob={handleViewJob} />
+      <JobTable
+        filteredJobs={filteredJobs}
+        handleDeleteJob={handleDeleteJob}
+        handleEditJob={handleEditJob}
+        handleViewJob={handleViewJob}
+        handleInvite={handleInvite}
+      />
     </div>
   );
 };
 
-export default DashboardTACM;
+export default DeptStaffDashboard;

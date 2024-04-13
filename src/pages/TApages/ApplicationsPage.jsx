@@ -16,7 +16,6 @@ const formatDate = (mongoTimestamp) => {
   return new Date(mongoTimestamp).toLocaleDateString("en-US", options);
 };
 
-
 const handleAccept = (jobId) => {
   console.log("Accepted Offer for jobid", jobId);
 };
@@ -43,7 +42,7 @@ const ApplicationsPage = () => {
       await toast.promise(res, {
         loading: "Loading...",
         success: (data) => {
-          // console.log('data applicationpage', data.data);
+          console.log('data applicationpage', data.data);
           return data?.data?.message;
         },
         error: (data) => {
@@ -57,7 +56,6 @@ const ApplicationsPage = () => {
     } catch (err) {
       console.log(err);
     }
-   
   };
 
   useEffect(() => {
@@ -135,7 +133,7 @@ const ApplicationsPage = () => {
                 submitted.map((job) => {
                   return (
                     <div
-                      className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 "
+                      className="m-4 p-4 border  border-gray-100 rounded-lg text-gray-700 shadow-md transition duration-300 ease-in-out transform hover:scale-105"
                       key={job.formId}
                     >
                       <h1 className="font-semibold text-xl">{job.title}</h1>
@@ -162,37 +160,13 @@ const ApplicationsPage = () => {
                           {job.status}
                         </span>
                       </h3>
-                      {job.status != "Accepted" ? (
-                        <button
-                          className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
-                          onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
-                        >
-                          View application
-                        </button>
-                      ) : (
-                        <div className="flex justify-evenly">
-                          <button
-                            className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
-                            onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
-                          >
-                            View application
-                          </button>
-                          <div className="flex justify-between gap-2">
-                            <button
-                              className="border border-green-400 mt-10 text-green-600 font-bold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
-                              onClick={() => handleAccept(job.jobId)} // Call handleViewApplication with jobId
-                            >
-                              Accept
-                            </button>
-                            <button
-                              className="border border-red-400 mt-10 text-red-600 font-bold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
-                              onClick={() => handleReject(job.jobId)} // Call handleViewApplication with jobId
-                            >
-                              Reject
-                            </button>
-                          </div>
-                        </div>
-                      )}
+
+                      <button
+                        className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
+                        onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
+                      >
+                        View application
+                      </button>
                     </div>
                   );
                 })
@@ -210,7 +184,8 @@ const ApplicationsPage = () => {
                 archived.map((job) => {
                   return (
                     <div
-                      className="m-4 p-4 border border-gray-200 rounded-lg text-gray-700 "
+                    className="m-4 p-4 border  border-gray-100 rounded-lg text-gray-700 shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+
                       key={job.formId}
                     >
                       <h1 className="font-semibold text-xl">{job.title}</h1>
@@ -225,49 +200,27 @@ const ApplicationsPage = () => {
                         Status:{" "}
                         <span
                           className={`rounded-lg text-sm px-2 py-0.5 font-mono font-semibold ${
-                            job.status === "Pending"
-                              ? "bg-slate-100 text-gray-700"
-                              : job.status === "Accepted"
+                            job.status === "Offer Pending"
+                              ? "bg-orange-400 text-white"
+                              : job.status === "Offer Accepted"
                               ? "bg-green-600 text-white"
                               : job.status === "Forwarded"
                               ? "bg-yellow-400 text-white"
-                              : "bg-blue-400 text-white"
+                              : job.status === "Offer Rejected"
+                              ? "bg-gray-400 text-white"
+                              : "bg-slate-100 text-gray-700" // This empty string is for cases where job.status doesn't match any condition
                           }`}
                         >
                           {job.status}
                         </span>
                       </h3>
-                      {job.status !== "Offer Pending" ? (
-                        <button
-                          className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
-                          onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
-                        >
-                          View application
-                        </button>
-                      ) : (
-                        <div className="flex justify-between">
-                          <button
-                            className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
-                            onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
-                          >
-                            View application
-                          </button>
-                          <div className="flex justify-between gap-2">
-                            <button
-                              className="border border-green-400 mt-10 text-green-600 font-bold text-sm hover:bg-green-500 hover:border-none hover:text-white px-3 py-2 rounded-md"
-                              onClick={() => handleAccept(job.jobId)} // Call handleViewApplication with jobId
-                            >
-                              Accept
-                            </button>
-                            <button
-                              className="border border-red-400 mt-10 text-red-600 font-bold text-sm hover:bg-red-500 hover:border-none hover:text-white px-3 py-2 rounded-md"
-                              onClick={() => handleReject(job.jobId)} // Call handleViewApplication with jobId
-                            >
-                              Reject
-                            </button>
-                          </div>
-                        </div>
-                      )}
+
+                      <button
+                        className="mt-10 text-blue-600 font-semibold text-sm hover:bg-slate-100 px-3 py-2 rounded-md"
+                        onClick={() => handleViewApplication(job.jobId)} // Call handleViewApplication with jobId
+                      >
+                        View application
+                      </button>
                     </div>
                   );
                 })
