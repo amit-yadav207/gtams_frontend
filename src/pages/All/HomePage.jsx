@@ -1,7 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
+  const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
   return (
     <div className="bg-gray-100 min-h-screen">
       <header className="bg-white shadow-md py-4">
@@ -20,26 +22,17 @@ const HomePage = () => {
             </h2>
             <p className="text-lg text-gray-600 mb-6">
               Welcome to the Graduate Teaching Assistant Management System. Our
-              platform simplifies the process of managing TA applications, course
-              assignments, and performance evaluations.
+              platform simplifies the process of managing TA applications,
+              course assignments, and performance evaluations.
             </p>
-            <Link
-              to="/login"
-              className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition duration-300"
-            >
-              Get Started
-            </Link>
-          </div>
-        </section>
-
-        <section className="mt-12">
-          <div className="max-w-xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Key Features</h2>
-            <ul className="list-disc list-inside text-gray-600 space-y-2">
-              <li>Submit TA applications with ease</li>
-              <li>Efficient course management and assignment</li>
-              <li>Track TA performance and evaluations</li>
-            </ul>
+            {!isLoggedIn && (
+              <Link
+                to="/login"
+                className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition duration-300"
+              >
+                Get Started
+              </Link>
+            )}
           </div>
         </section>
       </main>
