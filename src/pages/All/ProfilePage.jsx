@@ -18,17 +18,17 @@ function ProfilePage() {
   const getUser = async () => {
     let res = dispatch(getUserData());
 
-    await toast.promise(res, {
-      loading: "Fetching profile...",
-      success: (data) => {
-        // Success toast
-        return data?.payload?.message;
-      },
-      error: (data) => {
-        // Error toast
-        return data?.response?.data.message;
-      },
-    });
+    // await toast.promise(res, {
+    //   loading: "Fetching profile...",
+    //   success: (data) => {
+    //     // Success toast
+    //     return data?.payload?.message;
+    //   },
+    //   error: (data) => {
+    //     // Error toast
+    //     return data?.response?.data.message;
+    //   },
+    // });
 
     res = await res;
     setUser(res.payload.user);

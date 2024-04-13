@@ -44,15 +44,15 @@ const TADetails = ({ selectedTA, onClose }) => {
         courseId: selectedTA.course._id,
       });
 
-      await toast.promise(res, {
-        loading: "Fetching...",
-        success: (data) => {
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.response?.data.message;
-        },
-      });
+      // await toast.promise(res, {
+      //   loading: "Fetching...",
+      //   success: (data) => {
+      //     return data?.data?.message;
+      //   },
+      //   error: (data) => {
+      //     return data?.response?.data.message;
+      //   },
+      // });
       res = await res;
       if ((await res).data.success) {
         console.log("summary fetched.", (await res).data);

@@ -137,15 +137,15 @@ const JobPage = () => {
   const getAllJobs = async () => {
     let res = axiosInstance.post("/application/getAllJobs");
 
-    await toast.promise(res, {
-      loading: "Loading...",
-      success: (data) => {
-        return data?.data?.message;
-      },
-      error: (data) => {
-        return data?.data?.message;
-      },
-    });
+    // await toast.promise(res, {
+    //   loading: "Loading...",
+    //   success: (data) => {
+    //     return data?.data?.message;
+    //   },
+    //   error: (data) => {
+    //     return data?.data?.message;
+    //   },
+    // });
 
     res = await res;
 

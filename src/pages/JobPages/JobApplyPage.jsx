@@ -28,17 +28,17 @@ function JobApplyPage() {
   const getUser = async () => {
     let res = dispatch(getUserData());
 
-    await toast.promise(res, {
-      loading: "Fetching profile...",
-      success: (data) => {
-        // console.log('data hai',data.payload);
-        return data?.payload?.message;
-      },
-      error: (data) => {
-        // console.log('data', data?.response?.data.message)
-        return data?.response?.data.message;
-      },
-    });
+    // await toast.promise(res, {
+    //   loading: "Fetching profile...",
+    //   success: (data) => {
+    //     // console.log('data hai',data.payload);
+    //     return data?.payload?.message;
+    //   },
+    //   error: (data) => {
+    //     // console.log('data', data?.response?.data.message)
+    //     return data?.response?.data.message;
+    //   },
+    // });
 
     res = await res;
     // console.log('data 2 hai', res.payload.user);
@@ -106,7 +106,7 @@ function JobApplyPage() {
     setJobDetails([...jobDetails, newDetail]);
 
     // console.log("New Detail:", newDetail);
-
+toast.success("Added successfully")
     // Optionally, you can clear the input fields after adding the detail
     setCourse("");
     setFromDate("");
@@ -120,6 +120,7 @@ function JobApplyPage() {
     updatedJobDetails.splice(indexToDelete, 1);
     // Update the jobDetails state with the modified array
     setJobDetails(updatedJobDetails);
+    toast.success("deleted successfully")
   };
 
   const handleSubmit = async () => {

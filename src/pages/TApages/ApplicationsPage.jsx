@@ -16,13 +16,13 @@ const formatDate = (mongoTimestamp) => {
   return new Date(mongoTimestamp).toLocaleDateString("en-US", options);
 };
 
-const handleAccept = (jobId) => {
-  console.log("Accepted Offer for jobid", jobId);
-};
+// const handleAccept = (jobId) => {
+//   console.log("Accepted Offer for jobid", jobId);
+// };
 
-const handleReject = (jobId) => {
-  console.log("Rejected Offer for jobid", jobId);
-};
+// const handleReject = (jobId) => {
+//   console.log("Rejected Offer for jobid", jobId);
+// };
 
 const ApplicationsPage = () => {
   const userData = useSelector((state) => state?.auth?.data);
@@ -39,16 +39,16 @@ const ApplicationsPage = () => {
     try {
       let res = axiosInstance.post("/application/getAllJobsByUserId");
 
-      await toast.promise(res, {
-        loading: "Loading...",
-        success: (data) => {
-          console.log('data applicationpage', data.data);
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.data?.message;
-        },
-      });
+      // await toast.promise(res, {
+      //   loading: "Loading...",
+      //   success: (data) => {
+      //     console.log('data applicationpage', data.data);
+      //     return data?.data?.message;
+      //   },
+      //   error: (data) => {
+      //     return data?.data?.message;
+      //   },
+      // });
 
       res = await res;
       setJobs(res?.data?.applications);
@@ -203,6 +203,8 @@ const ApplicationsPage = () => {
                             job.status === "Offer Pending"
                               ? "bg-orange-400 text-white"
                               : job.status === "Offer Accepted"
+                              ? "bg-green-600 text-white"
+                              : job.status === "TA Assigned"
                               ? "bg-green-600 text-white"
                               : job.status === "Forwarded"
                               ? "bg-yellow-400 text-white"

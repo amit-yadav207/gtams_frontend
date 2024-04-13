@@ -14,16 +14,16 @@ const JobDetailPage = () => {
     let res = axiosInstance.post(`/application/getApplicationById/${jobId}`);
     console.log(res.data);
 
-    await toast.promise(res, {
-      loading: "Loading...",
-      success: (data) => {
-        console.log("data", data.data);
-        return data?.data?.message;
-      },
-      error: (data) => {
-        return data?.data?.message;
-      },
-    });
+    // await toast.promise(res, {
+    //   loading: "Loading...",
+    //   success: (data) => {
+    //     console.log("data", data.data);
+    //     return data?.data?.message;
+    //   },
+    //   error: (data) => {
+    //     return data?.data?.message;
+    //   },
+    // });
 
     res = await res;
 

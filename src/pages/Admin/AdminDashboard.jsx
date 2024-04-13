@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaTrash } from "react-icons/fa"; // Importing React Icons
 import { IoMdAddCircle } from "react-icons/io";
-
+import UserForm from "../../components/UserForm";
 import SearchInput from "../DeptStaffPages/SearchInput";
 import axiosInstance from "../../Helper/axiosInstance";
 import toast from "react-hot-toast";
@@ -27,15 +27,15 @@ const AdminDashboard = () => {
     try {
       let res = axiosInstance.post(`/user/getAllUser`);
 
-      await toast.promise(res, {
-        loading: "Fetching...",
-        success: (data) => {
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.response?.data.message;
-        },
-      });
+      // await toast.promise(res, {
+      //   loading: "Fetching...",
+      //   success: (data) => {
+      //     return data?.data?.message;
+      //   },
+      //   error: (data) => {
+      //     return data?.response?.data.message;
+      //   },
+      // });
       res = await res;
       // Handle success or error as needed
       setUsers(res.data.users);
@@ -50,15 +50,15 @@ const AdminDashboard = () => {
     try {
       let res = axiosInstance.post(`/department/getAllDepartment`);
 
-      await toast.promise(res, {
-        loading: "Fetching...",
-        success: (data) => {
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.response?.data.message;
-        },
-      });
+      // await toast.promise(res, {
+      //   loading: "Fetching...",
+      //   success: (data) => {
+      //     return data?.data?.message;
+      //   },
+      //   error: (data) => {
+      //     return data?.response?.data.message;
+      //   },
+      // });
       res = await res;
       // Handle success or error as needed
       setDepartment(res.data.departments);
@@ -156,7 +156,7 @@ const AdminDashboard = () => {
           <div className="w-1/3 md:w-1/4 text-right ">
             <button
               className="bg-green-600 hover:bg-green-700 text-white px-4 md:py-2 py-1 rounded shadow-md"
-              onClick={handleCreateUser}
+              onClick={()=>setShowCreateForm(true)}
             >
               <IoMdAddCircle className="md:hidden" size={30} />
               <span className="md:block hidden">Create User</span>

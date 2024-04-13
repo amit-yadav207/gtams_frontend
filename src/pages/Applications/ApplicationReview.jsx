@@ -18,15 +18,15 @@ const ApplicationReview = () => {
     try {
       let res = axiosInstance.post(`form/getAllFormResponseByJobId/${jobId}`);
 
-      await toast.promise(res, {
-        loading: "Loading responses...",
-        success: (data) => {
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.response?.data.message;
-        },
-      });
+      // await toast.promise(res, {
+      //   loading: "Loading responses...",
+      //   success: (data) => {
+      //     return data?.data?.message;
+      //   },
+      //   error: (data) => {
+      //     return data?.response?.data.message;
+      //   },
+      // });
       res = await res;
 
       console.log("received from data", res.data);

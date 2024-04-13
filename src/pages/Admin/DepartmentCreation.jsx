@@ -21,15 +21,15 @@ const DepartmentCreation = () => {
     try {
       let res = axiosInstance.post(`/department/getAllDepartment`);
 
-      await toast.promise(res, {
-        loading: "Fetching...",
-        success: (data) => {
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.response?.data.message;
-        },
-      });
+      // await toast.promise(res, {
+      //   loading: "Fetching...",
+      //   success: (data) => {
+      //     return data?.data?.message;
+      //   },
+      //   error: (data) => {
+      //     return data?.response?.data.message;
+      //   },
+      // });
       res = await res;
       if (res.data.success) {
         setDepartments(res.data.departments);

@@ -217,7 +217,7 @@ const DeptStaffDashboard = () => {
     try {
       const res = await axiosInstance.post("/application/getAllJobs");
       if (res.data?.success) {
-        toast.success("Application Fetched.");
+        // toast.success("Application Fetched.");
         setJobs(res.data.jobs);
       } else {
         toast.error("Error in fetch.");

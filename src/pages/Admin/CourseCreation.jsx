@@ -17,15 +17,15 @@ const CourseCreation = () => {
     try {
       let res = axiosInstance.post(`/course/getAllCourses`);
 
-      await toast.promise(res, {
-        loading: "Fetching...",
-        success: (data) => {
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.response?.data.message;
-        },
-      });
+      // await toast.promise(res, {
+      //   loading: "Fetching...",
+      //   success: (data) => {
+      //     return data?.data?.message;
+      //   },
+      //   error: (data) => {
+      //     return data?.response?.data.message;
+      //   },
+      // });
       res = await res;
       if (res.data.success) {
         setCourses(res.data.courses);
@@ -42,15 +42,15 @@ const CourseCreation = () => {
     try {
       let res = axiosInstance.post(`/department/getAllDepartmentsName`);
 
-      await toast.promise(res, {
-        loading: "Fetching...",
-        success: (data) => {
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.response?.data.message;
-        },
-      });
+      // await toast.promise(res, {
+      //   loading: "Fetching...",
+      //   success: (data) => {
+      //     return data?.data?.message;
+      //   },
+      //   error: (data) => {
+      //     return data?.response?.data.message;
+      //   },
+      // });
       res = await res;
       if (res.data.success) {
         setDepName(res.data.departments);

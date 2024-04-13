@@ -34,18 +34,18 @@ const ApplicationDetailsPage = () => {
   const [jobTitle, setJobTitle] = useState("");
 
   const getApplicationDetails = async () => {
-    console.log("hi hi hui");
+    // console.log("hi hi hui");
     try {
       let res = axiosInstance.post(`/form/getUserFormResponseByJobId/${jobId}`);
-      await toast.promise(res, {
-        loading: "Loading...",
-        success: (data) => {
-          return data?.data?.message;
-        },
-        error: (data) => {
-          return data?.data?.message;
-        },
-      });
+      // await toast.promise(res, {
+      //   loading: "Loading...",
+      //   success: (data) => {
+      //     return data?.data?.message;
+      //   },
+      //   error: (data) => {
+      //     return data?.data?.message;
+      //   },
+      // });
 
       res = await res;
       console.log("form response", res.data);
@@ -196,6 +196,8 @@ const ApplicationDetailsPage = () => {
               application.status === "Offer Pending"
                 ? "bg-orange-400 text-white"
                 : application.status === "Offer Accepted"
+                ? "bg-green-600 text-white"
+                : application.status === "TA Assigned"
                 ? "bg-green-600 text-white"
                 : application.status === "Forwarded"
                 ? "bg-yellow-400 text-white"
