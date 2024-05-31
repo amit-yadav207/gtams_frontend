@@ -1,0 +1,16 @@
+{
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
+    ],
+    "redirects": [
+      {
+        "source": "/api/(.*)",
+        "destination": "https://gtams-backend.onrender.com/api/v1",
+        "statusCode": 308
+      }
+    ]
+  }
+  
